@@ -1,12 +1,14 @@
 {
   "name": "email",
   "idInjection": false,
-  "hidden": [ "id" ],
+  "hidden": [
+    "id"
+  ],
   "properties": {
-  "email": {
-    "type": "string",
+    "email": {
+      "type": "string",
       "required": true
-  }
+    }
   },
   "validations": [],
   "relations": {},

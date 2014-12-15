@@ -5,6 +5,7 @@ module.exports = function(app) {
   var Role = app.models.Role;
   var RoleMapping = app.models.RoleMapping;
 
+  console.log("Booting");
 
   User.create([
     {username: 'user', email: 'user1@infloop.ru', password: '123456789'},
