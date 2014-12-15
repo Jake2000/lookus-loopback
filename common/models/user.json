@@ -12,8 +12,8 @@
       "type": "number",
       "required": true
     },
-    "age": {
-      "type": "number",
+    "birthday": {
+      "type": "date",
       "required": true
     },
     "sex": {

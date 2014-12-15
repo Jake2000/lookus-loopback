@@ -46,5 +46,13 @@
   "subscription": {
     "dataSource": "db",
     "public": true
+  },
+  "credentials": {
+    "dataSource": null,
+    "public": false
+  },
+  "email": {
+    "dataSource": null,
+    "public": false
   }
 }

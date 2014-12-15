@@ -7,8 +7,8 @@ module.exports = function(app) {
 
 
   User.create([
-    {username: 'infloop', email: 'admin@infloop.ru', password: '123456789'},
-    {username: 'neonorama', email: 'neonorama@infloop.ru', password: '123456789'}
+    {username: 'user', email: 'user1@infloop.ru', password: '123456789'},
+    {username: 'admin', email: 'admin1@infloop.ru', password: '123456789'}
   ], function(err, users) {
     if (err) return debug('%j', err);
 
@@ -19,16 +19,7 @@ module.exports = function(app) {
       if (err) return debug(err);
       debug(role);
 
-      // Make 'infloop' an admin
-      role.principals.create({
-        principalType: RoleMapping.USER,
-        principalId: users[0].id
-      }, function(err, principal) {
-        if (err) return debug(err);
-        debug(principal);
-      });
-
-      // Make 'neonorama' an admin
+      // Make 'admin' an admin
       role.principals.create({
         principalType: RoleMapping.USER,
         principalId: users[1].id
