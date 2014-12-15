@@ -7,9 +7,6 @@
       "./models"
     ]
   },
-  "User": {
-    "dataSource": "db"
-  },
   "AccessToken": {
     "dataSource": "db",
     "public": false
@@ -31,6 +28,14 @@
     "public": true
   },
   "message": {
+    "dataSource": "db",
+    "public": true
+  },
+  "marker": {
+    "dataSource": "db",
+    "public": true
+  },
+  "dialog": {
     "dataSource": "db",
     "public": true
   }

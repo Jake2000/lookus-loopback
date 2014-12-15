@@ -1,0 +1,40 @@
+{
+  "name": "marker",
+  "plural": "markers",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "properties": {
+    "life_time": {
+      "type": "number",
+      "required": true
+    },
+    "type": {
+      "type": "number",
+      "required": true
+    },
+    "text": {
+      "type": "string",
+      "required": true
+    },
+    "image_url": {
+      "type": "string"
+    },
+    "image_preview_url": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "date"
+    },
+    "is_up": {
+      "type": "boolean"
+    },
+    "location": {
+      "type": "geopoint",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": []
+}

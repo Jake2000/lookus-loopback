@@ -1,0 +1,11 @@
+{
+  "name": "dialog",
+  "plural": "dialogs",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "properties": {},
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": []
+}
