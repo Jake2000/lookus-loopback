@@ -1,0 +1,11 @@
+{
+  "name": "settings",
+  "plural": "settings",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "properties": {},
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": []
+}

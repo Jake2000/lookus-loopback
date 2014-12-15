@@ -38,5 +38,13 @@
   "dialog": {
     "dataSource": "db",
     "public": true
+  },
+  "settings": {
+    "dataSource": "db",
+    "public": true
+  },
+  "subscription": {
+    "dataSource": "db",
+    "public": true
   }
 }
