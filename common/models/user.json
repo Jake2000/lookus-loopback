@@ -3,7 +3,57 @@
   "plural": "users",
   "base": "User",
   "idInjection": true,
-  "properties": {},
+  "properties": {
+    "first_name": {
+      "type": "number",
+      "required": true
+    },
+    "last_name": {
+      "type": "number",
+      "required": true
+    },
+    "age": {
+      "type": "number",
+      "required": true
+    },
+    "sex": {
+      "type": "number",
+      "required": true
+    },
+    "image_preview_url": {
+      "type": "string",
+      "required": false
+    },
+    "image_url": {
+      "type": "string",
+      "required": true
+    },
+    "country": {
+      "type": "string",
+      "required": true
+    },
+    "city": {
+      "type": "string",
+      "required": true
+    },
+
+    "status": {
+      "type": "string",
+      "required": false
+    },
+    "vk_id": {
+      "type": "number",
+      "required": false
+    },
+    "is_online": {
+      "type": "boolean",
+      "required": false
+    },
+    "is_friend": {
+      "type": "boolean",
+      "required": false
+    }
+  },
   "validations": [],
   "relations": {},
   "acls": [],
