@@ -7,7 +7,7 @@ module.exports = function(User) {
   User.disableRemoteMethod('exists', true);
   User.disableRemoteMethod('findOne', true);
   User.disableRemoteMethod('count', true);
-  User.disableRemoteMethod('find', true);
+  //User.disableRemoteMethod('find', true);
 
   User.remoteMethod(
     'login',
