@@ -1,4 +1,4 @@
 lookus-loopback
 ===============
 
-LookUs Loobpack test
+LookUs Loopback test

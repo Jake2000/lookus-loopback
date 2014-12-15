@@ -1,5 +1,5 @@
 {
-  "restApiRoot": "/api",
+  "restApiRoot": "http://lp.dev.infloop.ru/api",
   "host": "127.0.0.1",
   "port": 3301,
   "remoting": {
