@@ -1,6 +1,7 @@
 module.exports = function(User) {
 
   User.login.shared = false;
+  User.resetPassword.shared = false;
 
   //User.disableRemoteMethod('login', false);
   User.disableRemoteMethod('upsert', true);
