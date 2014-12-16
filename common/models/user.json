@@ -54,7 +54,14 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "dialogs": {
+      "type": "hasMany",
+      "model": "dialog",
+      "foreignKey": "dialog_id",
+      "through": "dialog_user"
+    }
+  },
   "acls": [
     {
       "accessType": "*",

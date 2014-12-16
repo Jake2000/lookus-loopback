@@ -1,14 +1,11 @@
 module.exports = function(User) {
 
-  User.login.shared = false;
-  User.resetPassword.shared = false;
-
   //User.disableRemoteMethod('login', false);
   User.disableRemoteMethod('updateAll', true);
   User.disableRemoteMethod('exists', true);
   User.disableRemoteMethod('findOne', true);
   User.disableRemoteMethod('count', true);
-  //User.disableRemoteMethod('find', true);
+  User.disableRemoteMethod('find', true);
 
   User.remoteMethod(
     'login',

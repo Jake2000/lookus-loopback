@@ -5,7 +5,14 @@
   "idInjection": true,
   "properties": {},
   "validations": [],
-  "relations": {},
+  "relations": {
+    "users": {
+      "type": "hasMany",
+      "model": "user",
+      "foreignKey": "user_id",
+      "through": "dialog_user"
+    }
+  },
   "acls": [
     {
       "accessType": "*",

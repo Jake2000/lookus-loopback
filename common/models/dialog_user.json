@@ -1,0 +1,29 @@
+{
+  "name": "dialog_user",
+  "plural": "dialog_users",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "properties": {},
+  "validations": [],
+  "relations": {
+    "dialog": {
+      "type": "belongsTo",
+      "model": "dialog",
+      "foreignKey": "dialog_id"
+    },
+    "user": {
+      "type": "belongsTo",
+      "model": "user",
+      "foreignKey": "user_id"
+    }
+  },
+  "acls": [
+  {
+    "accessType": "*",
+    "principalType": "ROLE",
+    "principalId": "admin",
+    "permission": "ALLOW"
+  }
+],
+  "methods": []
+}
