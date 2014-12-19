@@ -39,6 +39,10 @@
     "dataSource": "db",
     "public": true
   },
+  "dialog_user": {
+    "dataSource": "db",
+    "public": false
+  },
   "settings": {
     "dataSource": "db",
     "public": true

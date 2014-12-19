@@ -13,7 +13,13 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "dialog": {
+      "type": "belongsTo",
+      "model": "dialog",
+      "foreignKey": "dialog_id"
+    }
+  },
   "acls": [
     {
       "accessType": "*",

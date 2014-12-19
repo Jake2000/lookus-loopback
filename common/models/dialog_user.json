@@ -6,24 +6,24 @@
   "properties": {},
   "validations": [],
   "relations": {
-    "dialog": {
-      "type": "belongsTo",
-      "model": "dialog",
-      "foreignKey": "dialog_id"
-    },
     "user": {
       "type": "belongsTo",
       "model": "user",
       "foreignKey": "user_id"
+    },
+    "dialog": {
+      "type": "belongsTo",
+      "model": "dialog",
+      "foreignKey": "dialog_id"
     }
   },
   "acls": [
-  {
-    "accessType": "*",
-    "principalType": "ROLE",
-    "principalId": "admin",
-    "permission": "ALLOW"
-  }
-],
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "admin",
+      "permission": "ALLOW"
+    }
+  ],
   "methods": []
 }
