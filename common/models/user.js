@@ -1,3 +1,5 @@
+var debug = require('debug')('lookus:user');
+
 module.exports = function(User) {
 
   User.login.shared = false;
@@ -11,6 +13,115 @@ module.exports = function(User) {
   User.disableRemoteMethod('count', true);
   User.disableRemoteMethod('find', true);
 
+  User.remember = function(key, fn, cb) {
+    //TODO caching
+    fn(function (err, res) {
+      cb(err,res);
+    });
+  };
+
+  User.forget = function(key, fn, cb) {
+    //TODO caching
+  };
+
+  User.findByCredentials = function(credentials, fn) {
+    var self = this;
+
+    var realmDelimiter;
+    // Check if realm is required
+    var realmRequired = !!(self.settings.realmRequired ||
+      self.settings.realmDelimiter);
+    if (realmRequired) {
+      realmDelimiter = self.settings.realmDelimiter;
+    }
+    var query = self.normalizeCredentials(credentials, realmRequired,
+      realmDelimiter);
+
+    if (realmRequired && !query.realm) {
+      var err1 = new Error('realm is required');
+      err1.statusCode = 400;
+      return fn(err1);
+    }
+    if (!query.email && !query.username) {
+      var err2 = new Error('username or email is required');
+      err2.statusCode = 400;
+      return fn(err2);
+    }
+    var cacheKey =
+      'user:findByCredentials'+
+      ':email:' + query.email +
+      ':username' + query.username +
+      ':realm:' + query.realm;
+    self.remember(cacheKey, function(cb) {
+      self.findOne({where: query}, cb);
+    }, fn);
+  };
+
+  User.findById = function(uid, fn) {
+      var self = this;
+
+      var cacheKey =
+        'user:findById'+
+        ':id:' + uid;
+      self.remember(cacheKey, function(cb) {
+        self.findOne({where: { id: uid}}, cb)
+      }, fn);
+  };
+
+  /**
+   * Login a user by with the given `credentials`.
+   *
+   * ```js
+   *    User.login({username: 'foo', password: 'bar'}, function (err, token) {
+  *      console.log(token.id);
+  *    });
+   * ```
+   *
+   * @param {Object} credentials username/password or email/password
+   * @param {Function} fn Callback function
+   */
+  User.login = function(credentials, fn) {
+    var self = this;
+
+    self.findByCredentials(credentials, function(err, user) {
+      var defaultError = new Error('login failed');
+      defaultError.statusCode = 401;
+
+      if (err) {
+        debug('An error is reported from User.findOne: %j', err);
+        fn(defaultError);
+      } else if (user) {
+        if (self.settings.emailVerificationRequired) {
+          if (!user.emailVerified) {
+            // Fail to log in if email verification is not done yet
+            debug('User email has not been verified');
+            err = new Error('login failed as the email has not been verified');
+            err.statusCode = 401;
+            return fn(err);
+          }
+        }
+        user.hasPassword(credentials.password, function(err, isMatch) {
+          if (err) {
+            debug('An error is reported from User.hasPassword: %j', err);
+            fn(defaultError);
+          } else if (isMatch) {
+            user.createAccessToken(credentials.ttl, function(err, token) {
+              if (err) return fn(err);
+              token.__data.user = user;
+              fn(err, token);
+            });
+          } else {
+            debug('The password is invalid for user %s', query.email || query.username);
+            fn(defaultError);
+          }
+        });
+      } else {
+        debug('No matching record is found for user %s', query.email || query.username);
+        fn(defaultError);
+      }
+    });
+  };
+
   User.remoteMethod(
     'login',
     {
@@ -21,7 +132,7 @@ module.exports = function(User) {
       returns: {
         arg: 'accessToken', type: 'AccessToken', root: true,
         description:
-        'The response body contains properties of the AccessToken created on login.\n'
+          'The response body contains properties of the AccessToken created on login.\n'
       },
       http: {verb: 'post'}
     }
@@ -39,4 +150,42 @@ module.exports = function(User) {
       http: {verb: 'post', path: '/reset'}
     }
   );
+
+  /**
+   * Confirm the user's identity.
+   *
+   * @param {Any} uid
+   * @param {String} token The validation token
+   * @param {String} redirect URL to redirect the user to once confirmed
+   * @callback {Function} callback
+   * @param {Error} err
+   */
+  User.confirm = function(uid, token, redirect, fn) {
+    this.findById(uid, function(err, user) {
+      if (err) {
+        fn(err);
+      } else {
+        if (user && user.verificationToken === token) {
+          user.verificationToken = undefined;
+          user.emailVerified = true;
+          user.save(function(err) {
+            if (err) {
+              fn(err);
+            } else {
+              fn();
+            }
+          });
+        } else {
+          if (user) {
+            err = new Error('Invalid token: ' + token);
+            err.statusCode = 400;
+          } else {
+            err = new Error('User not found: ' + uid);
+            err.statusCode = 404;
+          }
+          fn(err);
+        }
+      }
+    });
+  };
 };
