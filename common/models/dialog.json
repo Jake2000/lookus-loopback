@@ -3,7 +3,9 @@
   "plural": "dialogs",
   "base": "PersistedModel",
   "idInjection": true,
-  "properties": {},
+  "properties": {
+
+  },
   "validations": [],
   "relations": {
     "users": {
