@@ -13,6 +13,11 @@
       "model": "user",
       "foreignKey": "user_id",
       "through": "dialog_user"
+    },
+    "messages": {
+      "type": "hasMany",
+      "model": "message",
+      "foreignKey": "message_id"
     }
   },
   "acls": [
