@@ -4,7 +4,9 @@
   "base": "PersistedModel",
   "idInjection": true,
   "properties": {
-
+    "title": {
+      "type": "string"
+    }
   },
   "validations": [],
   "relations": {
@@ -13,11 +15,6 @@
       "model": "user",
       "foreignKey": "user_id",
       "through": "dialog_user"
-    },
-    "messages": {
-      "type": "hasMany",
-      "model": "message",
-      "foreignKey": "message_id"
     }
   },
   "acls": [

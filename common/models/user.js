@@ -12,6 +12,20 @@ module.exports = function(User) {
   User.disableRemoteMethod('count', true);
   User.disableRemoteMethod('find', true);
 
+  User.disableRemoteMethod('__get__dialogs', false);
+  User.disableRemoteMethod('__create__dialogs', false);
+  User.disableRemoteMethod('__delete__dialogs', false);
+  User.disableRemoteMethod('__findById__dialogs', false);
+  User.disableRemoteMethod('__count__dialogs', false);
+  User.disableRemoteMethod('__destroyById__dialogs', false);
+  //User.disableRemoteMethod('__removeById__dialogs', false);
+  User.disableRemoteMethod('__deleteById__dialogs', false);
+  User.disableRemoteMethod('__exists__dialogs', false);
+  User.disableRemoteMethod('__findOne__dialogs', false);
+  User.disableRemoteMethod('__link__dialogs', false);
+  User.disableRemoteMethod('__unlink__dialogs', false);
+  User.disableRemoteMethod('__updateById__dialogs', false);
+
   User.remember = function(key, fn, cb) {
     //TODO caching
     fn(function (err, res) {
@@ -67,6 +81,17 @@ module.exports = function(User) {
       }, fn);
   };
 
+  User.count = function(uid, fn) {
+    var self = this;
+
+    var cacheKey =
+      'user:count'+
+      ':id:' + uid;
+    self.remember(cacheKey, function(cb) {
+      self.super_.count({where: { id: uid}}, cb)
+    }, fn);
+  };
+
   /**
    * Login a user by with the given `credentials`.
    *
@@ -110,12 +135,12 @@ module.exports = function(User) {
               fn(err, token);
             });
           } else {
-            debug('The password is invalid for user %s', query.email || query.username);
+            debug('The password is invalid for user %s', credentials.email || credentials.username);
             fn(defaultError);
           }
         });
       } else {
-        debug('No matching record is found for user %s', query.email || query.username);
+        debug('No matching record is found for user %s', credentials.email || credentials.username);
         fn(defaultError);
       }
     });

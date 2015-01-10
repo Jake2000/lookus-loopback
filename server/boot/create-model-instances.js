@@ -1,6 +1,7 @@
 var debug = require('debug')('boot:create-model-instances');
 
 module.exports = function(app) {
+  console.log("Creating model instances");
   var User = app.models.user;
   var Role = app.models.Role;
   var RoleMapping = app.models.RoleMapping;

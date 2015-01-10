@@ -18,6 +18,16 @@
       "type": "belongsTo",
       "model": "dialog",
       "foreignKey": "dialog_id"
+    },
+    "sender": {
+      "type": "belongsTo",
+      "model": "user",
+      "foreignKey": "sender_id"
+    },
+    "recipient": {
+      "type": "belongsTo",
+      "model": "user",
+      "foreignKey": "recipient_id"
     }
   },
   "acls": [
