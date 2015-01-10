@@ -6,6 +6,9 @@
   "properties": {
     "title": {
       "type": "string"
+    },
+    "is_private": {
+      "type": "boolean"
     }
   },
   "validations": [],
@@ -15,6 +18,11 @@
       "model": "user",
       "foreignKey": "user_id",
       "through": "dialog_user"
+    },
+    "messages": {
+      "type": "hasMany",
+      "model": "message",
+      "foreignKey": "dialog_id"
     }
   },
   "acls": [

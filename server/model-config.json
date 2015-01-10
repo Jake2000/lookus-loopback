@@ -8,47 +8,47 @@
     ]
   },
   "AccessToken": {
-    "dataSource": "db",
+    "dataSource": "mongodb",
     "public": false
   },
   "ACL": {
-    "dataSource": "db",
+    "dataSource": "mongodb",
     "public": false
   },
   "RoleMapping": {
-    "dataSource": "db",
+    "dataSource": "mongodb",
     "public": false
   },
   "Role": {
-    "dataSource": "db",
+    "dataSource": "mongodb",
     "public": false
   },
   "user": {
-    "dataSource": "db",
+    "dataSource": "mongodb",
     "public": true
   },
   "message": {
-    "dataSource": "db",
+    "dataSource": "mongodb",
     "public": true
   },
   "marker": {
-    "dataSource": "db",
+    "dataSource": "mongodb",
     "public": true
   },
   "dialog": {
-    "dataSource": "db",
+    "dataSource": "mongodb",
     "public": true
   },
   "dialog_user": {
-    "dataSource": "db",
+    "dataSource": "mongodb",
     "public": true
   },
   "settings": {
-    "dataSource": "db",
+    "dataSource": "mongodb",
     "public": true
   },
   "subscription": {
-    "dataSource": "db",
+    "dataSource": "mongodb",
     "public": true
   },
   "credentials": {
