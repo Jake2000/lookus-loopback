@@ -7,6 +7,9 @@
     "title": {
       "type": "string"
     },
+    "users_count": {
+      "type": "number"
+    },
     "is_private": {
       "type": "boolean"
     }
@@ -17,7 +20,7 @@
       "type": "hasMany",
       "model": "user",
       "foreignKey": "user_id",
-      "through": "dialog_user"
+      "through": "dialogUser"
     },
     "messages": {
       "type": "hasMany",

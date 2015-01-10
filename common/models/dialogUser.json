@@ -1,6 +1,5 @@
 {
-  "name": "dialog_user",
-  "plural": "dialog_users",
+  "name": "dialogUser",
   "base": "PersistedModel",
   "idInjection": true,
   "properties": {},

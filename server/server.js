@@ -7,7 +7,9 @@ var app = module.exports = loopback();
 app.use(loopback.context());
 app.use(loopback.token());
 app.use(function setCurrentUser(req, res, next) {
+  console.log('middleware');
   if (!req.accessToken) {
+    console.log('access token not found');
     return next();
   }
   app.models.user.findById(req.accessToken.userId, function(err, user) {
@@ -17,9 +19,13 @@ app.use(function setCurrentUser(req, res, next) {
     if (!user) {
       return next(new Error('No user with this access token was found.'));
     }
+
     var loopbackContext = loopback.getCurrentContext();
     if (loopbackContext) {
+      console.log('context user set');
       loopbackContext.set('currentUser', user);
+    } else {
+      console.log('context not found');
     }
     next();
   });

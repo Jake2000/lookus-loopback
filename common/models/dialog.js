@@ -1,3 +1,5 @@
+var loopback = require('loopback');
+
 module.exports = function(Dialog) {
   Dialog.disableRemoteMethod('create', true);
   Dialog.disableRemoteMethod('update', true);
@@ -9,16 +11,13 @@ module.exports = function(Dialog) {
   Dialog.disableRemoteMethod('findOne', true);
   Dialog.disableRemoteMethod('count', true);
   Dialog.disableRemoteMethod('upsert', true);
-  //Dialog.disableRemoteMethod('find', true);
 
-  //var find = Dialog.find;
-  //Dialog.find = function(filter, cb) {
-  //  filter.where =
-  //  find.call(Dialog, filterfunction(err, results) {
-  //    if(!err) {
-  //      cache[key] = results;
-  //    }
-  //    cb(err, results);
-  //  });
-  //};
+  Dialog.afterUpdate = function(next) {
+    var modelInstance = this;
+    modelInstance.users.count({}, function(err, count) {
+      modelInstance.users_count = count | 0;
+      modelInstance.save();
+      next();
+    });
+  };
 };

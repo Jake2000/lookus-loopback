@@ -25,7 +25,7 @@ module.exports = function(app) {
   dialog.find = function(filter, cb) {
     console.log('custom find');
     filter = filter || {};
-    filter.include = ['messages'];
+    filter.include = ['messages', 'users'];
     find.call(dialog, filter, cb);
   };
 };

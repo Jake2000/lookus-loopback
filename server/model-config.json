@@ -39,9 +39,9 @@
     "dataSource": "mongodb",
     "public": true
   },
-  "dialog_user": {
+  "dialogUser": {
     "dataSource": "mongodb",
-    "public": true
+    "public": false
   },
   "settings": {
     "dataSource": "mongodb",
