@@ -245,4 +245,18 @@ module.exports = function(User) {
       next();
     });
   };
+
+  User.updateSettings = function(settings, cb) {
+    cb(null, {i:'not yet implemented'});
+  };
+
+  User.remoteMethod('prototype.__update__settings',
+    {
+      description: 'Update user settings',
+      accepts: [
+        {arg: 'settings', type: "settings", required: true, http: {source: 'body'}}
+      ],
+      http: {verb: 'put', path: '/:id/settings'}
+    }
+  );
 };
