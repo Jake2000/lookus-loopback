@@ -14,18 +14,29 @@
       "type": "boolean"
     }
   },
+  "hidden": ["private_participant_1_id", "private_participant_2_id"],
   "validations": [],
   "relations": {
     "users": {
       "type": "hasMany",
       "model": "user",
       "foreignKey": "user_id",
-      "through": "dialogUser"
+      "through": "dialoguser"
     },
     "messages": {
       "type": "hasMany",
       "model": "message",
       "foreignKey": "dialog_id"
+    },
+    "private_participant_1": {
+      "type": "belongsTo",
+      "model": "user",
+      "foreignKey": "private_participant_1_id"
+    },
+    "private_participant_2": {
+      "type": "belongsTo",
+      "model": "user",
+      "foreignKey": "private_participant_2_id"
     }
   },
   "acls": [

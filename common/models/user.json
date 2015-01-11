@@ -59,7 +59,7 @@
       "type": "hasMany",
       "model": "dialog",
       "foreignKey": "dialog_id",
-      "through": "dialogUser"
+      "through": "dialoguser"
     }
   },
   "acls": [

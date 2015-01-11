@@ -19,13 +19,13 @@ module.exports = function(app) {
   //PersistedModel.prototype.forget = function(key, fn, cb) {
   //  //TODO caching
   //};
-  var dialog = app.models.dialog;
-  var find = dialog.find;
-
-  dialog.find = function(filter, cb) {
-    console.log('custom find');
-    filter = filter || {};
-    filter.include = ['messages', 'users'];
-    find.call(dialog, filter, cb);
-  };
+  //var dialog = app.models.dialog;
+  //var find = dialog.find;
+  //
+  //dialog.find = function(filter, cb) {
+  //  console.log('custom find');
+  //  filter = filter || {};
+  //  filter.include = ['messages', 'users'];
+  //  find.call(dialog, filter, cb);
+  //};
 };

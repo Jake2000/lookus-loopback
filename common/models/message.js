@@ -5,6 +5,16 @@ var noop = function() {};
 
 module.exports = function(Message) {
 
+  var findDialogByParticipants = function(sender_id, recipient_id, cb) {
+    app.models.dialog.findOne({where: {
+      is_private:true,
+      or: [{and: [{private_participant_1_id: sender_id}, {private_participant_2_id: recipient_id}]},
+        {and: [{private_participant_2_id: sender_id}, {private_participant_1_id: recipient_id}]}]
+    }}, function(err, dialog) {
+      cb(err, dialog);
+    });
+  };
+
   Message.beforeCreate = function(next, modelInstance) {
 
     var ctx = loopback.getCurrentContext();
@@ -13,17 +23,13 @@ module.exports = function(Message) {
       var err = new Error('Access Exception');
       err.status = 403;
       err.errorCode = 40301;
-      console.log('currentUserNotFound');
-      console.log('currentUserNotFound');
       return next(err);
     }
-    console.log('currentUser.username: ', currentUser.username); // voila!
-    console.log('currentUser.id: ', currentUser.id);
-
+    // Setting message sender
     modelInstance.sender(currentUser);
 
-    //if dialog is passed from client
-    if(modelInstance.dialog_id) {
+    if(modelInstance.dialog_id) {   // If dialog is passed from client
+      // Check that dialog exists
       currentUser.dialogs.findById(modelInstance.dialog_id, function(err, dialog) {
         if(!dialog) {
           var err1 = new Error('Dialog with id \''+modelInstance.dialog_id+'\' not found');
@@ -32,9 +38,17 @@ module.exports = function(Message) {
           return next(err1);
         }
 
+        // link
+        modelInstance.dialog(dialog);
+
+        // Search all participants (check that we can write to that dialog)
+        // Note: we don't need it here
+        // app.models.dialogUser.exists({dialog_id: dialog.id, user_id: })
+
         next();
       });
-    } else if (modelInstance.recipient_id) {
+    } else if (modelInstance.recipient_id) {  // If recipient is passed from client
+
       //fetching recipient
       app.models.user.findById(modelInstance.recipient_id, function(err, recipient) {
         if(!recipient) {
@@ -43,6 +57,9 @@ module.exports = function(Message) {
           err1.errorCode = 42205;
           return next(err1);
         }
+
+        // Setting message recipient
+        modelInstance.recipient(recipient);
 
         next();
       });
@@ -59,31 +76,23 @@ module.exports = function(Message) {
     var currentUser = ctx && ctx.get('currentUser');
     var modelInstance = this;
 
-
-
     if(modelInstance.dialog_id) {
-
+      // Do not need to do something
     } else if (modelInstance.recipient_id) {
+
       //searching for private dialogs with this recipient
-      app.models.dialog.findOne({
-        where: { is_private: true, users_count:2 },
-        include: {
-          relation: 'users', // include the owner object
-          scope: { // further filter the owner object
-            where: {id: modelInstance.recipient_id} // only select order with id 5
-          }
-        }
-      }, function(err, dialog) {
+      findDialogByParticipants(currentUser.id, modelInstance.recipient_id, function(err, dialog) {
         console.log("dialog search");
         console.log(dialog);
 
         if(!dialog) {
           console.log("dialog not found");
-          //creating dialog
+          // Creating dialog
           app.models.dialog.create({
             title: modelInstance.subject || "",
             is_private: true,
-            users_count: 0
+            private_participant_1_id: modelInstance.recipient_id,
+            private_participant_2_id: currentUser.id
           }, function(err, dialog) {
             if(err) {
               console.log(err);
@@ -97,15 +106,11 @@ module.exports = function(Message) {
             console.log(dialog);
 
             //setting dialog users
-            dialog.users.add(currentUser, noop);
-
-            app.models.user.findById(modelInstance.recipient_id, function(err, recipient) {
-              if (recipient) {
+            modelInstance.recipient(function(err, recipient) {
+              dialog.users.add(currentUser, function(err, ac) {
                 dialog.users.add(recipient, noop);
-                dialog.save(noop);
-              }
+              });
             });
-
 
             modelInstance.dialog_id = dialog.id;
             modelInstance.save();

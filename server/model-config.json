@@ -39,7 +39,7 @@
     "dataSource": "mongodb",
     "public": true
   },
-  "dialogUser": {
+  "dialoguser": {
     "dataSource": "mongodb",
     "public": false
   },
