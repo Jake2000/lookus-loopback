@@ -6,10 +6,12 @@
   "properties": {
     "body": {
       "type": "string",
-      "required": true
+      "required": true,
+      "description": "Текст сообщения"
     },
     "subject": {
-      "type": "string"
+      "type": "string",
+      "description": "Тема сообщения (при автосоздании диалога - заголовок диалога)"
     }
   },
   "validations": [],

@@ -5,13 +5,16 @@
   "idInjection": true,
   "properties": {
     "title": {
-      "type": "string"
+      "type": "string",
+      "description": "Заголовок диалога"
     },
     "users_count": {
-      "type": "number"
+      "type": "number",
+      "description": "Кол-во пользователей в диалоге"
     },
     "is_private": {
-      "type": "boolean"
+      "type": "boolean",
+      "description": "Является ли диалог беседой только между двумя пользователями"
     }
   },
   "hidden": ["private_participant_1_id", "private_participant_2_id"],

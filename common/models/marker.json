@@ -6,27 +6,34 @@
   "properties": {
     "life_time": {
       "type": "number",
-      "required": true
+      "required": true,
+      "description": "Время жизни маркера в минутах"
     },
     "type": {
       "type": "number",
-      "required": true
+      "required": true,
+      "description": "Тип маркера"
     },
     "text": {
       "type": "string",
-      "required": true
+      "required": true,
+      "description": "Текст маркера (становится заголовком диалога для маркера)"
     },
     "image_url": {
-      "type": "string"
+      "type": "string",
+      "description": "Изображение маркера"
     },
     "image_preview_url": {
-      "type": "string"
+      "type": "string",
+      "description": "Изображение маркера (уменьш.)"
     },
     "created_at": {
-      "type": "date"
+      "type": "date",
+      "description": "Дата и время создания"
     },
     "is_up": {
-      "type": "boolean"
+      "type": "boolean",
+      "description": "Поднят ли маркер"
     },
     "location": {
       "type": "geopoint",
