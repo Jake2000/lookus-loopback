@@ -8,4 +8,9 @@ module.exports = function(Settings) {
   Settings.disableRemoteMethod('findOne', true);
   Settings.disableRemoteMethod('count', true);
   Settings.disableRemoteMethod('find', true);
+  Settings.disableRemoteMethod('prototype.updateAttributes', true);
+  Settings.disableRemoteMethod('findById', true);
+
+  Settings.disableRemoteMethod('__get__user', true);
+  Settings.disableRemoteMethod('prototype.__get__user', true);
 };

@@ -28,6 +28,7 @@ module.exports = function(User) {
   User.disableRemoteMethod('__create__friends', false);
   User.disableRemoteMethod('__delete__friends', false);
   User.disableRemoteMethod('__updateById__friends', false);
+  User.disableRemoteMethod('__destroyById__friends', false);
   User.disableRemoteMethod('__findById__friends', false);
   User.disableRemoteMethod('__exists__friends', false);
 
@@ -228,6 +229,19 @@ module.exports = function(User) {
           fn(err);
         }
       }
+    });
+  };
+
+  User.afterCreate = function(next) {
+    var modelInstance = this;
+
+    app.models.settings.create({
+      user_id: modelInstance.id,
+      notifications_global_disable: false,
+      notifications_only_from_friends: false,
+      notifications_no_sound: false
+    },function(err, settings) {
+      next();
     });
   };
 };

@@ -13,7 +13,6 @@ module.exports = function(Dialog) {
   Dialog.disableRemoteMethod('findOne', true);
   Dialog.disableRemoteMethod('count', true);
   Dialog.disableRemoteMethod('upsert', true);
-  Dialog.disableRemoteMethod('upsert', true);
 
   Dialog.disableRemoteMethod('__create__messages', false);
   Dialog.disableRemoteMethod('__destroyById__messages', false);

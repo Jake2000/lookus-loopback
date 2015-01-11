@@ -3,9 +3,31 @@
   "plural": "settings",
   "base": "PersistedModel",
   "idInjection": true,
-  "properties": {},
+  "properties": {
+    "notifications_global_disable": {
+      "type": "boolean",
+      "required": true,
+      "description": "Выключение уведомлений"
+    },
+    "notifications_only_from_friends": {
+      "type": "boolean",
+      "required": true,
+      "description": "Уведомления только от друзей"
+    },
+    "notifications_no_sound": {
+      "type": "boolean",
+      "required": true,
+      "description": "Уведомления без звука"
+    }
+  },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "user": {
+      "type": "belongsTo",
+      "model": "user",
+      "foreignKey": "user_id"
+    }
+  },
   "acls": [
     {
       "accessType": "*",
