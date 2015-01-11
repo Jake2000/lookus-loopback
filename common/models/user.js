@@ -12,13 +12,24 @@ module.exports = function(User) {
   User.disableRemoteMethod('count', true);
   User.disableRemoteMethod('find', true);
 
-  User.disableRemoteMethod('__get__dialogs', false);
-  User.disableRemoteMethod('__create__dialogs', false);
+  User.beforeRemote( 'prototype.*',
+    function( ctx, modelInstance, next) {
+
+    next();
+  });
+
+  User.afterRemote( 'prototype.*',
+    function( ctx, affectedModelInstance, next) {
+
+    next();
+  });
+
+  //User.disableRemoteMethod('__get__dialogs', false);
+  //User.disableRemoteMethod('__create__dialogs', false);
   User.disableRemoteMethod('__delete__dialogs', false);
   User.disableRemoteMethod('__findById__dialogs', false);
   User.disableRemoteMethod('__count__dialogs', false);
   User.disableRemoteMethod('__destroyById__dialogs', false);
-  //User.disableRemoteMethod('__removeById__dialogs', false);
   User.disableRemoteMethod('__deleteById__dialogs', false);
   User.disableRemoteMethod('__exists__dialogs', false);
   User.disableRemoteMethod('__findOne__dialogs', false);

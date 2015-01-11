@@ -9,6 +9,7 @@ module.exports = function(Dialog) {
   Dialog.disableRemoteMethod('deleteOne', true);
   Dialog.disableRemoteMethod('updateAll', true);
   Dialog.disableRemoteMethod('exists', true);
+  Dialog.disableRemoteMethod('find', true);
   Dialog.disableRemoteMethod('findOne', true);
   Dialog.disableRemoteMethod('count', true);
   Dialog.disableRemoteMethod('upsert', true);

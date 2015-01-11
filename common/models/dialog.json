@@ -20,7 +20,7 @@
     "users": {
       "type": "hasMany",
       "model": "user",
-      "foreignKey": "user_id",
+      "foreignKey": "dialog_id",
       "through": "dialoguser"
     },
     "messages": {
