@@ -1,4 +1,5 @@
 var debug = require('debug')('lookus:user');
+var app = require('./../../server/server');
 
 module.exports = function(User) {
 
