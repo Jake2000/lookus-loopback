@@ -12,18 +12,6 @@ module.exports = function(User) {
   User.disableRemoteMethod('count', true);
   User.disableRemoteMethod('find', true);
 
-  User.beforeRemote( 'prototype.*',
-    function( ctx, modelInstance, next) {
-
-    next();
-  });
-
-  User.afterRemote( 'prototype.*',
-    function( ctx, affectedModelInstance, next) {
-
-    next();
-  });
-
   //User.disableRemoteMethod('__get__dialogs', false);
   //User.disableRemoteMethod('__create__dialogs', false);
   User.disableRemoteMethod('__delete__dialogs', false);
