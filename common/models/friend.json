@@ -1,0 +1,33 @@
+{
+  "name": "friend",
+  "plural": "friends",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "properties": {
+  },
+  "hidden": [],
+  "validations": [],
+  "relations": {
+    "owner": {
+      "type": "belongsTo",
+      "model": "user",
+      "foreignKey": "owner_id",
+      "description": "ID пользователя"
+    },
+    "friend": {
+      "type": "belongsTo",
+      "model": "user",
+      "foreignKey": "friend_id",
+      "description": "ID друга"
+    }
+  },
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "admin",
+      "permission": "ALLOW"
+    }
+  ],
+  "methods": []
+}

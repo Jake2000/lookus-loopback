@@ -25,6 +25,25 @@ module.exports = function(User) {
   User.disableRemoteMethod('__unlink__dialogs', false);
   User.disableRemoteMethod('__updateById__dialogs', false);
 
+  User.disableRemoteMethod('__create__friends', false);
+  User.disableRemoteMethod('__delete__friends', false);
+  User.disableRemoteMethod('__updateById__friends', false);
+  User.disableRemoteMethod('__findById__friends', false);
+  User.disableRemoteMethod('__exists__friends', false);
+
+  User.disableRemoteMethod('__get__owners', false);
+  User.disableRemoteMethod('__create__owners', false);
+  User.disableRemoteMethod('__delete__owners', false);
+  User.disableRemoteMethod('__findById__owners', false);
+  User.disableRemoteMethod('__count__owners', false);
+  User.disableRemoteMethod('__destroyById__owners', false);
+  User.disableRemoteMethod('__deleteById__owners', false);
+  User.disableRemoteMethod('__exists__owners', false);
+  User.disableRemoteMethod('__findOne__owners', false);
+  User.disableRemoteMethod('__link__owners', false);
+  User.disableRemoteMethod('__unlink__owners', false);
+  User.disableRemoteMethod('__updateById__owners', false);
+
   User.remember = function(key, fn, cb) {
     //TODO caching
     fn(function (err, res) {

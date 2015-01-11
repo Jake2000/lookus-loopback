@@ -71,6 +71,18 @@
       "model": "dialog",
       "foreignKey": "user_id",
       "through": "dialoguser"
+    },
+    "friends": {
+      "type": "hasMany",
+      "model": "user",
+      "foreignKey": "friend_id",
+      "through": "friend"
+    },
+    "owners": {
+      "type": "hasMany",
+      "model": "user",
+      "foreignKey": "owner_id",
+      "through": "friend"
     }
   },
   "acls": [

@@ -51,6 +51,10 @@
     "dataSource": "mongodb",
     "public": true
   },
+  "friend": {
+    "dataSource": "mongodb",
+    "public": false
+  },
   "credentials": {
     "dataSource": null,
     "public": false
