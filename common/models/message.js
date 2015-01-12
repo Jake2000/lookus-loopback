@@ -141,4 +141,6 @@ module.exports = function(Message) {
   Message.disableRemoteMethod('find', true);
   Message.disableRemoteMethod('deleteById', true);
   Message.disableRemoteMethod('findById', true);
+
+
 };

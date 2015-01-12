@@ -8,13 +8,13 @@
   "hidden": [],
   "validations": [],
   "relations": {
-    "owner": {
+    "user": {
       "type": "belongsTo",
       "model": "user",
       "foreignKey": "owner_id",
       "description": "ID пользователя"
     },
-    "friend": {
+    "user": {
       "type": "belongsTo",
       "model": "user",
       "foreignKey": "friend_id",

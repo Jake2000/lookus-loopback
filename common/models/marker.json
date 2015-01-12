@@ -41,7 +41,13 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "dialog": {
+      "type": "hasOne",
+      "model": "dialog",
+      "foreignKey": "marker_id"
+    }
+  },
   "acls": [
     {
       "accessType": "*",

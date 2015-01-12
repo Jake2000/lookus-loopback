@@ -170,6 +170,9 @@ module.exports = function(User) {
     'login',
     {
       description: 'Login a user with username/email and password',
+      notes: "Можно логиниться под двумя тестовыми пользователями:<br> " +
+            "1) user1: {email: user1@infloop.ru, password: 123456789} <br>" +
+            "2) admin1: {email: admin1@infloop.ru, password: 123456789}",
       accepts: [
         {arg: 'credentials', type: 'credentials', required: true, http: {source: 'body'}}
       ],
