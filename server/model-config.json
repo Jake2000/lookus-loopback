@@ -47,6 +47,10 @@
     "dataSource": "mongodb",
     "public": false
   },
+  "blacklistItem": {
+    "dataSource": "mongodb",
+    "public": true
+  },
   "subscription": {
     "dataSource": "mongodb",
     "public": true
