@@ -28,4 +28,27 @@ module.exports = function(app) {
   //  filter.include = ['messages', 'users'];
   //  find.call(dialog, filter, cb);
   //};
+  var settingsCtor = app.models.settings.prototype;
+  var userIdSetter = Object.getOwnPropertyDescriptor(settingsCtor, "user_id").set;
+  Object.defineProperty(settingsCtor, 'user_id', {
+    set: function(value) {
+      if(!settingsCtor.id)
+        userIdSetter.call(settingsCtor, value);
+    }
+  });
+
+  //var idSetter = Object.getOwnPropertyDescriptor(settingsCtor, "id").set;
+  //Object.defineProperty(settingsCtor, 'id', {
+  //  set: function(value) {
+  //
+  //    if (value == undefined && !settingsCtor.id)
+  //      if (!!(idSetter && idSetter.constructor && idSetter.call && idSetter.apply)) {
+  //        console.log(idSetter);
+  //        idSetter.call(settingsCtor, value);
+  //      } else {
+  //        settingsCtor.$id = value;
+  //      }
+  //  }
+  //});
+  //
 };

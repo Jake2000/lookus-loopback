@@ -13,4 +13,18 @@ module.exports = function(Settings) {
 
   Settings.disableRemoteMethod('__get__user', true);
   Settings.disableRemoteMethod('prototype.__get__user', true);
+
+
+
+  Settings.setup = function() {
+    Settings.base.setup.apply(this, arguments);
+  };
+
+  //Settings.beforeUpdate = function(next, modelInstance) {
+  //  //delete modelInstance.user_id;
+  //  //console.log(modelInstance);
+  //  next();
+  //};
+
+  Settings.setup();
 };

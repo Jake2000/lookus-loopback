@@ -246,17 +246,51 @@ module.exports = function(User) {
     });
   };
 
-  User.updateSettings = function(settings, cb) {
-    cb(null, {i:'not yet implemented'});
+  User.prototype.__set__settings = function(data, cb) {
+    app.models.settings.findOne({where: { user_id: this.id}}, function(err, settings) {
+
+      if(err) {
+        return cb(err);
+      }
+
+      if(!settings) {
+        var err1 = new Error("Settings not found");
+        err1.status = 404;
+        err1.errorCode = 40401;
+        return cb(err1);
+      }
+      var dd = data.toObject();
+      delete dd.id;
+      settings.updateAttributes(dd, function(err, settings) {
+        if(err) {
+          return cb(err);
+        }
+        cb(null, settings);
+      });
+    });
   };
 
-  User.remoteMethod('prototype.__update__settings',
+  User.remoteMethod('__set__settings',
     {
+      isStatic: false,
       description: 'Update user settings',
       accepts: [
-        {arg: 'settings', type: "settings", required: true, http: {source: 'body'}}
+        {arg: 'data', type: "settings", required: true, http: {source: 'body'}}
       ],
-      http: {verb: 'put', path: '/:id/settings'}
+      returns: {
+        arg: 'settings', type: 'settings', root: true,
+        description:
+          'The response body contains properties of user settings.\n'
+      },
+      accessType: 'WRITE',
+      http: {verb: 'put', path: '/settings'}
     }
   );
+
+  User.beforeRemote('prototype.__set__settings',function( ctx, modelInstance, next) {
+    next();
+  });
+
+
+
 };
