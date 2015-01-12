@@ -139,4 +139,6 @@ module.exports = function(Message) {
   Message.disableRemoteMethod('exists', true);
   Message.disableRemoteMethod('findOne', true);
   Message.disableRemoteMethod('find', true);
+  Message.disableRemoteMethod('deleteById', true);
+  Message.disableRemoteMethod('findById', true);
 };
