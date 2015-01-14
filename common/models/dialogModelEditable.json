@@ -1,0 +1,17 @@
+{
+  "name": "dialogModelEditable",
+  "plural": "dialogModelsEditable",
+  "base": "Model",
+  "idInjection": false,
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Заголовок диалога"
+    }
+  },
+  "hidden": ["_id","id"],
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": []
+}

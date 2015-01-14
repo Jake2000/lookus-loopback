@@ -1,7 +1,7 @@
 {
-  "name": "dialog",
-  "plural": "dialogs",
-  "base": "PersistedModel",
+  "name": "dialogModelExtended",
+  "plural": "dialogModelsExtended",
+  "base": "Model",
   "idInjection": true,
   "properties": {
     "title": {
@@ -14,13 +14,19 @@
     },
     "is_grouped": {
       "type": "boolean",
-      "default": true,
       "description": "Является ли диалог беседой только между двумя пользователями"
     },
     "is_private": {
       "type": "boolean",
-      "default": true,
       "description": "Запрещает писать и добавляться в диалог другим пользователям, не состоящим в диалоге"
+    },
+    "last_message": {
+      "type": "message",
+      "description": "Последнее сообщение в диалоге"
+    },
+    "recipient": {
+      "type": "user",
+      "description": "Если диалог не групповой, передается пользователь-собеседник"
     },
     "created": {
       "type": "Date",
@@ -31,43 +37,9 @@
       "description": "Дата и время изменения диалога"
     }
   },
-  "hidden": ["private_participant_1_id", "private_participant_2_id"],
+  "hidden": [],
   "validations": [],
-  "relations": {
-    "users": {
-      "type": "hasMany",
-      "model": "user",
-      "foreignKey": "dialog_id",
-      "through": "dialoguser"
-    },
-    "messages": {
-      "type": "hasMany",
-      "model": "message",
-      "foreignKey": "dialog_id"
-    },
-    "private_participant_1": {
-      "type": "belongsTo",
-      "model": "user",
-      "foreignKey": "private_participant_1_id"
-    },
-    "private_participant_2": {
-      "type": "belongsTo",
-      "model": "user",
-      "foreignKey": "private_participant_2_id"
-    },
-    "marker": {
-      "type": "belongsTo",
-      "model": "marker",
-      "foreignKey": "marker_id"
-    }
-  },
-  "acls": [
-    {
-      "accessType": "*",
-      "principalType": "ROLE",
-      "principalId": "admin",
-      "permission": "ALLOW"
-    }
-  ],
+  "relations": {},
+  "acls": [],
   "methods": []
 }

@@ -7,7 +7,7 @@ module.exports = function(Message) {
 
   var findDialogByParticipants = function(sender_id, recipient_id, cb) {
     app.models.dialog.findOne({where: {
-      is_private:true,
+      is_grouped: false,
       or: [{and: [{private_participant_1_id: sender_id}, {private_participant_2_id: recipient_id}]},
         {and: [{private_participant_2_id: sender_id}, {private_participant_1_id: recipient_id}]}]
     }}, function(err, dialog) {
@@ -90,6 +90,7 @@ module.exports = function(Message) {
           // Creating dialog
           app.models.dialog.create({
             title: modelInstance.subject || "",
+            is_grouped: false,
             is_private: true,
             private_participant_1_id: modelInstance.recipient_id,
             private_participant_2_id: currentUser.id

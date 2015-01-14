@@ -46,6 +46,11 @@
       "type": "hasOne",
       "model": "dialog",
       "foreignKey": "marker_id"
+    },
+    "user": {
+      "type": "belongsTo",
+      "model": "user",
+      "foreignKey": "user_id"
     }
   },
   "acls": [

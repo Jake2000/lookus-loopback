@@ -59,6 +59,18 @@
     "dataSource": "mongodb",
     "public": false
   },
+  "dialogModel": {
+    "dataSource": null,
+    "public": false
+  },
+  "dialogModelEditable": {
+    "dataSource": null,
+    "public": false
+  },
+  "dialogModelExtended": {
+    "dataSource": null,
+    "public": false
+  },
   "credentials": {
     "dataSource": null,
     "public": false

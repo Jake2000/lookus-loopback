@@ -1,5 +1,7 @@
 var loopback = require('loopback');
 var app = require('./../../server/server');
+var async = require('async');
+var _ = require('lodash');
 
 module.exports = function(Dialog) {
   Dialog.disableRemoteMethod('create', true);
@@ -36,4 +38,50 @@ module.exports = function(Dialog) {
   //Dialog.disableRemoteMethod('__link__users', false);
   //Dialog.disableRemoteMethod('__unlink__users', false);
   Dialog.disableRemoteMethod('__updateById__users', false);
+
+  Dialog.afterInitializeEvents = {
+    addTimestamps:function(next) {
+      if (!this.created) {
+        this.created = Date.now();
+      }
+      if (!this.updated) {
+        this.updated = Date.now();
+      }
+      if (next) next();
+    },
+    includeLastMessage:function(next) {
+      if (this.last_message === undefined) {
+        this.last_message = {
+          body: 'text',
+          subject: 'subject'
+        };
+      }
+      if (next) next();
+    },
+    includeRecipient:function(next) {
+      if (this.is_grouped === false) {
+        this.recipient = {
+          id: 'rcp',
+          last_name: 'rcp',
+          first_name: "text"
+        };
+      }
+      if (next) next();
+    }
+  };
+
+  Dialog.afterInitialize = function(next) {
+    Dialog.afterInitializeEvents = Dialog.afterInitializeEvents || {};
+    var events = [];
+    var self = this;
+    _.forEach(_.keys(Dialog.afterInitializeEvents), function(key) {
+      events.push(Dialog.afterInitializeEvents[key]);
+    });
+
+    async.eachSeries(events, function(fn, cb) {
+      fn.call(self, cb);
+    }, function(err){
+      if (next) next();
+    });
+  };
 };
