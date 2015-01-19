@@ -21,14 +21,4 @@ module.exports = function(app) {
   app.remotes().findMethod('dialog.findById').returns = [
     {arg: 'dialog', type: ['dialogModelExtended'], root: true}
   ];
-
-  var dialog = app.models.dialog;
-  var find = dialog.find;
-
-  //dialog.find = function(filter, cb) {
-  //  filter = filter || {};
-  //  find.call(dialog, filter, function(err, dialogs) {
-  //
-  //  });
-  //};
 };

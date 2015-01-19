@@ -21,7 +21,4 @@ module.exports = function(app) {
     }
   );
 
-
-
-  //User.prototype.__create__dialogs.shared = false;
 };

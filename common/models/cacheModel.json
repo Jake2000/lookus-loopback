@@ -1,0 +1,10 @@
+{
+  "name": "CacheModel",
+  "base": "PersistedModel",
+  "properties": {},
+  "hidden": [],
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": []
+}

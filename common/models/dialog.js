@@ -3,6 +3,11 @@ var app = require('./../../server/server');
 var async = require('async');
 var _ = require('lodash');
 
+/**
+ * @class Dialog
+ * @inherits {PersistedModel}
+ * @param Dialog
+ */
 module.exports = function(Dialog) {
   Dialog.disableRemoteMethod('create', true);
   Dialog.disableRemoteMethod('update', true);

@@ -46,17 +46,6 @@ module.exports = function(User) {
   User.disableRemoteMethod('__unlink__owners', false);
   User.disableRemoteMethod('__updateById__owners', false);
 
-  User.remember = function(key, fn, cb) {
-    //TODO caching
-    fn(function (err, res) {
-      cb(err,res);
-    });
-  };
-
-  User.forget = function(key, fn, cb) {
-    //TODO caching
-  };
-
   User.findByCredentials = function(credentials, fn) {
     var self = this;
 
