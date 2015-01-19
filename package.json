@@ -6,6 +6,7 @@
     "pretest": "jshint ."
   },
   "dependencies": {
+    "loopback-component-passport": "*",
     "async": "^0.9.0",
     "compression": "^1.0.3",
     "debug": "^2.0.0",
