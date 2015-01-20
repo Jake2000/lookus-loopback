@@ -10,7 +10,8 @@
     "successRedirect": "/auth/account",
     "failureRedirect": "/login",
     "scope": ["email"],
-    "failureFlash": true
+    "failureFlash": true,
+    "attachOnly": true
   },
   "facebook-link": {
     "provider": "facebook",
@@ -24,7 +25,8 @@
     "failureRedirect": "/login",
     "scope": ["email", "user_likes"],
     "link": true,
-    "failureFlash": true
+    "failureFlash": true,
+    "attachOnly": true
   },
   "vkontakte-login": {
     "provider": "vkontakte",
@@ -37,6 +39,7 @@
     "successRedirect": "/auth/account",
     "failureRedirect": "/login",
     "scope": ["email", "profile"],
-    "failureFlash": false
+    "failureFlash": false,
+    "attachOnly": true
   }
 }
