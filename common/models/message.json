@@ -12,6 +12,10 @@
     "subject": {
       "type": "string",
       "description": "Тема сообщения (при автосоздании диалога - заголовок диалога)"
+    },
+    "created": {
+      "type": "date",
+      "description": "Дата и время создания"
     }
   },
   "validations": [],

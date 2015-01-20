@@ -62,6 +62,10 @@
       "type": "boolean",
       "required": false,
       "description": "Является ли пользователь другом"
+    },
+    "created": {
+      "type": "date",
+      "description": "Дата и время создания"
     }
   },
   "validations": [],

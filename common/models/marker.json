@@ -27,9 +27,17 @@
       "type": "string",
       "description": "Изображение маркера (уменьш.)"
     },
-    "created_at": {
+    "created": {
       "type": "date",
       "description": "Дата и время создания"
+    },
+    "updated": {
+      "type": "date",
+      "description": "Дата и время изменения"
+    },
+    "deleted": {
+      "type": "date",
+      "description": "Дата и время удаления"
     },
     "is_up": {
       "type": "boolean",
