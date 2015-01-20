@@ -307,6 +307,14 @@ module.exports = function(User) {
   //  // this function will not be called.
   //};
 
+  User.beforeRemote('loginVK', function( ctx, modelInstance, next) {
+    (function(req, res, next) {
+      passport.authenticate('vkontakte-login', {
+        scope: ['friends']
+      });
+    })(ctx.req, ctx.res, next);
+  });
+
   User.loginVK = function(cb) {
     console.log('loginVK');
     cb(null);
@@ -327,14 +335,14 @@ module.exports = function(User) {
   //  }
   //);
   //
-  //User.remoteMethod(
-  //  'loginVK',
-  //  {
-  //    description: 'Login as VK user',
-  //    accepts: [
-  //    ],
-  //    http: {verb: 'post', path: '/login/vk'}
-  //  }
-  //);
+  User.remoteMethod(
+    'loginVK',
+    {
+      description: 'Login as VK user',
+      accepts: [
+      ],
+      http: {verb: 'get', path: '/login/vk'}
+    }
+  );
 
 };

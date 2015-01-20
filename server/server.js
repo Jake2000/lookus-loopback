@@ -28,7 +28,7 @@ app.set('view engine', 'jade');
 // Sub-apps like REST API are mounted via boot scripts.
 boot(app, __dirname);
 
-passportConfigurator.init();
+passportConfigurator.init(true);
 
 passportConfigurator.setupModels({
   userModel: app.models.user,
@@ -65,8 +65,6 @@ app.use(function setCurrentUser(req, res, next) {
     next();
   });
 });
-
-var router = app.loopback.Router();
 
 app.get('/', function (req, res, next) {
   res.render('pages/index', {user:
