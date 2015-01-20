@@ -1,0 +1,12 @@
+extends ../layouts/layout
+
+block content
+  .row
+    .col-md-12
+      h1 Login:
+      ul.list-inline.list-unstyled
+        li
+          a.btn.btn-primary(href="/auth/facebook") Login with Facebook
+        li
+          a.btn.btn-primary(href="/api/user/loginVK") Login with Vkontakte
+      br

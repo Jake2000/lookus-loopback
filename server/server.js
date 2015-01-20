@@ -19,6 +19,28 @@ try {
   process.exit(1); // fatal
 }
 
+// Setup the view engine (jade)
+var path = require('path');
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
+
+// Bootstrap the application, configure models, datasources and middleware.
+// Sub-apps like REST API are mounted via boot scripts.
+boot(app, __dirname);
+
+passportConfigurator.init();
+
+passportConfigurator.setupModels({
+  userModel: app.models.user,
+  userIdentityModel: app.models.userIdentity,
+  userCredentialModel: app.models.userCredential
+});
+for (var s in config) {
+  var c = config[s];
+  c.session = c.session !== false;
+  passportConfigurator.configureProvider(s, c);
+}
+
 // -- Add your pre-processing middleware here --
 app.use(loopback.context());
 app.use(loopback.token());
@@ -44,9 +66,21 @@ app.use(function setCurrentUser(req, res, next) {
   });
 });
 
-// Bootstrap the application, configure models, datasources and middleware.
-// Sub-apps like REST API are mounted via boot scripts.
-boot(app, __dirname);
+var router = app.loopback.Router();
+
+app.get('/', function (req, res, next) {
+  res.render('pages/index', {user:
+    req.user,
+    url: req.url
+  });
+});
+
+app.get('/login', function (req, res, next){
+  res.render('pages/login', {
+    user: req.user,
+    url: req.url
+  });
+});
 
 app.start = function() {
   // start the web server

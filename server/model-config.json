@@ -27,6 +27,14 @@
     "dataSource": "mongodb",
     "public": true
   },
+  "userCredential": {
+    "dataSource": "mongodb",
+    "public": true
+  },
+  "userIdentity": {
+    "dataSource": "mongodb",
+    "public": true
+  },
   "message": {
     "dataSource": "mongodb",
     "public": true

@@ -15,6 +15,38 @@ module.exports = function mountLoopBackExplorer(server) {
 
   var restApiRoot = server.get('restApiRoot');
 
+  // Overriding remotes for swagger UI
+  // !The crunch!
+  var remotes = server.remotes;
+  server.remotes = function() {
+    var remotesObj = remotes.apply(server, arguments);
+
+    var handler = remotesObj.handler('rest');
+
+
+    return remotesObj;
+  };
+
+  var adapter = server.remotes().handler('rest').adapter;
+  var routes = adapter.allRoutes();
+  adapter.allRoutes = function() {
+    var arr = routes.apply(adapter, arguments);
+
+    arr.push({
+      accepts: [],
+      description: 'Login as VK user',
+      documented: true,
+      errors: undefined,
+      method: 'users.loginVK',
+      notes: '',
+      path: '/users/login/vk',
+      verb: 'get',
+      returns: []
+    });
+    return arr;
+  };
+
+
   var explorerApp = explorer(server, { basePath: restApiRoot });
   server.use('/explorer', explorerApp);
   server.once('started', function() {

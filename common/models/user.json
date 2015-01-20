@@ -70,6 +70,16 @@
   },
   "validations": [],
   "relations": {
+    "identities": {
+      "type": "hasMany",
+      "model": "userIdentity",
+      "foreignKey": "userId"
+    },
+    "credentials": {
+      "type": "hasMany",
+      "model": "userCredential",
+      "foreignKey": "userId"
+    },
     "dialogs": {
       "type": "hasMany",
       "model": "dialog",
@@ -105,6 +115,13 @@
       "principalType": "ROLE",
       "principalId": "admin",
       "permission": "ALLOW"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "loginVK"
     }
   ],
   "methods": []

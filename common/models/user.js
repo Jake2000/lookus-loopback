@@ -1,5 +1,6 @@
 var debug = require('debug')('lookus:user');
 var app = require('./../../server/server');
+var passport = require('passport');
 
 module.exports = function(User) {
 
@@ -283,6 +284,57 @@ module.exports = function(User) {
     next();
   });
 
+  //User.loginVK = function() {
+  //  passport.authenticate('vk', {
+  //    scope: ['friends']
+  //  });
+  //  // The request will be redirected to vk.com
+  //  // for authentication, so
+  //  // this function will not be called.
+  //};
 
+  //User.loginVKCallback = function() {
+  //  passport.authenticate('vk', {
+  //    failureRedirect: '/auth'
+  //  }),
+  //    function (req, res) {
+  //      // Successful authentication
+  //      //, redirect home.
+  //      res.redirect('/');
+  //    });
+  //  // The request will be redirected to vk.com
+  //  // for authentication, so
+  //  // this function will not be called.
+  //};
+
+  User.loginVK = function(cb) {
+    console.log('loginVK');
+    cb(null);
+  };
+  //
+  //User.loginVKCallback = function(cb) {
+  //  console.log('loginVKCallback');
+  //  cb(null);
+  //};
+  //
+  //User.remoteMethod(
+  //  'loginVKCallback',
+  //  {
+  //    description: 'VK login callback',
+  //    accepts: [
+  //    ],
+  //    http: {verb: 'post', path: '/login/vk/callback'}
+  //  }
+  //);
+  //
+  //User.remoteMethod(
+  //  'loginVK',
+  //  {
+  //    description: 'Login as VK user',
+  //    accepts: [
+  //    ],
+  //    http: {verb: 'post', path: '/login/vk'}
+  //  }
+  //);
 
 };
