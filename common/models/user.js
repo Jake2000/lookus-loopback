@@ -380,10 +380,10 @@ module.exports = function(User) {
       accepts: [
       ],
       notes: 'URL Для авторизации пользователя через Facebook<br>' +
-      ' Сейчас не раюотает, мне нужен clientID и clientSecret' +
+      ' Сейчас не работает, мне нужен clientID и clientSecret.' +
       '' +
-      '<br><br><br>' +
-      'Потестировать данный функционал можно по <a href="/">ссылке</a>',
+      '<br><br>' +
+      'Чтобы увидеть работу данного функционала нужно перейти по <a href="/">ссылке</a>',
       http: {verb: 'get', path: '/login/fb'}
     }
   );
