@@ -26,7 +26,8 @@
     "scope": ["email", "user_likes"],
     "link": true,
     "failureFlash": true,
-    "attachOnly": true
+    "attachOnly": true,
+    "session": false
   },
   "vkontakte-login": {
     "provider": "vkontakte",
@@ -36,10 +37,12 @@
     "callbackURL": "/api/users/login/vk/callback",
     "authPath": "/api/users/login/vk",
     "callbackPath": "/api/users/login/vk/callback",
-    "successRedirect": "/auth/account",
+    "successRedirect": "/api/users/login/",
     "failureRedirect": "/login",
     "scope": ["email", "profile"],
     "failureFlash": false,
-    "attachOnly": true
+    "attachOnly": true,
+    "session": false,
+    "json": true
   }
 }

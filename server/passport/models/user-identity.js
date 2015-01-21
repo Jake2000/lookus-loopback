@@ -57,6 +57,20 @@
       password: password,
       email: email
     };
+    if(provider === 'vkontakte-login') {
+      if (profile.gender === 'male') {
+        userObj.sex = 1;
+      } else if (profile.gender === 'female'){
+        userObj.sex = 2;
+      }
+      userObj.birthday = '';
+      userObj.image_url = profile.photos[0].value;
+      userObj.first_name = (profile.name || {}).givenName;
+      userObj.last_name = (profile.name || {}).familyName;
+    } else if(provider === 'facebook-login') {
+
+    }
+
     return userObj;
   }
 

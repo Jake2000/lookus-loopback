@@ -5,12 +5,12 @@
   "idInjection": true,
   "properties": {
     "first_name": {
-      "type": "number",
+      "type": "string",
       "required": true,
       "description": "Имя"
     },
     "last_name": {
-      "type": "number",
+      "type": "string",
       "required": true,
       "description": "Фамилия"
     },
@@ -35,12 +35,10 @@
     },
     "country": {
       "type": "string",
-      "required": true,
       "description": "Страна (текст)"
     },
     "city": {
       "type": "string",
-      "required": true,
       "description": "Город (текст)"
     },
     "status": {

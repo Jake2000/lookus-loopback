@@ -175,8 +175,6 @@ module.exports = function(User) {
     }
   );
 
-
-
   User.remoteMethod(
     'resetPassword',
     {
@@ -331,8 +329,14 @@ module.exports = function(User) {
     {
       description: 'Vkontakte login callback',
       accepts: [
+        {arg: 'code', type: 'string', required: true}
       ],
-      notes: 'Сюда приходит коллбэк из ВК',
+      returns: {
+        arg: 'accessToken', type: 'AccessToken', root: true,
+        description:
+          'The response body contains properties of the AccessToken created on login.\n'
+      },
+      notes: 'Сюда приходит коллбэк из vk.auth.com. <br>',
       http: {verb: 'get', path: '/login/vk/callback'}
     }
   );
@@ -345,9 +349,12 @@ module.exports = function(User) {
       ],
       notes: 'URL Для авторизации пользователя через ВК<br>' +
         'При переходе на этот url происходит 302 редирект на oauth.vk.com ' +
-        'и вконтакте отдает html страницу с формой для подтверждения доверия этому приложению' +
+        'и вконтакте отдает html страницу с формой для подтверждения доверия этому приложению. <br>' +
+        'Как только пользователь подтверждает доверие, то происходит редирект на login.vk.com. <br>' +
+        'А затем, редирект на \'/api/users/login/vk/callback\?code=<код>\'<br>' +
         '<br><br><br>' +
-        'Потестировать данный функционал можно по <a href="/">ссылке</a>',
+        '<b>ВНИМАНИЕ</b>: Этот URL не будет работать через API Explorer.<br>' +
+        'Чтобы увидеть работу данного функционала нужно перейти по <a href="/">ссылке</a>',
       http: {verb: 'get', path: '/login/vk'}
     }
   );

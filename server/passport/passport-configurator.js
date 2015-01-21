@@ -438,7 +438,9 @@ PassportConfigurator.prototype.configureProvider = function (name, options) {
         } else {
           if (info && info.accessToken) {
             if (!!options.json) {
-              return res.json({'access_token': info.accessToken.id, userId: user.id});
+              info.accessToken.__data.user = user;
+              return res.json(info.accessToken);
+              //return res.json({'access_token': info.accessToken.id, userId: user.id});
             } else {
               res.cookie('access_token', info.accessToken.id, { signed: req.signedCookies ? true : false,
                 maxAge: info.accessToken.ttl });
