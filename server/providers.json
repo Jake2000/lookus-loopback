@@ -27,7 +27,8 @@
     "link": true,
     "failureFlash": true,
     "attachOnly": true,
-    "session": false
+    "session": false,
+    "json": true
   },
   "vkontakte-login": {
     "provider": "vkontakte",
