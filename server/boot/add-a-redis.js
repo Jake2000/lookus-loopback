@@ -7,11 +7,12 @@ module.exports = function(app) {
   console.log('add-a-redis');
 
   app.redisCache = {};
-  app.redisCache.client = redis.createClient();
-  app.redisCache.client.on("error", function (err) {
-    console.log("Redis cache error ", err);
-  });
-  app.redisCache.client.select(3, function() {});
+  app.redisCache.client = {};
+  //app.redisCache.client = {redis.createClient();
+  //app.redisCache.client.on("error", function (err) {
+  //  console.log("Redis cache error ", err);
+  //});
+  //app.redisCache.client.select(3, function() {});
 
   /**
    *
