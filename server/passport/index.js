@@ -18,8 +18,8 @@ exports.UserIdentity = require('./models/user-identity')(UserIdentityModel);
 exports.UserCredential = require('./models/user-credential')(UserCredentialModel);
 exports.ApplicationCredential = require('./models/application-credential')(ApplicationCredentialModel);
 
-exports.UserIdentity.autoAttach = 'db';
-exports.UserCredential.autoAttach = 'db';
-exports.ApplicationCredential.autoAttach = 'db';
+exports.UserIdentity.autoAttach = 'mongodb';
+exports.UserCredential.autoAttach = 'mongodb';
+exports.ApplicationCredential.autoAttach = 'mongodb';
 
 exports.PassportConfigurator = require('./passport-configurator');

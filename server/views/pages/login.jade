@@ -3,10 +3,10 @@ extends ../layouts/layout
 block content
   .row
     .col-md-12
-      h1 Login:
+      h1 Login with following services:
       ul.list-inline.list-unstyled
         li
-          a.btn.btn-primary(href="/auth/facebook") Login with Facebook
+          a.btn.btn-primary(href="/api/users/login/fb") Login with Facebook
         li
           a.btn.btn-primary(href="/api/users/login/vk") Login with Vkontakte
       br

@@ -13,10 +13,8 @@ nav.navbar.navbar-default.navbar-fixed-top(role='navigation')
         ul.nav.navbar-nav.navbar-right
           li
             a(href='/explorer') API Explorer
-          li(class=url=='/auth/account'?'active':undefined)
-            a(href='/auth/account') View Account
           li
-            a(href='/auth/logout') Log Out
+            a(href='/api/users/logout') Log Out
       else
         //- User is *not* Logged In
         ul.nav.navbar-nav.navbar-right
@@ -24,7 +22,3 @@ nav.navbar.navbar-default.navbar-fixed-top(role='navigation')
             a(href='/') Home
           li
             a(href='/explorer') API Explorer
-          li(class=url=='/login'?'active':undefined)
-            a(href='/login') Log in
-          li(class=url=='/signup'?'active':undefined)
-            a(href='/signup') Sign Up

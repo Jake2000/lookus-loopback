@@ -2,6 +2,11 @@ var loopback = require('loopback');
 var boot = require('loopback-boot');
 
 var app = module.exports = loopback();
+var cors = require('cors');
+
+// Enable CORS
+app.use(cors());
+app.options('*', cors());
 
 // Passport configurators..
 var loopbackPassport = require('./passport');
@@ -29,8 +34,8 @@ app.set('view engine', 'jade');
 // Sub-apps like REST API are mounted via boot scripts.
 boot(app, __dirname);
 
+// Start passportConfigurator
 passportConfigurator.init(true);
-
 passportConfigurator.setupModels({
   userModel: app.models.user,
   userIdentityModel: app.models.userIdentity,
@@ -67,14 +72,7 @@ app.use(function setCurrentUser(req, res, next) {
   });
 });
 
-app.get('/', function (req, res, next) {
-  res.render('pages/index', {user:
-    req.user,
-    url: req.url
-  });
-});
-
-app.get('/login', function (req, res, next){
+app.get('/', function (req, res, next){
   res.render('pages/login', {
     user: req.user,
     url: req.url

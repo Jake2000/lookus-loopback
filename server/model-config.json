@@ -29,11 +29,11 @@
   },
   "userCredential": {
     "dataSource": "mongodb",
-    "public": true
+    "public": false
   },
   "userIdentity": {
     "dataSource": "mongodb",
-    "public": true
+    "public": false
   },
   "message": {
     "dataSource": "mongodb",

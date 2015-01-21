@@ -296,6 +296,18 @@ module.exports = function(User) {
     })(ctx.req, ctx.res, next);
   });
 
+  User.beforeRemote('loginFB', function( ctx, modelInstance, next) {
+    (function(req, res, next) {
+      app.passportConfigurator.getCallbacks('vkontakte-login').authCallback(req, res, next);
+    })(ctx.req, ctx.res, next);
+  });
+
+  User.beforeRemote('loginFBCallback', function( ctx, modelInstance, next) {
+    (function(req, res, next) {
+      app.passportConfigurator.getCallbacks('vkontakte-login').finishCallback(req, res, next);
+    })(ctx.req, ctx.res, next);
+  });
+
   User.loginVK = function(cb) {
     // Empty method for vk auth
     cb(null);
@@ -305,10 +317,19 @@ module.exports = function(User) {
     cb(null);
   };
 
+  User.loginFB = function(cb) {
+    // Empty method for fb auth
+    cb(null);
+  };
+  User.loginFBCallback = function(cb) {
+    // Empty method for fb auth callback
+    cb(null);
+  };
+
   User.remoteMethod(
     'loginVKCallback',
     {
-      description: 'VK login callback',
+      description: 'Vkontakte login callback',
       accepts: [
       ],
       notes: 'Сюда приходит коллбэк из ВК',
@@ -319,11 +340,41 @@ module.exports = function(User) {
   User.remoteMethod(
     'loginVK',
     {
-      description: 'Login as VK user',
+      description: 'Login with Vkontakte',
       accepts: [
       ],
-      notes: 'Для авторизации пользователя через ВК',
+      notes: 'URL Для авторизации пользователя через ВК<br>' +
+        'При переходе на этот url происходит 302 редирект на oauth.vk.com ' +
+        'и вконтакте отдает html страницу с формой для подтверждения доверия этому приложению' +
+        '<br><br><br>' +
+        'Потестировать данный функционал можно по <a href="/">ссылке</a>',
       http: {verb: 'get', path: '/login/vk'}
+    }
+  );
+
+  User.remoteMethod(
+    'loginFBCallback',
+    {
+      description: 'Facebook login callback',
+      accepts: [
+      ],
+      notes: 'Сюда приходит коллбэк из Facebook',
+      http: {verb: 'get', path: '/login/fb/callback'}
+    }
+  );
+  //
+  User.remoteMethod(
+    'loginFB',
+    {
+      description: 'Login with Facebook',
+      accepts: [
+      ],
+      notes: 'URL Для авторизации пользователя через ВК<br>' +
+      'При переходе на этот url происходит 302 редирект на oauth.vk.com ' +
+      'и вконтакте отдает html страницу с формой для подтверждения доверия этому приложению' +
+      '<br><br><br>' +
+      'Потестировать данный функционал можно по <a href="/">ссылке</a>',
+      http: {verb: 'get', path: '/login/fb'}
     }
   );
 
