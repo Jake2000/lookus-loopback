@@ -9,8 +9,6 @@ module.exports = function(Marker) {
   Marker.disableRemoteMethod('find', true);
   Marker.disableRemoteMethod('count', true);
 
-
-
   Marker.afterCreate = function(next) {
     var ctx = loopback.getCurrentContext();
     var currentUser = ctx && ctx.get('currentUser');
@@ -32,7 +30,33 @@ module.exports = function(Marker) {
     });
   };
 
-  Marker.nearby = function(location, cb) {
+
+  var getLatitudeCell = function(location, zoom) {
+      var multiplier = 1;
+      if(zoom == 1) {
+        multiplier = 0.002
+      }
+
+      return location.lat/0.0003 + ':z:'+(zoom|0)
+  };
+
+  var getLongitudeCell = function(location, zoom) {
+    return location.lng/0.0003 + ':z:'+(zoom|0)
+  };
+
+  Marker.nearby = function(location, zoom, cb) {
+
+    var latCellKey = getLatitudeCell(location.lat, zoom);
+    var lngCellKey = getLongitudeCell(location.lat, zoom);
+
+    var key = latCellKey+':'+lngCellKey;
+    console.log(key);
+
+    //Marker.remember(key);
+
+    //app.models.marker.find({""}, );
+
+
     cb(null);
   };
 
