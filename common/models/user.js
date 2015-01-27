@@ -296,13 +296,13 @@ module.exports = function(User) {
 
   User.beforeRemote('loginFB', function( ctx, modelInstance, next) {
     (function(req, res, next) {
-      app.passportConfigurator.getCallbacks('vkontakte-login').authCallback(req, res, next);
+      app.passportConfigurator.getCallbacks('facebook-login').authCallback(req, res, next);
     })(ctx.req, ctx.res, next);
   });
 
   User.beforeRemote('loginFBCallback', function( ctx, modelInstance, next) {
     (function(req, res, next) {
-      app.passportConfigurator.getCallbacks('vkontakte-login').finishCallback(req, res, next);
+      app.passportConfigurator.getCallbacks('facebook-login').finishCallback(req, res, next);
     })(ctx.req, ctx.res, next);
   });
 
@@ -379,10 +379,15 @@ module.exports = function(User) {
       description: 'Login with Facebook',
       accepts: [
       ],
-      notes: 'URL Для авторизации пользователя через Facebook<br>' +
-      ' Сейчас не работает, мне нужен clientID и clientSecret.' +
-      '' +
+      notes: 'URL Для авторизации пользователя через FB<br>' +
+      'При переходе на этот url происходит 302 редирект на https://www.facebook.com/dialog/oauth ' +
+      'и facebook отдает html страницу с формой для подтверждения доверия этому приложению. <br>' +
+      'Как только пользователь подтверждает доверие, то происходит редирект на \'/api/users/login/fb/callback\?code=<код>\'<br>' +
       '<br><br>' +
+      '<b>ВНИМАНИЕ</b>: Для правильной работы необходимо проставить правильный домен (текущий)<br>'+
+      'в настройках API для приложения Facebook'+
+      '<br><br>' +
+      '<b>ВНИМАНИЕ</b>: Этот URL не будет работать через API Explorer.<br>' +
       'Чтобы увидеть работу данного функционала нужно перейти по <a href="/">ссылке</a>',
       http: {verb: 'get', path: '/login/fb'}
     }
