@@ -37,7 +37,7 @@ module.exports = function(Marker) {
         multiplier = 0.002
       }
 
-      return location.lat/0.0003 + ':z:'+(zoom|0)
+      return (location.lat % multiplier) + ':z:'+(zoom|0)
   };
 
   var getLongitudeCell = function(location, zoom) {
@@ -46,10 +46,10 @@ module.exports = function(Marker) {
 
   Marker.nearby = function(location, zoom, cb) {
 
-    var latCellKey = getLatitudeCell(location.lat, zoom);
-    var lngCellKey = getLongitudeCell(location.lat, zoom);
+    //var latCellKey = getLatitudeCell(location.lat, zoom);
+    //var lngCellKey = getLongitudeCell(location.lat, zoom);
 
-    var key = latCellKey+':'+lngCellKey;
+    //var key = latCellKey+':'+lngCellKey;
     console.log(key);
 
     //Marker.remember(key);
