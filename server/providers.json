@@ -9,7 +9,7 @@
     "callbackPath": "/api/users/login/fb/callback",
     "successRedirect": "/api/users/login/",
     "failureRedirect": "/api/users/login/",
-    "scope": ["email", "profile", "friends"],
+    "scope": ["email", "public_profile", "user_friends"],
     "failureFlash": false,
     "attachOnly": true,
     "session": false,

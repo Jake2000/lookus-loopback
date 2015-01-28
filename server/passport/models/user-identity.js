@@ -68,6 +68,7 @@
       userObj.first_name = (profile.name || {}).givenName;
       userObj.last_name = (profile.name || {}).familyName;
     } else if(provider === 'facebook-login') {
+      console.log('=== facebook-login ====');
       console.log(profile);
     } else {
       console.log(profile);
