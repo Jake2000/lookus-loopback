@@ -78,7 +78,7 @@
       }
 
       userObj.birthday = '';
-      userObj.image_url = '';
+      userObj.image_url = 'http://lorempixel.com/200/200/sports/';
       userObj.first_name = (profile.name || {}).givenName;
       userObj.last_name = (profile.name || {}).familyName;
 
