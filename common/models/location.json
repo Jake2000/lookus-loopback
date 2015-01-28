@@ -1,0 +1,21 @@
+{
+  "name": "locationModel",
+  "plural": "locationModels",
+  "base": "Model",
+  "idInjection": true,
+  "properties": {
+    "lat": {
+      "type": "number",
+      "description": "Широта"
+    },
+    "lng": {
+      "type": "number",
+      "description": "Долгота"
+    }
+  },
+  "hidden": [ "id" ],
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": []
+}

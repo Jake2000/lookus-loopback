@@ -79,6 +79,10 @@
     "dataSource": null,
     "public": false
   },
+  "locationModel": {
+    "dataSource": null,
+    "public": false
+  },
   "credentials": {
     "dataSource": null,
     "public": false
