@@ -9,8 +9,8 @@
     "callbackPath": "/api/users/login/fb/callback",
     "successRedirect": "/api/users/login/",
     "failureRedirect": "/api/users/login/",
-    "scope": ["email"],
-    "failureFlash": true,
+    "scope": ["email", "profile", "friends"],
+    "failureFlash": false,
     "attachOnly": true,
     "session": false,
     "json": true
@@ -27,7 +27,7 @@
     "failureRedirect": "/api/users/login/",
     "scope": ["email", "user_likes"],
     "link": true,
-    "failureFlash": true,
+    "failureFlash": false,
     "attachOnly": true,
     "session": false,
     "json": true
@@ -42,7 +42,7 @@
     "callbackPath": "/api/users/login/vk/callback",
     "successRedirect": "/api/users/login/",
     "failureRedirect": "/api/users/login/",
-    "scope": ["email", "profile"],
+    "scope": ["email", "profile", "friends"],
     "failureFlash": false,
     "attachOnly": true,
     "session": false,

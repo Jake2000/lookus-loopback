@@ -128,6 +128,10 @@
       var userModel = (userIdentityModel.relations.user &&
                        userIdentityModel.relations.user.modelTo) ||
                        loopback.getModelByType(loopback.User);
+      console.log('UserIdentity.login');
+      console.log(provider);
+      console.log(profile);
+
       var userObj = (options.profileToUser || profileToUser)(provider, profile);
       if (!userObj.email) {
         return cb('email is missing from the user profile');
