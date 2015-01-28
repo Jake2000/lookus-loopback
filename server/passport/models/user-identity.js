@@ -70,8 +70,18 @@
     } else if(provider === 'facebook-login') {
       console.log('=== facebook-login ====');
       console.log(profile);
-    } else {
-      console.log(profile);
+
+      if (profile.gender === 'male') {
+        userObj.sex = 1;
+      } else if (profile.gender === 'female'){
+        userObj.sex = 2;
+      }
+
+      userObj.birthday = '';
+      userObj.image_url = profile.photos[0].value;
+      userObj.first_name = (profile.name || {}).givenName;
+      userObj.last_name = (profile.name || {}).familyName;
+
     }
 
     return userObj;
@@ -129,10 +139,6 @@
       var userModel = (userIdentityModel.relations.user &&
                        userIdentityModel.relations.user.modelTo) ||
                        loopback.getModelByType(loopback.User);
-      console.log('UserIdentity.login');
-      console.log(provider);
-      console.log(profile);
-
       var userObj = (options.profileToUser || profileToUser)(provider, profile);
       if (!userObj.email) {
         return cb('email is missing from the user profile');
