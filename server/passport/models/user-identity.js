@@ -78,7 +78,7 @@
       }
 
       userObj.birthday = '';
-      userObj.image_url = profile.photos[0].value;
+      userObj.image_url = '';
       userObj.first_name = (profile.name || {}).givenName;
       userObj.last_name = (profile.name || {}).familyName;
 
