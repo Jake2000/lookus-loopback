@@ -14,8 +14,9 @@ module.exports = function(app) {
 
     if (object instanceof PersistedModel) {
       details.type = 'PersistedModel';
+      console.log(object.constructor);
       details.subtype = modelName;
-      details.json = JSON.stringify(object.toJSON());
+      details.json = JSON.stringify(object.__data);
     } else if (object instanceof Array) {
       details.type = 'Array';
       details.subtype = modelName;

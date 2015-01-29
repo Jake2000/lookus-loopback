@@ -1,0 +1,20 @@
+{
+  "name": "GeoPoint",
+  "base": "Model",
+  "idInjection": false,
+  "properties": {
+    "lat": {
+      "type": "number",
+      "description": "Широта"
+    },
+    "lng": {
+      "type": "number",
+      "description": "Долгота"
+    }
+  },
+  "hidden": [ "id" ],
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": []
+}

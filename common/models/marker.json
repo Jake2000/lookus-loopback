@@ -43,14 +43,9 @@
       "type": "boolean",
       "description": "Поднят ли маркер"
     },
-    "lat": {
-      "type": "number",
-      "description": "Широта",
-      "required": true
-    },
-    "lng": {
-      "type": "number",
-      "description": "Долгота",
+    "location": {
+      "type": "GeoPoint",
+      "description": "Широта и Долгота",
       "required": true
     }
   },

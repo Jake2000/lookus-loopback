@@ -19,19 +19,28 @@ module.exports = function(Marker) {
       return next(err);
     }
 
+    //TODO replace with findByUserId
     app.models.marker.find({userId:currentUser.id}, function(err, marker) {
         if(err) {
           return next(err);
         }
 
         if(marker) {
-          var err = new Error();
 
+          //if our user is admin - we allow to create multiple markers
+          app.models.Role.isInRole('admin', {principalType: app.models.RoleMapping.USER, principalId: currentUser.id}, function(err, exists) {
+
+            if (exists){
+              return next();
+            } else {
+              var err = new Error("You can't create a new marker without deleting the existed");
+              err.status = 422;
+              err.errorCode = 42203;
+              return next(err);
+            }
+          });
         }
     });
-
-
-    next();
   };
 
   Marker.afterCreate = function(next) {
@@ -210,7 +219,7 @@ module.exports = function(Marker) {
     if(zoom >= 17 ) {
 
       // we can do no-caching here
-      app.models.marker.find({ near: location}, function(err, markers) {
+      app.models.marker.find({ geo: {near: location, maxDistance: 2}}, function(err, markers) {
         if(err) {
           return cb(err);
         }
@@ -220,6 +229,8 @@ module.exports = function(Marker) {
         }
       });
     }
+
+    // retrieving from cache
 
     cb(null, {
       latIndex: latIndex,

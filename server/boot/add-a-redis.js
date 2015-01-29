@@ -7,12 +7,12 @@ module.exports = function(app) {
   console.log('add-a-redis');
 
   app.redisCache = {};
-  app.redisCache.client = {};
-  //app.redisCache.client = {redis.createClient();
-  //app.redisCache.client.on("error", function (err) {
-  //  console.log("Redis cache error ", err);
-  //});
-  //app.redisCache.client.select(3, function() {});
+  //app.redisCache.client = {};
+  app.redisCache.client = redis.createClient();
+  app.redisCache.client.on("error", function (err) {
+    console.log("Redis cache error ", err);
+  });
+  app.redisCache.client.select(3, function() {});
 
   /**
    *
@@ -31,7 +31,7 @@ module.exports = function(app) {
               return cb(null, null);
             }
             var cachedObject = app.deserialize(obj.type, obj.subtype, obj.entities, obj.json);
-            console.log('[TRedisCacheModule:remember] key:[', key, '] deserialized: name: [', (cachedObject||{}).modelName, ']');
+            console.log('[TRedisCacheModule:remember] key:[', key, '] deserialized: name: [', obj.subtype, ']');
             cb(null, cachedObject);
           });
         },
@@ -71,6 +71,15 @@ module.exports = function(app) {
    */
   app.redisCache.forget= function (key) {
     app.redisCache.client.hdel(key, 'json', 'entities', 'subtype', 'type');
+  };
+
+  app.redisCache.set= function (key, object) {
+    var sr = app.serialize('noModel', object);
+    console.log(sr);
+    this.client.hset(key, 'type', sr.type);
+    this.client.hset(key, 'subtype', sr.subtype);
+    this.client.hset(key, 'entities', sr.entities);
+    this.client.hset(key, 'json', sr.json);
   };
 
   //TODO manage situation when app is connecting to redis and DataSource request occurred
