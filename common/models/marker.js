@@ -1,4 +1,6 @@
 var app = require('./../../server/server');
+var loopback = require('loopback');
+var _ = require('lodash');
 
 module.exports = function(Marker) {
   Marker.disableRemoteMethod('upsert', true);

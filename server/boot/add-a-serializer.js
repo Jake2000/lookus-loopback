@@ -14,7 +14,6 @@ module.exports = function(app) {
 
     if (object instanceof PersistedModel) {
       details.type = 'PersistedModel';
-      console.log(object.constructor);
       details.subtype = modelName;
       details.json = JSON.stringify(object.__data);
     } else if (object instanceof Array) {
@@ -57,7 +56,10 @@ module.exports = function(app) {
 
     if (type == 'PersistedModel') {
       var modelProto = app.models[subtype];
-      object = new modelProto(parsedJson);
+      object = new modelProto();
+      object.__data = parsedJson;
+      if(parsedJson.id)
+        object.id = parsedJson.id;
     } else if (type == 'Array') {
       //TODO implement
     } else {

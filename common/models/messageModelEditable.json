@@ -1,0 +1,30 @@
+{
+  "name": "messageModelEditable",
+  "plural": "messageModelsEditable",
+  "base": "Model",
+  "idInjection": true,
+  "properties": {
+    "body": {
+      "type": "string",
+      "required": true,
+      "description": "Текст сообщения"
+    },
+    "subject": {
+      "type": "string",
+      "description": "Тема сообщения (при автосоздании диалога - заголовок диалога)"
+    },
+    "dialog_id": {
+      "type": "objectid",
+      "description": "ID диалога, в который попадет сообщение"
+    },
+    "recipient_id": {
+      "type": "objectid",
+      "description": "ID пользователя, которому попадет сообщение"
+    }
+  },
+  "hidden": ["id"],
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": []
+}

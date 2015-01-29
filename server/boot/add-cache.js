@@ -31,15 +31,15 @@ module.exports = function(app) {
           app.redisCache.forget(cacheKey);
         };
 
-  var User_findById = User.findById;
-  User.findByIdf = function(id, cb) {
-    this.remember("findById:"+id, function(daoCb) {
-      User_findById.call(this, id, function(err, res){
-
-        daoCb(err,res);
-      });
-    }, cb);
-  };
+  //var User_findById = User.findById;
+  //User.findById = function(id, cb) {
+  //  this.remember("findById:"+id, function(daoCb) {
+  //    User_findById.call(this, id, function(err, res){
+  //
+  //      daoCb(err,res);
+  //    });
+  //  }, cb);
+  //};
 
   console.log('add-cache:done');
 };

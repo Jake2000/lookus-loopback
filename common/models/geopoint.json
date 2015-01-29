@@ -1,5 +1,5 @@
 {
-  "name": "GeoPoint",
+  "name": "geopoint",
   "base": "Model",
   "idInjection": false,
   "properties": {

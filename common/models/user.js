@@ -1,6 +1,7 @@
 var debug = require('debug')('lookus:user');
 var app = require('./../../server/server');
 var passport = require('passport');
+var _ = require('lodash');
 
 module.exports = function(User) {
 
@@ -71,7 +72,7 @@ module.exports = function(User) {
       return fn(err2);
     }
     var cacheKey =
-      'user:findByCredentials'+
+      'findByCredentials'+
       ':email:' + query.email +
       ':username' + query.username +
       ':realm:' + query.realm;
@@ -114,9 +115,10 @@ module.exports = function(User) {
    * @param {Object} credentials username/password or email/password
    * @param {Function} fn Callback function
    */
-  User.login = function(credentials, fn) {
+  User.login = function(credentials, include, fn) {
     var self = this;
-
+    if(_.isFunction(include))
+      fn = include;
     self.findByCredentials(credentials, function(err, user) {
       var defaultError = new Error('login failed');
       defaultError.statusCode = 401;

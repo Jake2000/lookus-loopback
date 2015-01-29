@@ -39,6 +39,10 @@
     "dataSource": "mongodb",
     "public": true
   },
+  "messageModelEditable": {
+    "dataSource": null,
+    "public": false
+  },
   "marker": {
     "dataSource": "mongodb",
     "public": true
@@ -80,6 +84,10 @@
     "public": false
   },
   "locationModel": {
+    "dataSource": null,
+    "public": false
+  },
+  "geopoint": {
     "dataSource": null,
     "public": false
   },

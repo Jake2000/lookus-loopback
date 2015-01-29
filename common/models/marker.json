@@ -44,7 +44,7 @@
       "description": "Поднят ли маркер"
     },
     "location": {
-      "type": "GeoPoint",
+      "type": "locationModel",
       "description": "Широта и Долгота",
       "required": true
     }

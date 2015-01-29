@@ -5,8 +5,8 @@ var app = module.exports = loopback();
 var cors = require('cors');
 
 // Enable CORS
-app.use(cors());
-app.options('*', cors());
+//app.use(cors());
+//app.options('*', cors());
 
 // Passport configurators..
 var loopbackPassport = require('./passport');
@@ -35,17 +35,17 @@ app.set('view engine', 'jade');
 boot(app, __dirname);
 
 // Start passportConfigurator
-passportConfigurator.init(true);
-passportConfigurator.setupModels({
-  userModel: app.models.user,
-  userIdentityModel: app.models.userIdentity,
-  userCredentialModel: app.models.userCredential
-});
-for (var s in config) {
-  var c = config[s];
-  c.session = c.session !== false;
-  passportConfigurator.configureProvider(s, c);
-}
+//passportConfigurator.init(true);
+//passportConfigurator.setupModels({
+//  userModel: app.models.user,
+//  userIdentityModel: app.models.userIdentity,
+//  userCredentialModel: app.models.userCredential
+//});
+//for (var s in config) {
+//  var c = config[s];
+//  c.session = c.session !== false;
+//  passportConfigurator.configureProvider(s, c);
+//}
 
 // -- Add your pre-processing middleware here --
 app.use(loopback.context());
@@ -54,6 +54,8 @@ app.use(function setCurrentUser(req, res, next) {
   if (!req.accessToken) {
     return next();
   }
+
+
   app.models.user.findById(req.accessToken.userId, function(err, user) {
     if (err) {
       return next(err);
