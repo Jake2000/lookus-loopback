@@ -74,22 +74,21 @@ module.exports = function(app) {
   };
 
   app.redisCache.set= function (key, object) {
-    var sr = app.serialize('noModel', object);
-    console.log(sr);
-    this.client.hset(key, 'type', sr.type);
-    this.client.hset(key, 'subtype', sr.subtype);
-    this.client.hset(key, 'entities', sr.entities);
-    this.client.hset(key, 'json', sr.json);
+    this.client.hset(key, 'value', JSON.stringify(object));
+  };
+
+  app.redisCache.get= function (key, object) {
+    return JSON.parse(this.client.hget(key, 'value'));
   };
 
   app.redisCache.increment = function (key, increment) {
     increment = increment || 1;
-    this.client.incrby(key, increment);
+    this.client.incrby(key, 'value', increment);
   };
 
   app.redisCache.decrement = function (key, decrement) {
     decrement = decrement || 1;
-    this.client.decrby(key, decrement);
+    this.client.decrby(key, 'value', decrement);
   };
 
   //TODO manage situation when app is connecting to redis and DataSource request occurred

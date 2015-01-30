@@ -71,13 +71,105 @@ module.exports = function(Marker) {
     });
   };
 
+  /**
+   *
+   * @param {number} lat1
+   * @param {number} lng1
+   * @param {number} lat2
+   * @param {number} lng2
+   * @returns {{lat: number, lng: number}}
+   */
+  var getCenter = function(lat1, lng1, lat2, lng2) {
+    lat1 = lat1 + 90;
+    lat2 = lat2 + 90;
+
+    lng1 = lng1 + 180;
+    lng2 = lng2 + 180;
+
+    var latCenter = 0;
+    var lngCenter = 0;
+
+    if(lat2>lat1) {
+      latCenter = (lat2-lat1/2);
+    } else if(lat1>lat2) {
+      latCenter = (lat1-lat2/2);
+    } else {
+      latCenter = lat1;
+    }
+
+    if(lng2>lng1) {
+      lngCenter = (lng2-lng1/2);
+    } else if(lng1>lng2) {
+      lngCenter = (lng1-lng2/2);
+    } else {
+      lngCenter = lng1;
+    }
+
+    return {
+      lat: (latCenter - 90),
+      lng: (lngCenter - 180)
+    };
+  };
+
+  Marker.getCachedLocationByIndex = function(index, zoom) {
+    var latCacheKey = getCellCacheLatitudeKeyByIndex(index, zoom);
+    var lngCacheKey = getCellCacheLongitudeKeyByIndex(index, zoom);
+    var lat = this.hget(latCacheKey);
+    var lng = this.hget(lngCacheKey);
+
+    if(_.isNull(lat) || _.isNull(lng))
+      return null;
+
+    return {
+      lat: lat, lng: lng
+    }
+  };
+
+  Marker.setCachedLocationByIndex = function(index, zoom, location) {
+    var cacheKey = getCellCacheKeyByIndex(index, zoom);
+  };
+
+  Marker.incrCachedCountByIndex = function(index, zoom) {
+    var cacheKey = getCellCacheKeyByIndex(index, zoom);
+    this.increment(cacheKey, 1);
+  };
+
+  Marker.getCachedCountByIndex = function(index, zoom) {
+    var cacheKey = getCellCacheKeyByIndex(index, zoom);
+    return this.hget(cacheKey)|0;
+  };
+
   Marker.afterSave = function(next) {
+    var modelInstance = this;
+    var location = modelInstance.location;
+
+    // we should update grid cache
+    for(var zoom = 0; zoom <= MAX_CACHE_ZOOM; zoom++) {
+      var index = getCellIndex(modelInstance.location, zoom);
+      var count = Marker.getCachedCountByIndex(index, zoom);
+
+      var cachedLocation = Marker.getCachedLocationByIndex(index, zoom);
+
+      if(count>0 && !cachedLocation) {
+        var center = getCenter(cachedLocation.lat, cachedLocation.lng, location.lat, location.lng);
+        Marker.setCachedLocationByIndex(index, zoom, center);
+      } else {
+        Marker.setCachedLocationByIndex(index, zoom, location);
+      }
+      Marker.incrCachedCountByIndex(index, zoom);
+    }
+    next();
+  };
+
+  Marker.afterDestroy = function(next) {
     var modelInstance = this;
 
     // we should update grid cache
-    for(var i= 0; i<=MAX_CACHE_ZOOM; i++) {
-
+    for(var zoom= 0; zoom <= MAX_CACHE_ZOOM; zoom++) {
+      var cellIndex = getCellCacheKey(modelInstance.location, zoom);
+      Marker.decrement(cellIndex, 1);
     }
+    next();
   };
 
   /**
@@ -110,13 +202,11 @@ module.exports = function(Marker) {
       return GeoDistance(0,0, lat, lng);
   };
 
-
-
   /**
    *
    * @param {{lat:Number, lng:Number}} location
    * @param {Number} zoom
-   * @returns {string}
+   * @returns {Number}
    */
   var getLatitudeCellIndex = function(location, zoom) {
       var latResolution = 0.000005; //~ 1m
@@ -165,15 +255,14 @@ module.exports = function(Marker) {
         latResolution = '-';     //no-clustering
       }
 
-      var cellIndex = ((location.lat + 90.0) / latResolution)|0;
-      return 'z:'+(zoom|0) + ':lat:c:'+cellIndex;
+      return ((location.lat + 90.0) / latResolution)|0;
   };
 
   /**
    *
    * @param {{lat:Number, lng:Number}} location
    * @param {Number} zoom
-   * @returns {string}
+   * @returns {Number}
    */
   var getLongitudeCellIndex = function(location, zoom) {
     var lngResolution = 0.00002;
@@ -222,18 +311,64 @@ module.exports = function(Marker) {
       lngResolution = '-';     //no-clustering
     }
 
-    var cellIndex = ((location.lng + 180.0) / lngResolution)|0;
-    return 'z:'+(zoom|0) + ':lng:c:'+cellIndex;
+    return ((location.lng + 180.0) / lngResolution)|0;
+  };
+
+  /**
+   *
+   * @param location
+   * @param {Number} zoom
+   * @returns {{latIndex: Number, lngIndex: Number}}
+   */
+  var getCellIndex = function(location, zoom) {
+    return {  latIndex: getLatitudeCellIndex(location, zoom),
+              lngIndex: getLongitudeCellIndex(location, zoom)
+    };
+  };
+
+  /**
+   *
+   * @param location
+   * @param {Number} zoom
+   * @returns {String}
+   */
+  var getCellCacheKey = function(location, zoom) {
+    var latIndex = getLatitudeCellIndex(location, zoom);
+    var lngIndex = getLongitudeCellIndex(location, zoom);
+    return 'z:'+(zoom|0) + ':lng:'+lngIndex+':lat:'+latIndex;
+  };
+
+  var getCellCacheKeyByIndex = function(index, zoom) {
+    return getCellCacheKeyByIndexes(index.latIndex, index.lngIndex, zoom);
+  };
+
+  var getCellCacheKeyByIndexes = function(latIndex, lngIndex, zoom) {
+    return 'z:'+(zoom|0) + ':lng:'+lngIndex+':lat:'+latIndex;
+  };
+
+  var getCellCacheLatitudeKeyByIndex = function(index, zoom) {
+    return getCellCacheLatitudeKeyByIndexes(index.latIndex, index.lngIndex, zoom);
+  };
+
+  var getCellCacheLatitudeKeyByIndexes = function(latIndex, lngIndex, zoom) {
+    return 'z:'+(zoom|0) + ':lng:'+lngIndex+':lat:'+latIndex+':location:lat';
+  };
+
+  var getCellCacheLongitudeKeyByIndex = function(index, zoom) {
+    return getCellCacheLongitudeKeyByIndexes(index.latIndex, index.lngIndex, zoom);
+  };
+
+  var getCellCacheLongitudeKeyByIndexes = function(latIndex, lngIndex, zoom) {
+    return 'z:'+(zoom|0) + ':lng:'+lngIndex+':lat:'+latIndex+':location:lng';
   };
 
   Marker.nearby = function(location, zoom, cb) {
 
     console.log(arguments);
 
-    var latIndex = getLatitudeCellIndex(location, zoom);
-    var lngIndex = getLongitudeCellIndex(location, zoom);
+    var index = getCellIndex(location, zoom);
 
-    if(zoom >= 17 ) {
+    if(zoom >= MAX_CACHE_ZOOM ) {
 
       // we can do no-caching here
       app.models.marker.find({ geo: {near: location, maxDistance: 2}}, function(err, markers) {
@@ -245,13 +380,40 @@ module.exports = function(Marker) {
           return cb(null, markers);
         }
       });
+    } else {
+      // retrieving from cache
+      console.log( index);
+
+      var markers = [];
+      var lat1 = index.latIndex - 5;
+      var lat2 = index.latIndex + 5;
+      var lng1 = index.lngIndex - 5;
+      var lng2 = index.lngIndex + 5;
+
+      for(var latIndex = lat1; latIndex<=lat2; latIndex++) {
+        for(var lngIndex = lng1; lngIndex<=lng2; lngIndex++) {
+
+          var count = this.hget(getCellCacheKeyByIndexes(latIndex,lngIndex, zoom));
+
+          var latCacheKey = getCellCacheLatitudeKeyByIndexes(latIndex,lngIndex, zoom);
+          var lngCacheKey = getCellCacheLongitudeKeyByIndexes(latIndex,lngIndex, zoom);
+
+          var marker = {
+            is_clustered: true,
+            count: count,
+            location: {
+
+            }
+          };
+
+          markers.push(marker);
+
+        }
+      }
+      return cb(null, markers);
     }
 
-    // retrieving from cache
-    console.log( {
-      latIndex: latIndex,
-      lngIndex: lngIndex
-    });
+
   };
 
   Marker.remoteMethod('nearby',
@@ -271,3 +433,4 @@ module.exports = function(Marker) {
     }
   );
 };
+

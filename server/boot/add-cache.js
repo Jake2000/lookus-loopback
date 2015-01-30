@@ -37,7 +37,7 @@ module.exports = function(app) {
         function(key, increment) {
           var cacheKey = this.modelName + ':'+ key;
           console.log('increment: '+ cacheKey);
-          app.redisCache.increment(cacheKey, increment);
+          return app.redisCache.increment(cacheKey, increment);
         };
 
   User.decrement = Settings.decrement =
@@ -46,7 +46,25 @@ module.exports = function(app) {
         function(key, decrement) {
           var cacheKey = this.modelName + ':'+ key;
           console.log('decrement: '+ cacheKey);
-          app.redisCache.decrement(cacheKey, decrement);
+          return app.redisCache.decrement(cacheKey, decrement);
+        };
+
+  User.hget = Settings.hget =
+    AccessToken.hget = Marker.hget =
+      Dialog.hget = Message.hget =
+        function(key) {
+          var cacheKey = this.modelName + ':'+ key;
+          console.log('hget: '+ cacheKey);
+          return app.redisCache.get(cacheKey);
+        };
+
+  User.hset = Settings.hset =
+    AccessToken.hset = Marker.hset =
+      Dialog.hset = Message.hset =
+        function(key, value) {
+          var cacheKey = this.modelName + ':'+ key;
+          console.log('hset: '+ cacheKey);
+          return app.redisCache.set(cacheKey, value);
         };
 
   //var User_findById = User.findById;

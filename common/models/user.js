@@ -1,6 +1,7 @@
 var debug = require('debug')('lookus:user');
 var app = require('./../../server/server');
 var passport = require('passport');
+var loopback = require('loopback');
 var _ = require('lodash');
 
 module.exports = function(User) {
@@ -418,6 +419,35 @@ module.exports = function(User) {
       '<b>ВНИМАНИЕ</b>: Этот URL не будет работать через API Explorer.<br>' +
       'Чтобы увидеть работу данного функционала нужно перейти по <a href="/">ссылке</a>',
       http: {verb: 'get', path: '/login/fb'}
+    }
+  );
+
+  User.current = function(cb) {
+    var ctx = loopback.getCurrentContext();
+    var currentUser = ctx && ctx.get('currentUser');
+    if(!currentUser) {
+      var err = new Error('Access Exception');
+      err.status = 403;
+      err.errorCode = 40301;
+      return next(err);
+    }
+
+    cb(null, currentUser);
+  };
+
+  User.remoteMethod(
+    'current',
+    {
+      description: 'Get current authenticated user',
+      accepts: [
+      ],
+      returns: {
+        arg: 'user', type: 'user', root: true,
+        description:
+          'The response body contains properties of user.\n'
+      },
+      notes: 'Возвращает данные текущего аутентифицированного пользователя',
+      http: {verb: 'get', path: '/current'}
     }
   );
 
