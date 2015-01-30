@@ -5,8 +5,35 @@ var app = module.exports = loopback();
 var cors = require('cors');
 
 // Enable CORS
-//app.use(cors());
-//app.options('*', cors());
+app.use(cors());
+app.options('*', cors());
+
+// -- Add your pre-processing middleware here --
+app.use(loopback.context());
+app.use(loopback.token());
+app.use(function setCurrentUser(req, res, next) {
+  console.log('Trying to retrieve accessToken')
+  if (!req.accessToken) {
+    return next();
+  }
+
+  app.models.user.findById(req.accessToken.userId, function(err, user) {
+    if (err) {
+      return next(err);
+    }
+    if (!user) {
+      return next(new Error('No user with this access token was found.'));
+    }
+
+    var loopbackContext = loopback.getCurrentContext();
+    if (loopbackContext) {
+      loopbackContext.set('currentUser', user);
+    } else {
+      console.log('loopback context not found');
+    }
+    next();
+  });
+});
 
 // Passport configurators..
 var loopbackPassport = require('./passport');
@@ -34,45 +61,22 @@ app.set('view engine', 'jade');
 // Sub-apps like REST API are mounted via boot scripts.
 boot(app, __dirname);
 
-// Start passportConfigurator
-//passportConfigurator.init(true);
-//passportConfigurator.setupModels({
-//  userModel: app.models.user,
-//  userIdentityModel: app.models.userIdentity,
-//  userCredentialModel: app.models.userCredential
-//});
-//for (var s in config) {
-//  var c = config[s];
-//  c.session = c.session !== false;
-//  passportConfigurator.configureProvider(s, c);
-//}
-
-// -- Add your pre-processing middleware here --
-app.use(loopback.context());
-app.use(loopback.token());
-app.use(function setCurrentUser(req, res, next) {
-  if (!req.accessToken) {
-    return next();
-  }
 
 
-  app.models.user.findById(req.accessToken.userId, function(err, user) {
-    if (err) {
-      return next(err);
-    }
-    if (!user) {
-      return next(new Error('No user with this access token was found.'));
-    }
-
-    var loopbackContext = loopback.getCurrentContext();
-    if (loopbackContext) {
-      loopbackContext.set('currentUser', user);
-    } else {
-      console.log('loopback context not found');
-    }
-    next();
-  });
+//Start passportConfigurator
+passportConfigurator.init(true);
+passportConfigurator.setupModels({
+  userModel: app.models.user,
+  userIdentityModel: app.models.userIdentity,
+  userCredentialModel: app.models.userCredential
 });
+for (var s in config) {
+  var c = config[s];
+  c.session = c.session !== false;
+  passportConfigurator.configureProvider(s, c);
+}
+
+
 
 app.get('/', function (req, res, next){
   res.render('pages/login', {

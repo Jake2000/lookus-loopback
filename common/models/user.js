@@ -13,7 +13,7 @@ module.exports = function(User) {
   User.disableRemoteMethod('exists', true);
   User.disableRemoteMethod('findOne', true);
   User.disableRemoteMethod('count', true);
-  User.disableRemoteMethod('find', true);
+  //User.disableRemoteMethod('find', true);
 
   //User.disableRemoteMethod('__get__dialogs', false);
   //User.disableRemoteMethod('__create__dialogs', false);
@@ -47,6 +47,32 @@ module.exports = function(User) {
   User.disableRemoteMethod('__link__owners', false);
   User.disableRemoteMethod('__unlink__owners', false);
   User.disableRemoteMethod('__updateById__owners', false);
+
+  User.disableRemoteMethod('__get__credentials', false);
+  User.disableRemoteMethod('__create__credentials', false);
+  User.disableRemoteMethod('__delete__credentials', false);
+  User.disableRemoteMethod('__findById__credentials', false);
+  User.disableRemoteMethod('__count__credentials', false);
+  User.disableRemoteMethod('__destroyById__credentials', false);
+  User.disableRemoteMethod('__deleteById__credentials', false);
+  User.disableRemoteMethod('__exists__credentials', false);
+  User.disableRemoteMethod('__findOne__credentials', false);
+  User.disableRemoteMethod('__link__credentials', false);
+  User.disableRemoteMethod('__unlink__credentials', false);
+  User.disableRemoteMethod('__updateById__credentials', false);
+
+  User.disableRemoteMethod('__get__identities', false);
+  User.disableRemoteMethod('__create__identities', false);
+  User.disableRemoteMethod('__delete__identities', false);
+  User.disableRemoteMethod('__findById__identities', false);
+  User.disableRemoteMethod('__count__identities', false);
+  User.disableRemoteMethod('__destroyById__identities', false);
+  User.disableRemoteMethod('__deleteById__identities', false);
+  User.disableRemoteMethod('__exists__identities', false);
+  User.disableRemoteMethod('__findOne__identities', false);
+  User.disableRemoteMethod('__link__identities', false);
+  User.disableRemoteMethod('__unlink__identities', false);
+  User.disableRemoteMethod('__updateById__identities', false);
 
   User.findByCredentials = function(credentials, fn) {
     var self = this;

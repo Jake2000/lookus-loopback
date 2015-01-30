@@ -47,6 +47,10 @@
     "dataSource": "mongodb",
     "public": true
   },
+  "markerModelEditable": {
+    "dataSource": null,
+    "public": false
+  },
   "dialog": {
     "dataSource": "mongodb",
     "public": true

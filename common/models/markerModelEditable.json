@@ -1,0 +1,45 @@
+{
+  "name": "markerModelEditable",
+  "plural": "markerModelsEditable",
+  "base": "Model",
+  "idInjection": true,
+  "properties": {
+    "life_time": {
+      "type": "number",
+      "required": true,
+      "description": "Время жизни маркера в минутах"
+    },
+    "type": {
+      "type": "number",
+      "required": true,
+      "description": "Тип маркера"
+    },
+    "text": {
+      "type": "string",
+      "required": true,
+      "description": "Текст маркера (становится заголовком диалога для маркера)"
+    },
+    "image_url": {
+      "type": "string",
+      "description": "Изображение маркера"
+    },
+    "image_preview_url": {
+      "type": "string",
+      "description": "Изображение маркера (уменьш.)"
+    },
+    "is_up": {
+      "type": "boolean",
+      "description": "Поднят ли маркер"
+    },
+    "location": {
+      "type": "locationModel",
+      "description": "Широта и Долгота",
+      "required": true
+    }
+  },
+  "hidden": ["id"],
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": []
+}

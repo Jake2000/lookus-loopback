@@ -21,6 +21,9 @@ module.exports = function(Marker) {
       return next(err);
     }
 
+    // Attaching user
+    modelInstance.userId = currentUser.id;
+
     //TODO replace with findByUserId
     app.models.marker.find({userId:currentUser.id}, function(err, marker) {
         if(err) {
@@ -88,6 +91,7 @@ module.exports = function(Marker) {
     return d * 1000;
   };
 
+  // http://www.tytai.com/gmap/
   // http://www.wolfpil.de/v3/deep-zoom.html
   // http://www.manuel-bieh.de/publikationen/scripts/geolib/demo.html
 
@@ -233,8 +237,7 @@ module.exports = function(Marker) {
     }
 
     // retrieving from cache
-
-    cb(null, {
+    console.log( {
       latIndex: latIndex,
       lngIndex: lngIndex
     });
