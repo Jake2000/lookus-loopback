@@ -31,6 +31,24 @@ module.exports = function(app) {
           app.redisCache.forget(cacheKey);
         };
 
+  User.increment = Settings.increment =
+    AccessToken.increment = Marker.increment =
+      Dialog.increment = Message.increment =
+        function(key, increment) {
+          var cacheKey = this.modelName + ':'+ key;
+          console.log('increment: '+ cacheKey);
+          app.redisCache.increment(cacheKey, increment);
+        };
+
+  User.decrement = Settings.decrement =
+    AccessToken.decrement = Marker.decrement =
+      Dialog.decrement = Message.decrement =
+        function(key, decrement) {
+          var cacheKey = this.modelName + ':'+ key;
+          console.log('decrement: '+ cacheKey);
+          app.redisCache.decrement(cacheKey, decrement);
+        };
+
   //var User_findById = User.findById;
   //User.findById = function(id, cb) {
   //  this.remember("findById:"+id, function(daoCb) {

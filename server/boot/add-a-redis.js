@@ -82,6 +82,16 @@ module.exports = function(app) {
     this.client.hset(key, 'json', sr.json);
   };
 
+  app.redisCache.increment = function (key, increment) {
+    increment = increment || 1;
+    this.client.incrby(key, increment);
+  };
+
+  app.redisCache.decrement = function (key, decrement) {
+    decrement = decrement || 1;
+    this.client.decrby(key, decrement);
+  };
+
   //TODO manage situation when app is connecting to redis and DataSource request occurred
 
 };

@@ -2,6 +2,8 @@ var app = require('./../../server/server');
 var loopback = require('loopback');
 var _ = require('lodash');
 
+var MAX_CACHE_ZOOM = 16;
+
 module.exports = function(Marker) {
   Marker.disableRemoteMethod('upsert', true);
   Marker.disableRemoteMethod('update', true);
@@ -67,6 +69,15 @@ module.exports = function(Marker) {
         next();
       });
     });
+  };
+
+  Marker.afterSave = function(next) {
+    var modelInstance = this;
+
+    // we should update grid cache
+    for(var i= 0; i<=MAX_CACHE_ZOOM; i++) {
+
+    }
   };
 
   /**
