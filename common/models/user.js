@@ -1,6 +1,5 @@
 var debug = require('debug')('lookus:user');
 var app = require('./../../server/server');
-var passport = require('passport');
 var loopback = require('loopback');
 var _ = require('lodash');
 

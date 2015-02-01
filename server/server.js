@@ -12,7 +12,7 @@ app.options('*', cors());
 app.use(loopback.context());
 app.use(loopback.token());
 app.use(function setCurrentUser(req, res, next) {
-  console.log('Trying to retrieve accessToken')
+  console.log('Trying to retrieve accessToken');
   if (!req.accessToken) {
     return next();
   }
@@ -41,10 +41,17 @@ var PassportConfigurator = loopbackPassport.PassportConfigurator;
 var passportConfigurator = new PassportConfigurator(app);
 app.passportConfigurator = passportConfigurator;
 
+
 // Build the providers/passport config
+var os = require("os");
+var hostname = os.hostname();
 var config = {};
 try {
-  config = require('./providers.json');
+  if (hostname == 'Inflcomp'){
+    config = require('./providers-test.json');
+  } else {
+    config = require('./providers.json');
+  }
 } catch (err) {
   console.error('Please configure your passport strategy in `providers.json`.');
   console.error('Create `providers.json` file in server/boot directory and replace the clientID/clientSecret values with your own.');
@@ -62,8 +69,7 @@ app.set('view engine', 'jade');
 boot(app, __dirname);
 
 
-
-//Start passportConfigurator
+// Start passportConfigurator
 passportConfigurator.init(true);
 passportConfigurator.setupModels({
   userModel: app.models.user,
@@ -80,6 +86,13 @@ for (var s in config) {
 
 app.get('/', function (req, res, next){
   res.render('pages/login', {
+    user: req.user,
+    url: req.url
+  });
+});
+
+app.get('/map', function (req, res, next){
+  res.render('pages/map', {
     user: req.user,
     url: req.url
   });

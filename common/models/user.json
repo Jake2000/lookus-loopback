@@ -127,6 +127,13 @@
       "principalId": "$everyone",
       "permission": "ALLOW",
       "property": "loginVKCallback"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW",
+      "property": "current"
     }
   ],
   "methods": []

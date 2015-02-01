@@ -1,0 +1,51 @@
+{
+  "facebook-login": {
+    "provider": "facebook",
+    "module": "passport-facebook",
+    "clientID": "1587772988123128",
+    "clientSecret": "6ac71868c53d47e9e043e28be00cf5e5",
+    "callbackURL": "/api/users/login/fb/callback",
+    "authPath": "/api/users/login/fb",
+    "callbackPath": "/api/users/login/fb/callback",
+    "successRedirect": "/api/users/login/",
+    "failureRedirect": "/api/users/login/",
+    "scope": ["email", "public_profile", "user_friends"],
+    "failureFlash": false,
+    "attachOnly": true,
+    "session": false,
+    "json": true
+  },
+  "facebook-link": {
+    "provider": "facebook",
+    "module": "passport-facebook",
+    "clientID": "1587772988123128",
+    "clientSecret": "6ac71868c53d47e9e043e28be00cf5e5",
+    "callbackURL": "/link/facebook/callback",
+    "authPath": "/link/facebook",
+    "callbackPath": "/link/facebook/callback",
+    "successRedirect": "/api/users/login/",
+    "failureRedirect": "/api/users/login/",
+    "scope": ["email", "user_likes"],
+    "link": true,
+    "failureFlash": false,
+    "attachOnly": true,
+    "session": false,
+    "json": true
+  },
+  "vkontakte-login": {
+    "provider": "vkontakte",
+    "module": "passport-vkontakte",
+    "clientID": "2393406",
+    "clientSecret": "SRsWK9fKnRacT13P5voQ",
+    "callbackURL": "/api/users/login/vk/callback",
+    "authPath": "/api/users/login/vk",
+    "callbackPath": "/api/users/login/vk/callback",
+    "successRedirect": "/api/users/login/",
+    "failureRedirect": "/api/users/login/",
+    "scope": ["email", "profile", "friends"],
+    "failureFlash": false,
+    "attachOnly": true,
+    "session": false,
+    "json": true
+  }
+}

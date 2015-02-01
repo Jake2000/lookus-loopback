@@ -3,6 +3,10 @@ var _ = require('lodash');
 var async = require("async");
 var redis = require("redis");
 
+/**
+ *
+ * @param {express} app
+ */
 module.exports = function(app) {
   console.log('add-a-redis');
 
@@ -83,12 +87,12 @@ module.exports = function(app) {
 
   app.redisCache.increment = function (key, increment) {
     increment = increment || 1;
-    this.client.incrby(key, 'value', increment);
+    this.client.hincrby(key, 'value', increment);
   };
 
   app.redisCache.decrement = function (key, decrement) {
     decrement = decrement || 1;
-    this.client.decrby(key, 'value', decrement);
+    this.client.hdecrby(key, 'value', decrement);
   };
 
   //TODO manage situation when app is connecting to redis and DataSource request occurred
