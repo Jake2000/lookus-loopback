@@ -1,0 +1,50 @@
+{
+  "name": "userModelEditable",
+  "plural": "userModelsEditable",
+  "base": "Model",
+  "idInjection": true,
+  "properties": {
+    "first_name": {
+      "type": "string",
+      "required": false,
+      "description": "Имя"
+    },
+    "last_name": {
+      "type": "string",
+      "required": false,
+      "description": "Фамилия"
+    },
+    "birthday": {
+      "type": "date",
+      "description": "Дата рождения"
+    },
+    "sex": {
+      "type": "number",
+      "required": true,
+      "description": "Пол - (0-не указано, 1-мужчина, 2-женщина)"
+    },
+    "image_preview_url": {
+      "type": "string",
+      "required": false,
+      "description": "Ссылка на аватар (уменьшенный)"
+    },
+    "image_url": {
+      "type": "string",
+      "required": false,
+      "description": "Ссылка на аватар"
+    },
+    "country": {
+      "type": "string",
+      "description": "Страна (текст)"
+    },
+    "city": {
+      "type": "string",
+      "description": "Город (текст)"
+    }
+  },
+  "hidden": ["id"],
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": []
+}

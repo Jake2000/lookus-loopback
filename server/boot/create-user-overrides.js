@@ -21,4 +21,10 @@ module.exports = function(app) {
     }
   );
 
+  app.remotes().findMethod('user.create').notes = '' +
+  'Регистрация пользователя';
+
+
+  app.remotes().findMethod('user.create').accepts = [{arg: 'data', type: 'userModelEditable', http: {source: 'body'}}];
+
 };
