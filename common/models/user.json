@@ -6,12 +6,12 @@
   "properties": {
     "first_name": {
       "type": "string",
-      "required": true,
+      "required": false,
       "description": "Имя"
     },
     "last_name": {
       "type": "string",
-      "required": true,
+      "required": false,
       "description": "Фамилия"
     },
     "birthday": {
@@ -30,7 +30,7 @@
     },
     "image_url": {
       "type": "string",
-      "required": true,
+      "required": false,
       "description": "Ссылка на аватар"
     },
     "country": {
