@@ -127,6 +127,7 @@ function loadMarkers() {
             var gClMarker = new google.maps.Marker({
               position: new google.maps.LatLng(marker.location.lat, marker.location.lng),
               map: map,
+              icon: '/images/marker_cluster.png',
               title: marker.count
             });
             markers.push(gClMarker);
