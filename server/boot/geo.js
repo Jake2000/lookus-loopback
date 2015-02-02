@@ -2,7 +2,7 @@ var _ = require('lodash');
 
 var MAX_CACHED_ZOOM = 16;
 var CACHE_KEY = 'geo:';
-
+var B = 10000000000;
 /**
  *
  * @param {express} app
@@ -33,6 +33,13 @@ module.exports = function(app) {
    */
 
   /**
+   * Offset object
+   * @typedef {Object} Offset
+   * @property {number} latOffset - Latitude offset
+   * @property {number} lngOffset - Longitude offset
+   */
+
+  /**
    *
    * @param {number} zoom
    * @returns {number}
@@ -43,39 +50,39 @@ module.exports = function(app) {
     return 20/(Math.pow(2, zoom));
 
     if(zoom <= 0 ) {
-      resolution = 10;        // 2000km;
+      resolution = 10;
     } else if(zoom == 1 ) {
-      resolution = 5;        // 1000km;
+      resolution = 5;
     } else if(zoom == 2 ) {
-      resolution = 4;     // 500km;
+      resolution = 5;
     } else if(zoom == 3 ) {
-      resolution = 2.5;    // 250km;
+      resolution = 5;
     } else if(zoom == 4 ) {
-      resolution = 2;    // 125km;
+      resolution = 5;
     } else if(zoom == 5 ) {
-      resolution = 1.5;     // 30km;
+      resolution = 5;
     } else if(zoom == 6 ) {
-      resolution = 1.2;    // 15km;
+      resolution = 5;
     } else if(zoom == 7 ) {
-      resolution = 0.1;   // 7km;
+      resolution = 3;
     } else if(zoom == 8 ) {
-      resolution = 0.05;  // 3.5km;
+      resolution = 1;
     } else if(zoom == 9 ) {
-      resolution = 0.03;   // 1.75km;
+      resolution = 0.5;
     } else if(zoom == 10 ) {
-      resolution = 0.02;      // 850m;
+      resolution = 0.25;
     } else if(zoom == 11 ) {
-      resolution = 0.01;      // 800m;  !
+      resolution = 0.125;
     } else if(zoom == 12 ) {
-      resolution = 0.007;      // 400m;  !
+      resolution = 0.0625;
     } else if(zoom == 13 ) {
-      resolution = 0.006;      // 100m;
+      resolution = 0.03125;
     } else if(zoom == 14 ) {
-      resolution = 0.005;      // 50m;
+      resolution = 0.015625;
     } else if(zoom == 15 ) {
-      resolution = 0.001;      // 25m;
+      resolution = 0.0078125;
     } else if(zoom == 16 ) {
-      resolution = 0.0001;      // 10m;
+      resolution = 0.00390625;
     } else if(zoom == 17 ) {
       resolution = 0.0001;     //no-clustering
     } else if(zoom == 18 ) {
@@ -140,13 +147,48 @@ module.exports = function(app) {
   /**
    *
    * @param {PointCell} cell
+   * @param {Point} point
+   * @returns {Offset}
+   */
+  var getCellPointOffset = function(cell, point) {
+
+    var resolution = getResolution(cell.zoom);
+    var latOffset = (point.lat + 90) - (cell.latCell * resolution);
+    var lngOffset = (point.lng + 180) - (cell.lngCell * resolution * 2);
+
+    return {
+      latOffset: latOffset,
+      lngOffset: lngOffset
+    }
+  };
+
+  /**
+   *
+   * @param {PointCell} cell
+   * @returns {Point}
+   */
+  var getCellZeroPoint = function(cell) {
+
+    var resolution = getResolution(cell.zoom);
+    var lat = (cell.latCell * resolution) - 90;
+    var lng = (cell.lngCell * resolution * 2) - 180;
+
+    return {
+      lat:lat,
+      lng:lng
+    }
+  };
+
+  /**
+   *
+   * @param {PointCell} cell
    * @returns {Point}
    */
   var getCellCenterPoint  = function(cell) {
     var resolution = getResolution(cell.zoom);
 
-    var cLatCell = ((cell.latCell*2 +1)*resolution)/2 - 90;
-    var cLngCell = ((cell.lngCell*2 +1)*resolution*2)/2 - 180;
+    var cLatCell = ((cell.latCell*2 + 1)*resolution)/2 - 90;
+    var cLngCell = ((cell.lngCell*2 + 1)*resolution*2)/2 - 180;
 
     return {
       lat: cLatCell,
@@ -222,6 +264,7 @@ module.exports = function(app) {
    */
   var getCellInfo = function(cell, cb) {
     var cacheKey = getCellCacheKey(cell);
+    var zeroPoint = getCellZeroPoint(cell);
 
     app.redisCache.client.hgetall(cacheKey, function(err, obj) {
 
@@ -229,13 +272,13 @@ module.exports = function(app) {
         return cb(null, null);
       }
 
-      if(_.isNull(obj.lat) || _.isNull(obj.lng) || _.isNull(obj.number)) {
+      if(obj.number == 0 || _.isNull(obj.totalLatOffset) || _.isNull(obj.totalLngOffset) || _.isNull(obj.number)) {
         return cb(null, null);
       }
 
       cb(null, {
-        lat: obj.lat,
-        lng: obj.lng,
+        lat: zeroPoint.lat + ((obj.totalLatOffset/B)/obj.number),
+        lng: zeroPoint.lng + ((obj.totalLngOffset/B)/obj.number),
         points: obj.number
       });
     });
@@ -248,11 +291,11 @@ module.exports = function(app) {
    */
   var addCellPoint = function(cell, point) {
     var cacheKey = getCellCacheKey(cell);
+    var cellOffset = getCellPointOffset(cell, point);
+    console.log(cellOffset);
 
-    var cellCenter = getCellCenterPoint(cell);
-
-    app.redisCache.client.hset(cacheKey, 'lat', cellCenter.lat);
-    app.redisCache.client.hset(cacheKey, 'lng', cellCenter.lng);
+    app.redisCache.client.hincrby(cacheKey, 'totalLatOffset', (cellOffset.latOffset*B)|0);
+    app.redisCache.client.hincrby(cacheKey, 'totalLngOffset', (cellOffset.lngOffset*B)|0);
     app.redisCache.client.hincrby(cacheKey, 'number', 1);
 
   };
@@ -286,7 +329,10 @@ module.exports = function(app) {
    */
   var removeCellPoint = function(cell, point) {
     var cacheKey = getCellCacheKey(cell);
+    var cellOffset = getCellPointOffset(cell, point);
 
+    app.redisCache.client.hincrby(cacheKey, 'totalLatOffset', -((cellOffset.latOffset*B)|0));
+    app.redisCache.client.hincrby(cacheKey, 'totalLngOffset', -((cellOffset.lngOffset*B)|0));
     app.redisCache.client.hincrby(cacheKey, 'number', -1);
 
   };
