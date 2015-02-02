@@ -47,6 +47,10 @@ module.exports = function(app) {
   var getResolution = function(zoom) {
     var resolution = 0.00002;
 
+    if(zoom <=  2 ) {
+      return 20;
+    }
+
     return 20/(Math.pow(2, zoom));
 
     if(zoom <= 0 ) {
