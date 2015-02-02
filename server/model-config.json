@@ -102,5 +102,9 @@
   "email": {
     "dataSource": null,
     "public": false
+  },
+  "container": {
+    "dataSource": "storage",
+    "public": true
   }
 }

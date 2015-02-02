@@ -117,9 +117,9 @@
     {
       "accessType": "*",
       "principalType": "ROLE",
-      "principalId": "$everyone",
+      "principalId": "$authenticated",
       "permission": "ALLOW",
-      "property": "loginVK"
+      "property": "current"
     },
     {
       "accessType": "*",
@@ -131,9 +131,23 @@
     {
       "accessType": "*",
       "principalType": "ROLE",
-      "principalId": "$authenticated",
+      "principalId": "$everyone",
       "permission": "ALLOW",
-      "property": "current"
+      "property": "loginVK"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "loginFB"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "loginFBCallback"
     }
   ],
   "methods": []

@@ -3,5 +3,11 @@
     "url": "mongodb://localhost:27017/lookus",
     "name": "mongodb",
     "connector": "mongodb"
+  },
+  "storage": {
+    "name": "storage",
+    "connector": "loopback-component-storage",
+    "provider": "filesystem",
+    "root": "../client/uploads"
   }
 }

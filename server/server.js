@@ -98,17 +98,35 @@ app.get('/map', function (req, res, next){
   });
 });
 
-app.start = function() {
+app.start = function(cb) {
   // start the web server
-  return app.listen(function() {
+  var http = app.listen(function() {
     app.emit('started');
     console.log('Web server listening at: %s', app.get('url'));
+    cb(null)
   });
+
+
+  return http;
 };
 
 
 
 // start the server if `$ node server.js`
 if (require.main === module) {
-  app.start();
+  var http = app.start(function(err) {
+    app.io = require('socket.io').listen(http);
+    console.log('Websocket server listening at: %s', app.get('url'));
+
+    app.io.on('connection', function (socket) {
+      socket.emit('news', { hello: 'world' });
+      socket.on('my other event', function (data) {
+        console.log(data);
+      });
+    });
+  });
+
 }
+
+
+
