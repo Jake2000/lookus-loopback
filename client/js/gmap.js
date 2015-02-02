@@ -1,5 +1,6 @@
 var map;
 var markers = [];
+var currentMarker = null;
 
 function initialize() {
   var mapOptions = {
@@ -21,6 +22,7 @@ function initialize() {
       });
 
       map.setCenter(pos);
+      loadMarkers();
     }, function() {
       handleNoGeolocation(true);
     });
@@ -28,6 +30,21 @@ function initialize() {
     // Browser doesn't support Geolocation
     handleNoGeolocation(false);
   }
+
+  google.maps.event.addListener(map, 'click', function(event) {
+    if(currentMarker) {
+      if(!currentMarker.attached) {
+        currentMarker.setMap(null);
+        currentMarker = null;
+      }
+    }
+
+    currentMarker = new google.maps.Marker({
+      position: event.latLng,
+      map: map
+    });
+
+  });
 }
 
 function handleNoGeolocation(errorFlag) {
@@ -55,6 +72,38 @@ function setAllMap(map) {
 
 function clearMarkers() {
   setAllMap(null);
+  markers = [];
+}
+
+function saveCurrentMarker() {
+  if(!currentMarker)
+    return;
+
+  var marker = {
+    "life_time": 1523,
+    "type": 1,
+    "text": "hello",
+    "image_url": "/images/blank.jpg",
+    "image_preview_url": "/images/blank.jpg",
+    "is_up": false,
+    "location": {
+      "lat": currentMarker.position.lat(),
+      "lng": currentMarker.position.lng()
+    }
+  };
+
+  $.ajax({
+    type: 'POST',
+    contentType: 'application/json',
+    dataType: 'json',
+    processData: false,
+    url:'/api/markers?access_token=RrLgFyxVE0prUxVBx7gDcSLME3lYsqq86GDuZv3JJQ3bwKoWYVLpZAB58OiM8vaU',
+    data: JSON.stringify(marker),
+    success: function(data) {
+      markers.push(currentMarker);
+      currentMarker.attached = true;
+    }
+  });
 }
 
 function loadMarkers() {
@@ -88,7 +137,7 @@ function loadMarkers() {
       }
     }
   });
-};
+}
 
 $(function(){
   initialize();
@@ -97,7 +146,11 @@ $(function(){
     loadMarkers();
   });
 
-  google.maps.event.addListener(map, 'zoom_changed', _.throttle(function() {
+  $('#save-marker').on('click', function() {
+    saveCurrentMarker();
+  });
+
+  google.maps.event.addListener(map, 'bounds_changed', _.debounce(function() {
     loadMarkers();
-  }, 300));
+  }, 1000));
 });

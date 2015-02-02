@@ -34,58 +34,69 @@ module.exports = function(app) {
 
   /**
    *
+   * @param {number} zoom
+   * @returns {number}
+   */
+  var getResolution = function(zoom) {
+    var resolution = 0.00002;
+
+    if(zoom <= 0 ) {
+      resolution = 10;        // 2000km;
+    } else if(zoom == 1 ) {
+      resolution = 5;        // 1000km;
+    } else if(zoom == 2 ) {
+      resolution = 4;     // 500km;
+    } else if(zoom == 3 ) {
+      resolution = 2.5;    // 250km;
+    } else if(zoom == 4 ) {
+      resolution = 2;    // 125km;
+    } else if(zoom == 5 ) {
+      resolution = 1.5;     // 30km;
+    } else if(zoom == 6 ) {
+      resolution = 1.2;    // 15km;
+    } else if(zoom == 7 ) {
+      resolution = 0.1;   // 7km;
+    } else if(zoom == 8 ) {
+      resolution = 0.05;  // 3.5km;
+    } else if(zoom == 9 ) {
+      resolution = 0.03;   // 1.75km;
+    } else if(zoom == 10 ) {
+      resolution = 0.02;      // 850m;
+    } else if(zoom == 11 ) {
+      resolution = 0.01;      // 800m;  !
+    } else if(zoom == 12 ) {
+      resolution = 0.007;      // 400m;  !
+    } else if(zoom == 13 ) {
+      resolution = 0.006;      // 100m;
+    } else if(zoom == 14 ) {
+      resolution = 0.005;      // 50m;
+    } else if(zoom == 15 ) {
+      resolution = 0.001;      // 25m;
+    } else if(zoom == 16 ) {
+      resolution = 0.0001;      // 10m;
+    } else if(zoom == 17 ) {
+      resolution = 0.0001;     //no-clustering
+    } else if(zoom == 18 ) {
+      resolution = 0.0001;     //no-clustering
+    } else if(zoom == 19 ) {
+      resolution = 0.0001;     //no-clustering
+    } else if(zoom >= 20 ) {
+      resolution = 0.0001;     //no-clustering
+    }
+
+    return resolution;
+  };
+
+  /**
+   *
    * @param {Point} Point
    * @param {Number} zoom
    * @returns {Number}
    */
   var getLatitudeCellIndex = function(Point, zoom) {
-    var latResolution = 0.000005; //~ 1m
+    var resolution = getResolution(zoom);
 
-    if(zoom <= 0 ) {
-      latResolution = 5;        // 1000km;
-    } else if(zoom == 1 ) {
-      latResolution = 2.5;      // 500km;
-    } else if(zoom == 2 ) {
-      latResolution = 1.25;     // 250km;
-    } else if(zoom == 3 ) {
-      latResolution = 0.625;    // 125km;
-    } else if(zoom == 4 ) {
-      latResolution = 0.3;      // 60km;
-    } else if(zoom == 5 ) {
-      latResolution = 0.15;     // 30km;
-    } else if(zoom == 6 ) {
-      latResolution = 0.075;    // 15km;
-    } else if(zoom == 7 ) {
-      latResolution = 0.0375;   // 7km;
-    } else if(zoom == 8 ) {
-      latResolution = 0.01875;  // 3.5km;
-    } else if(zoom == 9 ) {
-      latResolution = 0.0125;   // 1.75km;
-    } else if(zoom == 10 ) {
-      latResolution = 0.00625;      // 850m;
-    } else if(zoom == 11 ) {
-      latResolution = 0.003125;      // 400m;
-    } else if(zoom == 12 ) {
-      latResolution = 0.0015625;      // 200m;
-    } else if(zoom == 13 ) {
-      latResolution = 0.00078125;      // 100m;
-    } else if(zoom == 14 ) {
-      latResolution = 0.000390625;      // 50m;
-    } else if(zoom == 15 ) {
-      latResolution = 0.0001953125;      // 25m;
-    } else if(zoom == 16 ) {
-      latResolution = 0.00009765625;      // 10m;
-    } else if(zoom == 17 ) {
-      latResolution = '-';     //no-clustering
-    } else if(zoom == 18 ) {
-      latResolution = '-';     //no-clustering
-    } else if(zoom == 19 ) {
-      latResolution = '-';     //no-clustering
-    } else if(zoom >= 20 ) {
-      latResolution = '-';     //no-clustering
-    }
-
-    return ((Point.lat + 90.0) / latResolution)|0;
+    return ((Point.lat + 90.0) / resolution)|0;
   };
 
   /**
@@ -95,53 +106,9 @@ module.exports = function(app) {
    * @returns {Number}
    */
   var getLongitudeCellIndex = function(Point, zoom) {
-    var lngResolution = 0.00002;
+    var resolution = getResolution(zoom)*2;
 
-    if(zoom <= 0 ) {
-      lngResolution = 5;        // 1000km;
-    } else if(zoom == 1 ) {
-      lngResolution = 2.5;      // 500km;
-    } else if(zoom == 2 ) {
-      lngResolution = 1.25;     // 250km;
-    } else if(zoom == 3 ) {
-      lngResolution = 0.625;    // 125km;
-    } else if(zoom == 4 ) {
-      lngResolution = 0.3;      // 60km;
-    } else if(zoom == 5 ) {
-      lngResolution = 0.15;     // 30km;
-    } else if(zoom == 6 ) {
-      lngResolution = 0.075;    // 15km;
-    } else if(zoom == 7 ) {
-      lngResolution = 0.0375;   // 7km;
-    } else if(zoom == 8 ) {
-      lngResolution = 0.01875;  // 3.5km;
-    } else if(zoom == 9 ) {
-      lngResolution = 0.0125;   // 1.75km;
-    } else if(zoom == 10 ) {
-      lngResolution = 0.00625;      // 850m;
-    } else if(zoom == 11 ) {
-      lngResolution = 0.003125;      // 400m;
-    } else if(zoom == 12 ) {
-      lngResolution = 0.0015625;      // 200m;
-    } else if(zoom == 13 ) {
-      lngResolution = 0.00078125;      // 100m;
-    } else if(zoom == 14 ) {
-      lngResolution = 0.000390625;      // 50m;
-    } else if(zoom == 15 ) {
-      lngResolution = 0.0001953125;      // 25m;
-    } else if(zoom == 16 ) {
-      lngResolution = 0.00009765625;      // 10m;
-    } else if(zoom == 17 ) {
-      lngResolution = '-';     //no-clustering
-    } else if(zoom == 18 ) {
-      lngResolution = '-';     //no-clustering
-    } else if(zoom == 19 ) {
-      lngResolution = '-';     //no-clustering
-    } else if(zoom >= 20 ) {
-      lngResolution = '-';     //no-clustering
-    }
-
-    return ((Point.lng + 180.0) / lngResolution)|0;
+    return ((Point.lng + 180.0) / resolution)|0;
   };
 
   /**
@@ -166,6 +133,23 @@ module.exports = function(app) {
    */
   var getCenter = function(Point1, Point2) {
     return getCenterByCoordinates(Point1.lat, Point1.lng, Point2.lat, Point2.lng);
+  };
+
+  /**
+   *
+   * @param {PointCell} cell
+   * @returns {Point}
+   */
+  var getCellCenterPoint  = function(cell) {
+    var resolution = getResolution(cell.zoom);
+
+    var cLatCell = ((cell.latCell*2 +1)*resolution)/2 - 90;
+    var cLngCell = ((cell.lngCell*2 +1)*resolution*2)/2 - 180;
+
+    return {
+      lat: cLatCell,
+      lng: cLngCell
+    }
   };
 
   /**
@@ -263,10 +247,34 @@ module.exports = function(app) {
   var addCellPoint = function(cell, point) {
     var cacheKey = getCellCacheKey(cell);
 
-    app.redisCache.client.hset(cacheKey, 'lat', point.lat);
-    app.redisCache.client.hset(cacheKey, 'lng', point.lng);
+    var cellCenter = getCellCenterPoint(cell);
+
+    app.redisCache.client.hset(cacheKey, 'lat', cellCenter.lat);
+    app.redisCache.client.hset(cacheKey, 'lng', cellCenter.lng);
     app.redisCache.client.hincrby(cacheKey, 'number', 1);
 
+  };
+
+  /**
+   *
+   * @param {Point} point
+   */
+  var addPoint = function(point) {
+    for(var zoom = 0; zoom <= MAX_CACHED_ZOOM; zoom++) {
+      var cell = getCell(point, zoom);
+      addCellPoint(cell, point);
+    }
+  };
+
+  /**
+   *
+   * @param {Point} point
+   */
+  var removePoint = function(point) {
+    for(var zoom = 0; zoom <= MAX_CACHED_ZOOM; zoom++) {
+      var cell = getCell(point, zoom);
+      removeCellPoint(cell, point);
+    }
   };
 
   /**
@@ -307,5 +315,7 @@ module.exports = function(app) {
   app.geo.addCellPoint = addCellPoint;
   app.geo.removeCellPoint = removeCellPoint;
   app.geo.getAdjacentCells = getAdjacentCells;
+  app.geo.addPoint = addPoint;
+  app.geo.removePoint = removePoint;
 
 };

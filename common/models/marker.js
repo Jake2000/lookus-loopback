@@ -77,10 +77,7 @@ module.exports = function(Marker) {
     var modelInstance = this;
 
     // we should update grid cache
-    for(var zoom = 0; zoom <= MAX_CACHE_ZOOM; zoom++) {
-      var cell = app.geo.getCell(modelInstance.location, zoom);
-      app.geo.addCellPoint(cell, modelInstance.location);
-    }
+    app.geo.addPoint(modelInstance.location);
     next();
   };
 
@@ -88,10 +85,7 @@ module.exports = function(Marker) {
     var modelInstance = this;
 
     // we should update grid cache
-    for(var zoom = 0; zoom <= MAX_CACHE_ZOOM; zoom++) {
-      var cell = app.geo.getCell(modelInstance.location, zoom);
-      app.geo.removeCellPoint(cell, modelInstance.location);
-    }
+    app.geo.removePoint(modelInstance.location);
     next();
   };
 
@@ -151,6 +145,28 @@ module.exports = function(Marker) {
       },
       accessType: 'READ',
       http: {verb: 'post', path: '/nearby'}
+    }
+  );
+
+  Marker.reindex = function(cb) {
+    app.models.marker.find({}, function(err, markers) {
+      async.eachSeries(markers,
+        function(marker, cb) {
+          app.geo.addPoint(marker.location);
+          cb();
+        }, function(err) {
+          cb(null,'success');
+      });
+    });
+  };
+
+  Marker.remoteMethod('reindex',
+    {
+      description: 'Re-indexes all markers',
+      accepts: [],
+      returns: {},
+      accessType: 'READ',
+      http: {verb: 'post', path: '/reindex'}
     }
   );
 };
