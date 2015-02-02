@@ -105,6 +105,6 @@
   },
   "container": {
     "dataSource": "storage",
-    "public": true
+    "public": false
   }
 }
