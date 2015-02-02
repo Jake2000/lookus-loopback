@@ -40,7 +40,7 @@ module.exports = function(app) {
   var getResolution = function(zoom) {
     var resolution = 0.00002;
 
-    return 10/(zoom+1);
+    return 10/(Math.pow(0, zoom));
 
     if(zoom <= 0 ) {
       resolution = 10;        // 2000km;
