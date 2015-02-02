@@ -44,6 +44,8 @@ function initialize() {
       map: map
     });
 
+    $('#save-marker').removeAttr('disabled');
+
   });
 }
 
@@ -92,16 +94,19 @@ function saveCurrentMarker() {
     }
   };
 
+  var accessToken = $('#auth-token').val();
+
   $.ajax({
     type: 'POST',
     contentType: 'application/json',
     dataType: 'json',
     processData: false,
-    url:'/api/markers?access_token=RrLgFyxVE0prUxVBx7gDcSLME3lYsqq86GDuZv3JJQ3bwKoWYVLpZAB58OiM8vaU',
+    url:'/api/markers?access_token='+accessToken,
     data: JSON.stringify(marker),
     success: function(data) {
       markers.push(currentMarker);
       currentMarker.attached = true;
+      $('#save-marker').attr('disabled', "disabled");
     }
   });
 }
