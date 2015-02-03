@@ -98,31 +98,36 @@ app.get('/map', function (req, res, next){
   });
 });
 
-app.start = function(cb) {
+app.get('/ws', function (req, res, next){
+  res.render('pages/ws', {
+    user: req.user,
+    url: req.url
+  });
+});
+
+app.start = function() {
   // start the web server
-  var http = app.listen(function() {
+  return app.listen(function() {
     app.emit('started');
     console.log('Web server listening at: %s', app.get('url'));
-    cb(null)
   });
-
-
-  return http;
 };
 
 
 
 // start the server if `$ node server.js`
 if (require.main === module) {
-  var http = app.start(function(err) {
-    app.io = require('socket.io').listen(http);
-    console.log('Websocket server listening at: %s', app.get('url'));
+  app.io = require('socket.io')(app.start());
 
-    app.io.on('connection', function (socket) {
-      socket.emit('news', { hello: 'world' });
-      socket.on('my other event', function (data) {
-        console.log(data);
-      });
+  app.io.on('connection', function(socket){
+    console.log('a user connected');
+    socket.on('msg', function(msg){
+      console.log('msg: ' + msg.text);
+      msg.text = "server." + msg.text;
+      app.io.emit('msg', msg);
+    });
+    socket.on('disconnect', function(){
+      console.log('user disconnected');
     });
   });
 

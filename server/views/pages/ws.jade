@@ -1,0 +1,14 @@
+extends ../layouts/layout
+block content
+  .row
+    .col-md-12
+      script(src="/socket.io/socket.io.js")
+      script(src="/js/io.js")
+      h1 Websockets test
+      a.btn.btn-primary(href="#", id="send-ws-message") Send ws message
+      span &nbsp
+      input.input(id="ws-message", placeholder="WS Message")
+      div.panel panel-default
+        div.panel-heading WS Messages
+        div.panel-body
+          ul(id="ws-messages")

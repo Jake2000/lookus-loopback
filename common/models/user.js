@@ -553,7 +553,7 @@ module.exports = function(User) {
       isStatic: false,
       description: 'Add user friend',
       accepts: [
-        {arg: 'friend_id', type: 'any', description:'User ID', required: true, http: {source: 'path'}}
+        {arg: 'friend_id', type: 'any', description:'User id', required: true, http: {source: 'path'}}
       ],
       returns: {
       },
@@ -567,7 +567,7 @@ module.exports = function(User) {
       isStatic: false,
       description: 'Remove user friend',
       accepts: [
-        {arg: 'friend_id', type: 'any', description:'User ID', required: true, http: {source: 'path'}}
+        {arg: 'friend_id', type: 'any', description:'User id', required: true, http: {source: 'path'}}
       ],
       returns: {
       },
