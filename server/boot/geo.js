@@ -226,8 +226,12 @@ module.exports = function(app) {
     var cacheKey = getCellCacheKey(cell);
     var zeroPoint = getCellZeroPoint(cell);
 
-    if(runtimeCache[cacheKey] || runtimeCache[cacheKey] === false)
-      return cb(null, runtimeCache[cacheKey]);
+    var cellInfo = runtimeCache[cacheKey];
+    if(cellInfo === false)
+      return cb(null, false);
+
+    if(cellInfo)
+      return cb(null, cellInfo);
 
     app.redisCache.client.hgetall(cacheKey, function(err, obj) {
 
@@ -261,8 +265,7 @@ module.exports = function(app) {
     var cellOffset = getCellPointOffset(cell, point);
     console.log(cellOffset);
 
-    if(runtimeCache[cacheKey])
-      runtimeCache[cacheKey] = null;
+    runtimeCache[cacheKey] = null;
 
     app.redisCache.client.hincrby(cacheKey, 'totalLatOffset', (cellOffset.latOffset*B)|0);
     app.redisCache.client.hincrby(cacheKey, 'totalLngOffset', (cellOffset.lngOffset*B)|0);
@@ -301,8 +304,7 @@ module.exports = function(app) {
     var cacheKey = getCellCacheKey(cell);
     var cellOffset = getCellPointOffset(cell, point);
 
-    if(runtimeCache[cacheKey])
-      runtimeCache[cacheKey] = null;
+    runtimeCache[cacheKey] = null;
 
     app.redisCache.client.hincrby(cacheKey, 'totalLatOffset', -((cellOffset.latOffset*B)|0));
     app.redisCache.client.hincrby(cacheKey, 'totalLngOffset', -((cellOffset.lngOffset*B)|0));
