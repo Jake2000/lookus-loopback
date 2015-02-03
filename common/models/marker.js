@@ -3,7 +3,6 @@ var loopback = require('loopback');
 var _ = require('lodash');
 var async = require('async');
 
-var MAX_CACHE_ZOOM = 16;
 
 module.exports = function(Marker) {
   Marker.disableRemoteMethod('upsert', true);

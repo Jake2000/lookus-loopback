@@ -3,6 +3,8 @@ var _ = require('lodash');
 var MAX_CACHED_ZOOM = 16;
 var CACHE_KEY = 'geo:';
 var B = 100000000;
+var runtimeCache = {};
+
 /**
  *
  * @param {express} app
@@ -224,21 +226,28 @@ module.exports = function(app) {
     var cacheKey = getCellCacheKey(cell);
     var zeroPoint = getCellZeroPoint(cell);
 
+    if(runtimeCache[cacheKey] || runtimeCache[cacheKey] === false)
+      return cb(null, runtimeCache[cacheKey]);
+
     app.redisCache.client.hgetall(cacheKey, function(err, obj) {
 
       if (err || !obj) {
+        runtimeCache[cacheKey] = false;
         return cb(null, null);
       }
 
       if(obj.number == 0 || _.isNull(obj.totalLatOffset) || _.isNull(obj.totalLngOffset) || _.isNull(obj.number)) {
+        runtimeCache[cacheKey] = false;
         return cb(null, null);
       }
 
-      cb(null, {
+      runtimeCache[cacheKey] = {
         lat: zeroPoint.lat + ((obj.totalLatOffset/B)/obj.number),
         lng: zeroPoint.lng + ((obj.totalLngOffset/B)/obj.number),
         points: obj.number
-      });
+      };
+
+      cb(null, runtimeCache[cacheKey]);
     });
   };
 
@@ -251,6 +260,9 @@ module.exports = function(app) {
     var cacheKey = getCellCacheKey(cell);
     var cellOffset = getCellPointOffset(cell, point);
     console.log(cellOffset);
+
+    if(runtimeCache[cacheKey])
+      runtimeCache[cacheKey] = null;
 
     app.redisCache.client.hincrby(cacheKey, 'totalLatOffset', (cellOffset.latOffset*B)|0);
     app.redisCache.client.hincrby(cacheKey, 'totalLngOffset', (cellOffset.lngOffset*B)|0);
@@ -288,6 +300,9 @@ module.exports = function(app) {
   var removeCellPoint = function(cell, point) {
     var cacheKey = getCellCacheKey(cell);
     var cellOffset = getCellPointOffset(cell, point);
+
+    if(runtimeCache[cacheKey])
+      runtimeCache[cacheKey] = null;
 
     app.redisCache.client.hincrby(cacheKey, 'totalLatOffset', -((cellOffset.latOffset*B)|0));
     app.redisCache.client.hincrby(cacheKey, 'totalLngOffset', -((cellOffset.lngOffset*B)|0));
