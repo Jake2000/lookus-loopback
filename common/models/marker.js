@@ -111,7 +111,7 @@ module.exports = function(Marker) {
 
       var adjacentCells = app.geo.getAdjacentCells(cell, distance);
 
-      async.eachSeries(adjacentCells, function(adjacentCell, cb) {
+      async.parallel(adjacentCells, function(adjacentCell, cb) {
         app.geo.getCellInfo(adjacentCell, function(err, pointInfo) {
           if(pointInfo) {
             markers.push({
@@ -125,7 +125,7 @@ module.exports = function(Marker) {
           }
           cb();
         });
-      }, function(err) {
+      }, function(err, results) {
         return cb(null, markers);
       });
     }
