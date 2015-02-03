@@ -1,0 +1,39 @@
+{
+  "name": "friendscontainer",
+  "plural": "friendscontainers",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "properties": {
+  },
+  "hidden": [],
+  "validations": [],
+  "relations": {
+    "owner": {
+      "type": "belongsTo",
+      "model": "user",
+      "foreignKey": "user_id",
+      "description": "ID пользователя"
+    },
+    "friends": {
+      "type": "hasMany",
+      "model": "user",
+      "foreignKey": "friendscontainer_id",
+      "description": "ID друга"
+    }
+  },
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "admin",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW"
+    }
+  ],
+  "methods": []
+}

@@ -2,6 +2,7 @@ var debug = require('debug')('lookus:user');
 var app = require('./../../server/server');
 var loopback = require('loopback');
 var _ = require('lodash');
+var async = require('async');
 
 module.exports = function(User) {
 
@@ -14,6 +15,8 @@ module.exports = function(User) {
   User.disableRemoteMethod('findOne', true);
   User.disableRemoteMethod('count', true);
   //User.disableRemoteMethod('find', true);
+
+  User.disableRemoteMethod('__get__friendscontainer', false);
 
   //User.disableRemoteMethod('__get__dialogs', false);
   //User.disableRemoteMethod('__create__dialogs', false);
@@ -255,14 +258,27 @@ module.exports = function(User) {
   User.afterCreate = function(next) {
     var modelInstance = this;
 
-    app.models.settings.create({
-      user_id: modelInstance.id,
-      notifications_global_disable: false,
-      notifications_only_from_friends: false,
-      notifications_no_sound: false
-    },function(err, settings) {
+    async.parallel([function(cb) {
+      app.models.settings.create({
+        user_id: modelInstance.id,
+        notifications_global_disable: false,
+        notifications_only_from_friends: false,
+        notifications_no_sound: false
+      }, function (err, settings) {
+        cb();
+      });
+    }, function(cb) {
+      app.models.friendscontainer.create({
+        user_id: modelInstance.id
+      },function(err, settings) {
+        cb();
+      });
+
+    }], function(err) {
       next();
     });
+
+
   };
 
   User.prototype.__set__settings = function(data, cb) {
@@ -450,4 +466,113 @@ module.exports = function(User) {
     }
   );
 
+  User.prototype.__get__friends = function(cb) {
+    app.models.friendscontainer.findOne({where: { user_id: this.id}}, function(err, friendsContainer) {
+
+      if(err) {
+        return cb(err);
+      }
+
+      if(!friendsContainer) {
+        var err1 = new Error("FriendContainer not found");
+        err1.status = 404;
+        err1.errorCode = 40401;
+        return cb(err1);
+      }
+
+      friendsContainer.friends.find({}, function(err, users) {
+        if(err) {
+          return cb(err);
+        }
+
+        return cb(null, users);
+      })
+    });
+  };
+
+  User.remoteMethod('__get__friends',
+    {
+      isStatic: false,
+      description: 'Query user friends',
+      returns: {
+        arg: 'users', type: ["user"], root: true,
+        description:
+          'The response body contains list of users\'s friends.\n'
+      },
+      accessType: 'READ',
+      http: {verb: 'get', path: '/friends'}
+    }
+  );
+
+  User.prototype.__link__friends = function(friendId, cb) {
+    app.models.friendscontainer.findOne({where: { user_id: this.id}}, function(err, friendContainer) {
+
+      if(err) {
+        return cb(err);
+      }
+
+      if(!friendContainer) {
+        var err1 = new Error("FriendContainer not found");
+        err1.status = 404;
+        err1.errorCode = 40401;
+        return cb(err1);
+      }
+
+      app.models.user.find({id:friendId}, function(err, friend) {
+        friendContainer.friends.add(friend, function(err, ok) {
+          cb(null, ok);
+        })
+      });
+    });
+  };
+
+  User.prototype.__unlink__friends = function(friendId, cb) {
+    app.models.friendscontainer.findOne({where: { user_id: this.id}}, function(err, friendContainer) {
+
+      if(err) {
+        return cb(err);
+      }
+
+      if(!friendContainer) {
+        var err1 = new Error("FriendContainer not found");
+        err1.status = 404;
+        err1.errorCode = 40401;
+        return cb(err1);
+      }
+
+      app.models.user.find({id:friendId}, function(err, friend) {
+        friendContainer.friends.remove(friend, function(err, ok) {
+          cb(null, ok);
+        });
+      });
+    });
+  };
+
+  User.remoteMethod('__link__friends',
+    {
+      isStatic: false,
+      description: 'Add user friend',
+      accepts: [
+        {arg: 'friend_id', type: 'any', description:'User ID', required: true, http: {source: 'path'}}
+      ],
+      returns: {
+      },
+      accessType: 'WRITE',
+      http: {verb: 'put', path: '/friends/rel/{user_id}'}
+    }
+  );
+
+  User.remoteMethod('__unlink__friends',
+    {
+      isStatic: false,
+      description: 'Remove user friend',
+      accepts: [
+        {arg: 'friend_id', type: 'any', description:'User ID', required: true, http: {source: 'path'}}
+      ],
+      returns: {
+      },
+      accessType: 'WRITE',
+      http: {verb: 'delete', path: '/friends/rel/{user_id}'}
+    }
+  );
 };

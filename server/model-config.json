@@ -75,7 +75,7 @@
     "dataSource": "mongodb",
     "public": true
   },
-  "friend": {
+  "friendscontainer": {
     "dataSource": "mongodb",
     "public": false
   },
