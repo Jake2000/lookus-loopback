@@ -132,7 +132,7 @@ module.exports = function(Marker) {
 
   Marker.remoteMethod('nearby',
     {
-      description: 'Get nearby markers (implementation in progress)',
+      description: 'Get nearby markers',
       accepts: [
         {arg: 'data', type: "locationModel", required: true, http: {source: 'body'}},
         {arg: 'zoom', type: "integer", required: true, http: {source: 'query'}}

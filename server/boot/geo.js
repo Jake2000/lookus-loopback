@@ -227,6 +227,10 @@ module.exports = function(app) {
     var zeroPoint = getCellZeroPoint(cell);
 
     var cellInfo = runtimeCache[cacheKey];
+
+    if(_.isUndefined(cellInfo))
+      return cb(null, false);
+
     if(cellInfo === false)
       return cb(null, false);
 
