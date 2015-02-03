@@ -2,7 +2,7 @@ var _ = require('lodash');
 
 var MAX_CACHED_ZOOM = 16;
 var CACHE_KEY = 'geo:';
-var B = 10000000000;
+var B = 100000000;
 /**
  *
  * @param {express} app
@@ -47,57 +47,11 @@ module.exports = function(app) {
   var getResolution = function(zoom) {
     var resolution = 0.00002;
 
-    if(zoom <=  2 ) {
-      return 20;
+    if(zoom <= 1 ) {
+      return 10;
     }
 
-    return 20/(Math.pow(2, zoom));
-
-    if(zoom <= 0 ) {
-      resolution = 10;
-    } else if(zoom == 1 ) {
-      resolution = 5;
-    } else if(zoom == 2 ) {
-      resolution = 5;
-    } else if(zoom == 3 ) {
-      resolution = 5;
-    } else if(zoom == 4 ) {
-      resolution = 5;
-    } else if(zoom == 5 ) {
-      resolution = 5;
-    } else if(zoom == 6 ) {
-      resolution = 5;
-    } else if(zoom == 7 ) {
-      resolution = 3;
-    } else if(zoom == 8 ) {
-      resolution = 1;
-    } else if(zoom == 9 ) {
-      resolution = 0.5;
-    } else if(zoom == 10 ) {
-      resolution = 0.25;
-    } else if(zoom == 11 ) {
-      resolution = 0.125;
-    } else if(zoom == 12 ) {
-      resolution = 0.0625;
-    } else if(zoom == 13 ) {
-      resolution = 0.03125;
-    } else if(zoom == 14 ) {
-      resolution = 0.015625;
-    } else if(zoom == 15 ) {
-      resolution = 0.0078125;
-    } else if(zoom == 16 ) {
-      resolution = 0.00390625;
-    } else if(zoom == 17 ) {
-      resolution = 0.0001;     //no-clustering
-    } else if(zoom == 18 ) {
-      resolution = 0.0001;     //no-clustering
-    } else if(zoom == 19 ) {
-      resolution = 0.0001;     //no-clustering
-    } else if(zoom >= 20 ) {
-      resolution = 0.0001;     //no-clustering
-    }
-
-    return resolution;
+    return 40/(Math.pow(2, zoom));
   };
 
   /**
