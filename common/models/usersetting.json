@@ -1,6 +1,6 @@
 {
-  "name": "settings",
-  "plural": "manysettings",
+  "name": "usersetting",
+  "plural": "usersettings",
   "base": "PersistedModel",
   "idInjection": true,
   "properties": {
@@ -20,6 +20,7 @@
       "description": "Уведомления без звука"
     }
   },
+  "hidden": [],
   "validations": [],
   "relations": {
     "owner": {

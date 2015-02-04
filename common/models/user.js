@@ -261,18 +261,18 @@ module.exports = function(User) {
     async.series([
       function(cb) {
         app.models.friendscontainer.create({
-          user_id: modelInstance.id
+          user_id: modelInstance.id.toString()
         },function(err, friendscontainer) {
           cb();
         });
       },
       function(cb) {
-        app.models.settings.create({
+        app.models.usersetting.create({
           notifications_global_disable: false,
           notifications_only_from_friends: false,
           notifications_no_sound: false,
-          user_id: modelInstance.id
-        }, function (err, settings) {
+          user_id: modelInstance.id.toString()
+        }, function (err, usersetting) {
           cb();
         });
       }
@@ -282,7 +282,7 @@ module.exports = function(User) {
   };
 
   User.prototype.__set__settings = function(data, cb) {
-    app.models.settings.findOne({where: { user_id: this.id}}, function(err, settings) {
+    app.models.usersetting.findOne({where: { user_id: this.id}}, function(err, settings) {
 
       if(err) {
         return cb(err);
@@ -310,10 +310,10 @@ module.exports = function(User) {
       isStatic: false,
       description: 'Update user settings',
       accepts: [
-        {arg: 'data', type: "settings", required: true, http: {source: 'body'}}
+        {arg: 'data', type: "usersetting", required: true, http: {source: 'body'}}
       ],
       returns: {
-        arg: 'settings', type: 'settings', root: true,
+        arg: 'settings', type: 'usersetting', root: true,
         description:
           'The response body contains properties of user settings.\n'
       },
@@ -481,22 +481,21 @@ module.exports = function(User) {
       }
 
       app.models.friendscontaineruser.find({
-        user_id
-      }, function(err, users) {
+        friendscontainer_id:  friendsContainer.id
+      }, function(err, usercontainers) {
         if(err) {
           return cb(err);
         }
 
-        return cb(null, users);
+        var ids = [];
+        _.forEach(usercontainers, function(usercontainer) {
+          ids.push(usercontainer.user_id);
+        });
+
+        app.models.user.findByIds(ids, function(err,users) {
+          return cb(null, users);
+        });
       });
-
-      friendsContainer.friends.find({}, function(err, users) {
-        if(err) {
-          return cb(err);
-        }
-
-        return cb(null, users);
-      })
     });
   };
 
@@ -528,33 +527,69 @@ module.exports = function(User) {
         return cb(err1);
       }
 
-      app.models.user.find({id:friendId}, function(err, friend) {
-        friendsContainer.friends.add(friend, function(err, ok) {
-          cb(null, ok);
-        })
+      app.models.user.findById(friendId, function(err, friend) {
+
+        if(err) {
+          return cb(err);
+        }
+
+        if(!friend) {
+          var err2 = new Error("User with this id not found");
+          err2.status = 404;
+          err2.errorCode = 40401;
+          return cb(err2);
+        }
+
+        app.models.friendscontaineruser.findOrCreate(
+          {
+            friendscontainer_id: friendsContainer.id,
+            user_id: friend.id
+          }, {
+            friendscontainer_id: friendsContainer.id,
+            user_id: friend.id
+          }, function (err, ok) {
+            cb(null, {});
+          });
       });
+
     });
   };
 
   User.prototype.__unlink__friends = function(friendId, cb) {
-    app.models.friendscontainer.findOne({where: { user_id: this.id}}, function(err, friendContainer) {
+    app.models.friendscontainer.findOne({where: { user_id: this.id}}, function(err, friendsContainer) {
 
       if(err) {
         return cb(err);
       }
 
-      if(!friendContainer) {
+      if(!friendsContainer) {
         var err1 = new Error("FriendContainer not found");
         err1.status = 404;
         err1.errorCode = 40401;
         return cb(err1);
       }
 
-      app.models.user.find({id:friendId}, function(err, friend) {
-        friendContainer.friends.remove(friend, function(err, ok) {
-          cb(null, ok);
-        });
+      app.models.user.findById(friendId, function(err, friend) {
+
+        if(err) {
+          return cb(err);
+        }
+
+        if(!friend) {
+          var err2 = new Error("User with this id not found");
+          err2.status = 404;
+          err2.errorCode = 40401;
+          return cb(err2);
+        }
+
+        app.models.friendscontaineruser.remove({
+            friendscontainer_id: friendsContainer.id,
+            user_id: friend.id
+          }, function (err, ok) {
+            cb(null, {});
+          });
       });
+
     });
   };
 
@@ -582,7 +617,7 @@ module.exports = function(User) {
       returns: {
       },
       accessType: 'WRITE',
-      http: {verb: 'delete', path: '/friends/rel/{friend_id}'}
+      http: {verb: 'delete', path: '/friends/rel/:friend_id'}
     }
   );
 };

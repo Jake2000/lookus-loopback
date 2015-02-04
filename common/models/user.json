@@ -91,7 +91,7 @@
     },
     "settings": {
       "type": "hasOne",
-      "model": "settings",
+      "model": "usersetting",
       "foreignKey": "user_id"
     },
     "marker": {

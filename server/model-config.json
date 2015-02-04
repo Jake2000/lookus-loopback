@@ -63,7 +63,7 @@
     "dataSource": "mongodb",
     "public": false
   },
-  "settings": {
+  "usersetting": {
     "dataSource": "mongodb",
     "public": false
   },
