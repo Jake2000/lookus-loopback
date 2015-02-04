@@ -9,6 +9,7 @@ module.exports = function(User) {
   User.login.shared = false;
   User.resetPassword.shared = false;
 
+  //User.disableRemoteMethod('login', true);
   User.disableRemoteMethod('upsert', true);
   User.disableRemoteMethod('updateAll', true);
   User.disableRemoteMethod('exists', true);
@@ -187,24 +188,27 @@ module.exports = function(User) {
     });
   };
 
-  User.remoteMethod(
-    'login',
-    {
-      description: 'Login a user with username/email and password',
-      notes: "Можно логиниться под двумя тестовыми пользователями:<br> " +
-            "1) user1: {email: user1@infloop.ru, password: 123456789} <br>" +
-            "2) admin1: {email: admin1@infloop.ru, password: 123456789}",
-      accepts: [
-        {arg: 'credentials', type: 'credentials', required: true, http: {source: 'body'}}
-      ],
-      returns: {
-        arg: 'accessToken', type: 'AccessToken', root: true,
-        description:
-          'The response body contains properties of the AccessToken created on login.\n'
-      },
-      http: {verb: 'post'}
-    }
-  );
+  //User.remoteMethod(
+  //  'loginLC',
+  //  {
+  //    description: 'Login a user with username/email and password',
+  //    notes: 'Можно логиниться под двумя тестовыми пользователями:<br> ' +
+  //          '1) user1: {email: user1@infloop.ru, password: 123456789} <br>' +
+  //          '2) admin1: {email: admin1@infloop.ru, password: 123456789}' +
+  //          '<br><br>' +
+  //          'При успешном логине возвращается модель AccessToken.<br>' +
+  //          'токеном доступа является ее id',
+  //    accepts: [
+  //      {arg: 'credentials', type: 'credentials', required: true, http: {source: 'body'}}
+  //    ],
+  //    returns: {
+  //      arg: 'accessToken', type: 'AccessToken', root: true,
+  //      description:
+  //        'The response body contains properties of the AccessToken created on login.\n'
+  //    },
+  //    http: {verb: 'post', path: '/login'}
+  //  }
+  //);
 
   User.remoteMethod(
     'resetPassword',
