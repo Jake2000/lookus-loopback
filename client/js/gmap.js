@@ -94,7 +94,7 @@ function saveCurrentMarker() {
     }
   };
 
-  var accessToken = $('#auth-token').val();
+  var accessToken = app.access_token;
 
   $.ajax({
     type: 'POST',
@@ -107,6 +107,13 @@ function saveCurrentMarker() {
       markers.push(currentMarker);
       currentMarker.attached = true;
       $('#save-marker').attr('disabled', "disabled");
+    },
+    error: function(err) {
+      if(err.responseJSON && err.responseJSON.error) {
+        //alert(err.responseJSON.error.message);
+        $('.main-error-block').html(err.responseJSON.error.message);
+        $('.main-error-block').show();
+      }
     }
   });
 }

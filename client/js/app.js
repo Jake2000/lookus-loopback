@@ -23,7 +23,6 @@ var app = {};
           window.location = '/welcome';
         },
         error: function(err) {
-          console.log(err);
           if(err.responseJSON && err.responseJSON.error) {
             //alert(err.responseJSON.error.message);
             $('.main-error-block').html(err.responseJSON.error.message);

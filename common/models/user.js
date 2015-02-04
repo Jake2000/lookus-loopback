@@ -558,7 +558,7 @@ module.exports = function(User) {
       returns: {
       },
       accessType: 'WRITE',
-      http: {verb: 'put', path: '/friends/rel/{user_id}'}
+      http: {verb: 'put', path: '/friends/rel/{friend_id}'}
     }
   );
 
@@ -572,7 +572,7 @@ module.exports = function(User) {
       returns: {
       },
       accessType: 'WRITE',
-      http: {verb: 'delete', path: '/friends/rel/{user_id}'}
+      http: {verb: 'delete', path: '/friends/rel/{friend_id}'}
     }
   );
 };
