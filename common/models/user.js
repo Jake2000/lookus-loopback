@@ -258,27 +258,27 @@ module.exports = function(User) {
   User.afterCreate = function(next) {
     var modelInstance = this;
 
-    async.parallel([function(cb) {
-      app.models.settings.create({
-        user_id: modelInstance.id,
-        notifications_global_disable: false,
-        notifications_only_from_friends: false,
-        notifications_no_sound: false
-      }, function (err, settings) {
-        cb();
-      });
-    }, function(cb) {
-      app.models.friendscontainer.create({
-        user_id: modelInstance.id
-      },function(err, settings) {
-        cb();
-      });
-
-    }], function(err) {
+    async.series([
+      function(cb) {
+        app.models.friendscontainer.create({
+          user_id: modelInstance.id
+        },function(err, friendscontainer) {
+          cb();
+        });
+      },
+      function(cb) {
+        app.models.settings.create({
+          notifications_global_disable: false,
+          notifications_only_from_friends: false,
+          notifications_no_sound: false,
+          user_id: modelInstance.id
+        }, function (err, settings) {
+          cb();
+        });
+      }
+    ], function(err) {
       next();
     });
-
-
   };
 
   User.prototype.__set__settings = function(data, cb) {
@@ -480,6 +480,16 @@ module.exports = function(User) {
         return cb(err1);
       }
 
+      app.models.friendscontaineruser.find({
+        user_id
+      }, function(err, users) {
+        if(err) {
+          return cb(err);
+        }
+
+        return cb(null, users);
+      });
+
       friendsContainer.friends.find({}, function(err, users) {
         if(err) {
           return cb(err);
@@ -505,13 +515,13 @@ module.exports = function(User) {
   );
 
   User.prototype.__link__friends = function(friendId, cb) {
-    app.models.friendscontainer.findOne({where: { user_id: this.id}}, function(err, friendContainer) {
+    app.models.friendscontainer.findOne({where: { user_id: this.id}}, function(err, friendsContainer) {
 
       if(err) {
         return cb(err);
       }
 
-      if(!friendContainer) {
+      if(!friendsContainer) {
         var err1 = new Error("FriendContainer not found");
         err1.status = 404;
         err1.errorCode = 40401;
@@ -519,7 +529,7 @@ module.exports = function(User) {
       }
 
       app.models.user.find({id:friendId}, function(err, friend) {
-        friendContainer.friends.add(friend, function(err, ok) {
+        friendsContainer.friends.add(friend, function(err, ok) {
           cb(null, ok);
         })
       });
@@ -558,7 +568,7 @@ module.exports = function(User) {
       returns: {
       },
       accessType: 'WRITE',
-      http: {verb: 'put', path: '/friends/rel/{friend_id}'}
+      http: {verb: 'put', path: '/friends/rel/:friend_id'}
     }
   );
 

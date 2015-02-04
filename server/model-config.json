@@ -79,6 +79,10 @@
     "dataSource": "mongodb",
     "public": false
   },
+ "friendscontaineruser": {
+   "dataSource": "mongodb",
+   "public": false
+ },
   "dialogModel": {
     "dataSource": null,
     "public": false

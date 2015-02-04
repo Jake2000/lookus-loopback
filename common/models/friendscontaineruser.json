@@ -1,25 +1,19 @@
 {
-  "name": "friendscontainer",
-  "plural": "friendscontainers",
+  "name": "friendscontaineruser",
   "base": "PersistedModel",
   "idInjection": true,
-  "properties": {
-  },
-  "hidden": [],
+  "properties": {},
   "validations": [],
   "relations": {
-    "owner": {
+    "user": {
       "type": "belongsTo",
       "model": "user",
-      "foreignKey": "user_id",
-      "description": "ID пользователя"
+      "foreignKey": "user_id"
     },
-    "friends": {
-      "type": "hasMany",
-      "model": "user",
-      "foreignKey": "friendscontainer_id",
-      "description": "ID друга",
-      "through": "friendscontaineruser"
+    "friendscontainer": {
+      "type": "belongsTo",
+      "model": "friendscontainer",
+      "foreignKey": "friendscontainer_id"
     }
   },
   "acls": [

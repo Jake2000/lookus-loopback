@@ -1,6 +1,6 @@
 {
   "name": "settings",
-  "plural": "settings",
+  "plural": "manysettings",
   "base": "PersistedModel",
   "idInjection": true,
   "properties": {
@@ -22,7 +22,7 @@
   },
   "validations": [],
   "relations": {
-    "user": {
+    "owner": {
       "type": "belongsTo",
       "model": "user",
       "foreignKey": "user_id"

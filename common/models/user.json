@@ -130,7 +130,7 @@
       "property": "loginVK"
     },
     {
-      "accessType": "*",
+      "accesType": "*",
       "principalType": "ROLE",
       "principalId": "$everyone",
       "permission": "ALLOW",
