@@ -4,6 +4,16 @@
   "base": "Model",
   "idInjection": true,
   "properties": {
+    "email": {
+      "type": "string",
+      "required": true,
+      "description": "Email"
+    },
+    "password": {
+      "type": "string",
+      "required": true,
+      "description": "Password"
+    },
     "first_name": {
       "type": "string",
       "required": false,
