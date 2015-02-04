@@ -5,10 +5,13 @@ block content
       script(src="/socket.io/socket.io.js")
       script(src="/js/io.js")
       h1 Websockets test
-      a.btn.btn-primary(href="#", id="send-ws-message") Send ws message
-      span &nbsp
-      input.input(id="ws-message", placeholder="WS Message")
-      div.panel panel-default
-        div.panel-heading WS Messages
+      form.form-inline
+        div.form-group
+          input.form-control(id="ws-message", placeholder="Websocket message text")
+        | &nbsp;
+        a.btn.btn-default(href="#", id="send-ws-message") Send
+      br
+      div.panel.panel-default
+        div.panel-heading Messages
         div.panel-body
-          ul(id="ws-messages")
+          ul.list-group(id="ws-messages")

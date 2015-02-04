@@ -91,8 +91,22 @@ app.get('/', function (req, res, next){
   });
 });
 
+app.get('/local', function (req, res, next){
+  res.render('pages/local', {
+    user: req.user,
+    url: req.url
+  });
+});
+
 app.get('/map', function (req, res, next){
   res.render('pages/map', {
+    user: req.user,
+    url: req.url
+  });
+});
+
+app.get('/welcome', function (req, res, next){
+  res.render('pages/welcome', {
     user: req.user,
     url: req.url
   });
