@@ -1,0 +1,17 @@
+{
+  "name": "successModel",
+  "plural": "successModels",
+  "base": "Model",
+  "idInjection": true,
+  "properties": {
+    "success": {
+      "type": "boolean",
+      "required": true
+    }
+  },
+  "hidden": ["id"],
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": []
+}

@@ -114,5 +114,9 @@
   "container": {
     "dataSource": null,
     "public": false
+  },
+  "successModel":{
+    "dataSource": null,
+    "public": false
   }
 }

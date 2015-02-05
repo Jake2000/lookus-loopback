@@ -552,7 +552,7 @@ module.exports = function(User) {
             friendscontainer_id: friendsContainer.id,
             user_id: friend.id
           }, function (err, ok) {
-            cb(null, {});
+            cb(null, {success: true});
           });
       });
 
@@ -590,7 +590,7 @@ module.exports = function(User) {
             friendscontainer_id: friendsContainer.id,
             user_id: friend.id
           }, function (err, ok) {
-            cb(null, {});
+            cb(null, {success: true});
           });
       });
 
@@ -605,6 +605,9 @@ module.exports = function(User) {
         {arg: 'friend_id', type: 'any', description:'User id', required: true, http: {source: 'path'}}
       ],
       returns: {
+        arg: 'success', type: 'successModel', root: true,
+        description:
+          'Success json.\n'
       },
       accessType: 'WRITE',
       http: {verb: 'put', path: '/friends/rel/:friend_id'}
@@ -619,6 +622,9 @@ module.exports = function(User) {
         {arg: 'friend_id', type: 'any', description:'User id', required: true, http: {source: 'path'}}
       ],
       returns: {
+        arg: 'success', type: 'successModel', root: true,
+        description:
+          'Success json.\n'
       },
       accessType: 'WRITE',
       http: {verb: 'delete', path: '/friends/rel/:friend_id'}
