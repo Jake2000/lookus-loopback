@@ -178,7 +178,7 @@ module.exports = function(Marker) {
   };
 
   Marker.remoteMethod('up',
-    {
+     {
       isStatic:false,
       description: 'Makes this marker up',
       accepts: [],
