@@ -168,5 +168,23 @@ module.exports = function(Marker) {
       http: {verb: 'post', path: '/reindex'}
     }
   );
+
+  Marker.prototype.up = function(cb) {
+    this.is_up = true;
+
+    this.save(function(err, marker) {
+      cb(null);
+    });
+  };
+
+  Marker.remoteMethod('up',
+    {
+      isStatic:false,
+      description: 'Makes this marker up',
+      accepts: [],
+      accessType: 'WRITE',
+      http: {verb: 'post', path: '/up'}
+    }
+  );
 };
 
