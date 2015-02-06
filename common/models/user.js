@@ -630,4 +630,25 @@ module.exports = function(User) {
       http: {verb: 'delete', path: '/friends/rel/:friend_id'}
     }
   );
+
+  User.prototype.upload_avatar = function( cb) {
+
+  };
+
+  User.remoteMethod(
+    'upload_avatar',
+    {
+      isStatic: false,
+      description: 'Upload avatar',
+      accepts: [
+      ],
+      returns: {
+        arg: 'success', type: 'successModel', root: true,
+        description:
+          'Success json.\n'
+      },
+      accessType: 'WRITE',
+      http: {verb: 'post', path: '/uploadAvatar'}
+    }
+  );
 };

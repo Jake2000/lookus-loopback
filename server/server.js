@@ -1,8 +1,19 @@
 var loopback = require('loopback');
 var boot = require('loopback-boot');
+var path = require('path');
 
 var app = module.exports = loopback();
 var cors = require('cors');
+
+// File upload
+var ds = loopback.createDataSource({
+  connector: require('loopback-component-storage'),
+  provider: 'filesystem',
+  root: path.join(__dirname, '../client/uploads')
+});
+
+var container = ds.createModel('container');
+app.model(container, { public:false });
 
 // Enable CORS
 app.use(cors());

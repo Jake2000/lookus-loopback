@@ -1,9 +1,19 @@
 {
-  "name": "userModelEditable",
-  "plural": "userModelsEditable",
+  "name": "userModelCreatable",
+  "plural": "userModelsCreatable",
   "base": "Model",
   "idInjection": true,
   "properties": {
+    "email": {
+      "type": "string",
+      "required": true,
+      "description": "Email"
+    },
+    "password": {
+      "type": "string",
+      "required": true,
+      "description": "Password"
+    },
     "first_name": {
       "type": "string",
       "required": false,
@@ -16,13 +26,7 @@
     },
     "birthday": {
       "type": "date",
-      "required": false,
       "description": "Дата рождения"
-    },
-    "status": {
-      "type": "string",
-      "required": false,
-      "description": "Статус пользователя"
     },
     "sex": {
       "type": "number",
@@ -31,12 +35,10 @@
     },
     "country": {
       "type": "string",
-      "required": false,
       "description": "Страна (текст)"
     },
     "city": {
       "type": "string",
-      "required": false,
       "description": "Город (текст)"
     }
   },

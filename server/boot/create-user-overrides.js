@@ -25,7 +25,7 @@ module.exports = function(app) {
   'Регистрация пользователя';
 
 
-  app.remotes().findMethod('user.create').accepts = [{arg: 'data', type: 'userModelEditable', http: {source: 'body'}}];
+  app.remotes().findMethod('user.create').accepts = [{arg: 'data', type: 'userModelCreatable', http: {source: 'body'}}];
 
 
   app.remotes().findMethod('user.login').accepts = [{arg: 'credentials', type: 'credentials', required: true, http: {source: 'body'}}];
@@ -41,5 +41,11 @@ module.exports = function(app) {
     description:
       'The response body contains properties of the AccessToken created on login.\n'
   }];
+
+  // updateAttributes
+  app.remotes().findMethod('user.prototype.updateAttributes').notes = '' +
+  'Редактирование пользователя <br>';
+
+  app.remotes().findMethod('user.prototype.updateAttributes').accepts = [{arg: 'data', type: 'userModelEditable', required: true, http: {source: 'body'}}];
 
 };

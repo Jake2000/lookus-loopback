@@ -46,11 +46,6 @@
       "required": false,
       "description": "Статус пользователя"
     },
-    "vk_id": {
-      "type": "number",
-      "required": false,
-      "description": "ID пользователя в Вконтакте"
-    },
     "is_online": {
       "type": "boolean",
       "required": false,
