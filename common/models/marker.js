@@ -17,7 +17,7 @@ module.exports = function(Marker) {
     var ctx = loopback.getCurrentContext();
     var currentUser = ctx && ctx.get('currentUser');
     if(!currentUser) {
-      var err = new Error('Access Exception');
+      var err = new Error('Forbidden Exception');
       err.status = 403;
       err.errorCode = 40301;
       return next(err);
@@ -27,9 +27,13 @@ module.exports = function(Marker) {
     modelInstance.user_id = currentUser.id;
 
     //TODO replace with findByUserId
-    app.models.marker.find({user_id:currentUser.id}, function(err, marker) {
+    app.models.marker.findOne({user_id: currentUser.id}, function(err, marker) {
         if(err) {
           return next(err);
+        }
+
+        if(!marker) {
+          return next();
         }
 
         if(marker) {
@@ -106,7 +110,7 @@ module.exports = function(Marker) {
       var cell = app.geo.getCell(location, zoom);
       var markers = [];
       var distance = ((zoom+1)*4.5 |0);
-      console.log(distance);
+      //console.log(distance);
 
       var adjacentCells = app.geo.getAdjacentCells(cell, distance);
 

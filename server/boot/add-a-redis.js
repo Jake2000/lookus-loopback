@@ -35,21 +35,21 @@ module.exports = function(app) {
               return cb(null, null);
             }
             var cachedObject = app.deserialize(obj.type, obj.subtype, obj.entities, obj.json);
-            console.log('[TRedisCacheModule:remember] key:[', key, '] deserialized: name: [', obj.subtype, ']');
+            //console.log('[TRedisCacheModule:remember] key:[', key, '] deserialized: name: [', obj.subtype, ']');
             cb(null, cachedObject);
           });
         },
         function (cachedObject, cb) {
           if (!_.isNull(cachedObject) && !_.isUndefined(cachedObject)) {
-            console.log('[TRedisCacheModule:remember] key:[', key, '] object successfully got from cache');
+            //console.log('[TRedisCacheModule:remember] key:[', key, '] object successfully got from cache');
             return cb(null, cachedObject);
           }
 
-          console.log('[TRedisCacheModule:remember] key:[', key, '] object will be fetched to save to cache');
+          //console.log('[TRedisCacheModule:remember] key:[', key, '] object will be fetched to save to cache');
 
           fn.call(context, function (err, res) {
             var sr = app.serialize(context.modelName, res);
-            console.log(sr);
+            //console.log(sr);
             self.client.hset(key, 'type', sr.type);
             self.client.hset(key, 'subtype', sr.subtype);
             self.client.hset(key, 'entities', sr.entities);
@@ -60,7 +60,7 @@ module.exports = function(app) {
         }],
       function (err, res) {
         if (err) {
-         console.log('[TRedisCacheModule:remember] key:[', key, '] error: ', err);
+          //console.log('[TRedisCacheModule:remember] key:[', key, '] error: ', err);
           cb(err);
           return;
         }

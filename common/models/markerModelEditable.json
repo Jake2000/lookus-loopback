@@ -19,14 +19,6 @@
       "required": true,
       "description": "Текст маркера (становится заголовком диалога для маркера)"
     },
-    "image_url": {
-      "type": "string",
-      "description": "Изображение маркера"
-    },
-    "image_preview_url": {
-      "type": "string",
-      "description": "Изображение маркера (уменьш.)"
-    },
     "is_up": {
       "type": "boolean",
       "description": "Поднят ли маркер"

@@ -9,6 +9,5 @@ module.exports = function(BlacklistItem) {
   BlacklistItem.disableRemoteMethod('updateAll', true);
   BlacklistItem.disableRemoteMethod('exists', true);
   BlacklistItem.disableRemoteMethod('findOne', true);
-  BlacklistItem.disableRemoteMethod('deleteById', true);
   BlacklistItem.disableRemoteMethod('findById', true);
 };

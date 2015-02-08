@@ -17,7 +17,7 @@
     "birthday": {
       "type": "date",
       "required": false,
-      "description": "Дата рождения"
+      "description": "Дата рождения (Формат YYYY-MM-DD)"
     },
     "status": {
       "type": "string",

@@ -19,7 +19,7 @@ module.exports = function(app) {
       Dialog.remember = Message.remember =
         function(key, fn, cb) {
           var cacheKey = this.modelName + ':'+ key;
-          console.log('read: '+ cacheKey);
+          //console.log('read: '+ cacheKey);
           app.redisCache.remember(cacheKey, fn, cb, this);
         };
 
@@ -36,7 +36,7 @@ module.exports = function(app) {
       Dialog.increment = Message.increment =
         function(key, increment) {
           var cacheKey = this.modelName + ':'+ key;
-          console.log('increment: '+ cacheKey);
+          //console.log('increment: '+ cacheKey);
           return app.redisCache.increment(cacheKey, increment);
         };
 
@@ -45,7 +45,7 @@ module.exports = function(app) {
       Dialog.decrement = Message.decrement =
         function(key, decrement) {
           var cacheKey = this.modelName + ':'+ key;
-          console.log('decrement: '+ cacheKey);
+          //console.log('decrement: '+ cacheKey);
           return app.redisCache.decrement(cacheKey, decrement);
         };
 
@@ -54,7 +54,7 @@ module.exports = function(app) {
       Dialog.hget = Message.hget =
         function(key) {
           var cacheKey = this.modelName + ':'+ key;
-          console.log('hget: '+ cacheKey);
+          //console.log('hget: '+ cacheKey);
           return app.redisCache.get(cacheKey);
         };
 
@@ -63,7 +63,7 @@ module.exports = function(app) {
       Dialog.hset = Message.hset =
         function(key, value) {
           var cacheKey = this.modelName + ':'+ key;
-          console.log('hset: '+ cacheKey);
+          //console.log('hset: '+ cacheKey);
           return app.redisCache.set(cacheKey, value);
         };
 

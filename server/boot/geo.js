@@ -267,7 +267,7 @@ module.exports = function(app) {
   var addCellPoint = function(cell, point) {
     var cacheKey = getCellCacheKey(cell);
     var cellOffset = getCellPointOffset(cell, point);
-    console.log(cellOffset);
+    //console.log(cellOffset);
 
     runtimeCache[cacheKey] = null;
 
