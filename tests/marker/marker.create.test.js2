@@ -9,7 +9,7 @@ describe('Marker resource tests', function() {
 
   var marker = {
     life_time: 100,
-    type: 2,
+    "type": 2,
     text: "new marker",
     is_up: false,
     location: {

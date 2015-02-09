@@ -1,6 +1,7 @@
 var should = require('chai').should();
 var request = require('supertest');
 var async = require('async');
+var api = require('../helpers/api.js');
 
 request = request('http://localhost:3301');
 
@@ -10,7 +11,7 @@ describe('Users resource tests', function() {
   var UserId = null;
 
   var user = {
-    "email": "userN@mail.com",
+    "email": 'user'+api.randomStr()+'@mail.com',
     "password": "123456789",
     "first_name": "Arthur",
     "last_name": "King",
@@ -18,7 +19,7 @@ describe('Users resource tests', function() {
     "sex": 1,
     "country": "Russia",
     "city": "Saint-Petersburg"
-  }
+  };
 
   describe('POST /api/users', function() {
     it('should work', function(done) {

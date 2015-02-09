@@ -1,6 +1,7 @@
 var should = require('chai').should();
 var request = require('supertest');
 var async = require('async');
+var _ = require('lodash');
 
 request = request('http://localhost:3301');
 
@@ -13,11 +14,11 @@ var session = {
 
 function loginAsUser(user) {
   describe('POST /api/users/login', function() {
-    it('should work', function(done) {
+    it('should login as user ' + user.email, function(done) {
       request
         .post('/api/users/login')
         .type('json')
-        .send(user)
+        .send({email: user.email, password: user.password})
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
@@ -33,6 +34,40 @@ function loginAsUser(user) {
         });
     });
   });
+}
+
+function createUser(email, cb) {
+  var newUser = {
+    email: email,
+    password: '123456789',
+    first_name: 'Arthur',
+    last_name: 'King',
+    birthday: '1987-01-01',
+    sex: 1,
+    country: 'Russia',
+    city: 'Saint-Petersburg'
+  };
+
+  describe('POST /api/users', function() {
+    it('should create a new user '+email, function(done) {
+      request
+        .post('/api/users')
+        .type('json')
+        .send(newUser)
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .end(function(err, res) {
+          if (err) return done(err);
+          res.body.should.have.property('id');
+          newUser.id = res.body.id;
+          done();
+          cb(newUser);
+        });
+    });
+  });
+
+  return newUser;
 }
 
 function loginAsNormalUser() {
@@ -65,7 +100,7 @@ function createAndLoginAsNewNormalUser() {
   session.authToken = null;
   session.userId = null;
   describe('POST /api/users/', function () {
-    it('should work', function (done) {
+    it('should create a new user '+newUser.email, function (done) {
       async.series([
           function (cb) {
             request
@@ -106,6 +141,9 @@ function createAndLoginAsNewNormalUser() {
 }
 
 module.exports.session = session;
+module.exports.randomStr = randomStr;
+module.exports.createUser = createUser;
+module.exports.loginAsUser = loginAsUser;
 module.exports.createAndLoginAsNewNormalUser = createAndLoginAsNewNormalUser;
 module.exports.loginAsAdminUser = loginAsAdminUser;
 module.exports.loginAsNormalUser = loginAsNormalUser;

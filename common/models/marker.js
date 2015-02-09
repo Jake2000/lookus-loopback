@@ -23,16 +23,19 @@ module.exports = function(Marker) {
       return next(err);
     }
 
-    // Attaching user
-    modelInstance.user_id = currentUser.id;
-
     //TODO replace with findByUserId
     app.models.marker.findOne({user_id: currentUser.id}, function(err, marker) {
         if(err) {
           return next(err);
         }
 
+        console.log(currentUser.id);
+        console.log(marker);
         if(!marker) {
+
+          // Attaching user
+          modelInstance.user_id = currentUser.id;
+
           return next();
         }
 
@@ -42,11 +45,15 @@ module.exports = function(Marker) {
           app.models.Role.isInRole('admin', {principalType: app.models.RoleMapping.USER, principalId: currentUser.id}, function(err, exists) {
 
             if (exists){
+
+              // Attaching user
+              modelInstance.user_id = currentUser.id;
+
               return next();
             } else {
               var err = new Error("You can't create a new marker without deleting the existed");
-              err.status = 422;
-              err.errorCode = 42203;
+              err.status = 403;
+              err.errorCode = 40303;
               return next(err);
             }
           });
