@@ -23,6 +23,8 @@ module.exports = function(Marker) {
       return next(err);
     }
 
+    console.log(modelInstance);
+
     //TODO replace with findByUserId
     app.models.marker.findOne({user_id: currentUser.id}, function(err, marker) {
         if(err) {
@@ -34,7 +36,7 @@ module.exports = function(Marker) {
         if(!marker) {
 
           // Attaching user
-          modelInstance.user_id = currentUser.id;
+          //modelInstance.user_id = currentUser.id;
 
           return next();
         }
@@ -47,7 +49,7 @@ module.exports = function(Marker) {
             if (exists){
 
               // Attaching user
-              modelInstance.user_id = currentUser.id;
+              //modelInstance.user_id = currentUser.id;
 
               return next();
             } else {
