@@ -37,6 +37,8 @@ function loginAsUser(user) {
 }
 
 function createUser(email, cb) {
+  cb = cb || function(){};
+
   var newUser = {
     email: email,
     password: '123456789',

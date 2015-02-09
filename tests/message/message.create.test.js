@@ -38,7 +38,6 @@ describe('Message resource tests', function() {
     });
   });
 
-
   api.createUser(userA.email, function(user){
     userA = user;
   });

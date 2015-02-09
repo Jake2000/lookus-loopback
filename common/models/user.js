@@ -188,38 +188,13 @@ module.exports = function(User) {
     });
   };
 
-  //User.remoteMethod(
-  //  'loginLC',
-  //  {
-  //    description: 'Login a user with username/email and password',
-  //    notes: 'Можно логиниться под двумя тестовыми пользователями:<br> ' +
-  //          '1) user1: {email: user1@infloop.ru, password: 123456789} <br>' +
-  //          '2) admin1: {email: admin1@infloop.ru, password: 123456789}' +
-  //          '<br><br>' +
-  //          'При успешном логине возвращается модель AccessToken.<br>' +
-  //          'токеном доступа является ее id',
-  //    accepts: [
-  //      {arg: 'credentials', type: 'credentials', required: true, http: {source: 'body'}}
-  //    ],
-  //    returns: {
-  //      arg: 'accessToken', type: 'AccessToken', root: true,
-  //      description:
-  //        'The response body contains properties of the AccessToken created on login.\n'
-  //    },
-  //    http: {verb: 'post', path: '/login'}
-  //  }
-  //);
-
-  User.remoteMethod(
-    'resetPassword',
-    {
+  User.remoteMethod('resetPassword', {
       description: 'Reset password for a user with email',
       accepts: [
         {arg: 'options', type: "email", required: true, http: {source: 'body'}}
       ],
       http: {verb: 'post', path: '/reset'}
-    }
-  );
+  });
 
   /**
    * Confirm the user's identity.
@@ -309,8 +284,7 @@ module.exports = function(User) {
     });
   };
 
-  User.remoteMethod('__set__settings',
-    {
+  User.remoteMethod('__set__settings', {
       isStatic: false,
       description: 'Update user settings',
       accepts: [
@@ -323,8 +297,7 @@ module.exports = function(User) {
       },
       accessType: 'WRITE',
       http: {verb: 'put', path: '/settings'}
-    }
-  );
+  });
 
   User.beforeRemote('prototype.__set__settings',function( ctx, modelInstance, next) {
     next();
@@ -358,6 +331,7 @@ module.exports = function(User) {
     // Empty method for vk auth
     cb(null);
   };
+
   User.loginVKCallback = function(cb) {
     // Empty method for vk auth callback
     cb(null);
@@ -367,14 +341,13 @@ module.exports = function(User) {
     // Empty method for fb auth
     cb(null);
   };
+
   User.loginFBCallback = function(cb) {
     // Empty method for fb auth callback
     cb(null);
   };
 
-  User.remoteMethod(
-    'loginVKCallback',
-    {
+  User.remoteMethod('loginVKCallback', {
       description: 'Vkontakte login callback',
       accepts: [
         {arg: 'code', type: 'string', required: true}
@@ -386,12 +359,9 @@ module.exports = function(User) {
       },
       notes: 'Сюда приходит коллбэк из vk.auth.com. <br>',
       http: {verb: 'get', path: '/login/vk/callback'}
-    }
-  );
+  });
   //
-  User.remoteMethod(
-    'loginVK',
-    {
+  User.remoteMethod('loginVK', {
       description: 'Login with Vkontakte',
       accepts: [
       ],
@@ -407,23 +377,17 @@ module.exports = function(User) {
         '<b>ВНИМАНИЕ</b>: Этот URL не будет работать через API Explorer.<br>' +
         'Чтобы увидеть работу данного функционала нужно перейти по <a href="/">ссылке</a>',
       http: {verb: 'get', path: '/login/vk'}
-    }
-  );
+  });
 
-  User.remoteMethod(
-    'loginFBCallback',
-    {
+  User.remoteMethod('loginFBCallback', {
       description: 'Facebook login callback',
       accepts: [
       ],
       notes: 'Сюда приходит коллбэк из Facebook',
       http: {verb: 'get', path: '/login/fb/callback'}
-    }
-  );
-  //
-  User.remoteMethod(
-    'loginFB',
-    {
+  });
+
+  User.remoteMethod('loginFB', {
       description: 'Login with Facebook',
       accepts: [
       ],
@@ -438,8 +402,7 @@ module.exports = function(User) {
       '<b>ВНИМАНИЕ</b>: Этот URL не будет работать через API Explorer.<br>' +
       'Чтобы увидеть работу данного функционала нужно перейти по <a href="/">ссылке</a>',
       http: {verb: 'get', path: '/login/fb'}
-    }
-  );
+  });
 
   User.current = function(cb) {
     var ctx = loopback.getCurrentContext();
@@ -454,9 +417,7 @@ module.exports = function(User) {
     cb(null, currentUser);
   };
 
-  User.remoteMethod(
-    'current',
-    {
+  User.remoteMethod('current', {
       description: 'Get current authenticated user',
       accepts: [
       ],
@@ -467,8 +428,7 @@ module.exports = function(User) {
       },
       notes: 'Возвращает данные текущего аутентифицированного пользователя',
       http: {verb: 'get', path: '/current'}
-    }
-  );
+  });
 
   User.prototype.__get__friends = function(cb) {
     app.models.friendscontainer.findOne({where: { user_id: this.id}}, function(err, friendsContainer) {
@@ -503,8 +463,7 @@ module.exports = function(User) {
     });
   };
 
-  User.remoteMethod('__get__friends',
-    {
+  User.remoteMethod('__get__friends', {
       isStatic: false,
       description: 'Query user friends',
       returns: {
@@ -514,8 +473,7 @@ module.exports = function(User) {
       },
       accessType: 'READ',
       http: {verb: 'get', path: '/friends'}
-    }
-  );
+  });
 
   User.prototype.__link__friends = function(friendId, cb) {
     app.models.friendscontainer.findOne({where: { user_id: this.id}}, function(err, friendsContainer) {
@@ -597,8 +555,7 @@ module.exports = function(User) {
     });
   };
 
-  User.remoteMethod('__link__friends',
-    {
+  User.remoteMethod('__link__friends', {
       isStatic: false,
       description: 'Add user friend',
       accepts: [
@@ -611,11 +568,9 @@ module.exports = function(User) {
       },
       accessType: 'WRITE',
       http: {verb: 'put', path: '/friends/rel/:friend_id'}
-    }
-  );
+  });
 
-  User.remoteMethod('__unlink__friends',
-    {
+  User.remoteMethod('__unlink__friends', {
       isStatic: false,
       description: 'Remove user friend',
       accepts: [
@@ -628,16 +583,13 @@ module.exports = function(User) {
       },
       accessType: 'WRITE',
       http: {verb: 'delete', path: '/friends/rel/:friend_id'}
-    }
-  );
+  });
 
   User.prototype.upload_avatar = function( cb) {
 
   };
 
-  User.remoteMethod(
-    'upload_avatar',
-    {
+  User.remoteMethod('upload_avatar', {
       isStatic: false,
       description: 'Upload avatar',
       accepts: [
@@ -649,6 +601,5 @@ module.exports = function(User) {
       },
       accessType: 'WRITE',
       http: {verb: 'post', path: '/uploadAvatar'}
-    }
-  );
+  });
 };

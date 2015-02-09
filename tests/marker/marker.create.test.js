@@ -18,13 +18,17 @@ describe('Marker resource tests', function() {
     }
   };
 
+  var userA = {
+    email: 'user'+api.randomStr()+'@infloop.ru',
+    password: '123456789'
+  };
+
   describe('POST /api/markers', function () {
     it('should throw access exception for unauthorized user', function (done) {
       request
         .post('/api/markers')
         .type('json')
         .send(marker)
-        .set('Authorization', '')
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(401)
@@ -35,10 +39,12 @@ describe('Marker resource tests', function() {
     });
   });
 
-  api.createAndLoginAsNewNormalUser();
+  api.createUser(userA.email);
+
+  api.loginAsUser(userA);
 
   describe('POST /api/markers', function () {
-    it('should work for normal user', function (done) {
+    it('should work (for userA)', function (done) {
       request
         .post('/api/markers')
         .set('Authorization', api.session.authToken)
@@ -48,10 +54,6 @@ describe('Marker resource tests', function() {
         .expect('Content-Type', /json/)
         .expect(200)
         .end(function (err, res) {
-
-          console.log(api.session.email);
-          console.log(api.session.authToken);
-          console.log(res.body);
           if (err) return done(err);
           res.body.should.have.property('id');
           res.body.should.have.property('is_up').and.equal(false);
@@ -61,7 +63,7 @@ describe('Marker resource tests', function() {
   });
 
   describe('POST /api/markers', function () {
-    it('should block creating two markers for normal user', function (done) {
+    it('should block creating two markers (for userA)', function (done) {
       request
         .post('/api/markers')
         .set('Authorization', api.session.authToken)

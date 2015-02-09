@@ -82,7 +82,6 @@ module.exports = function(Marker) {
     });
   };
 
-
   Marker.afterSave = function(next) {
     var modelInstance = this;
 
@@ -141,8 +140,7 @@ module.exports = function(Marker) {
     }
   };
 
-  Marker.remoteMethod('nearby',
-    {
+  Marker.remoteMethod('nearby', {
       description: 'Get nearby markers',
       accepts: [
         {arg: 'data', type: "locationModel", required: true, http: {source: 'body'}},
@@ -155,8 +153,7 @@ module.exports = function(Marker) {
       },
       accessType: 'READ',
       http: {verb: 'post', path: '/nearby'}
-    }
-  );
+  });
 
   Marker.reindex = function(cb) {
     app.models.marker.find({}, function(err, markers) {
@@ -170,14 +167,12 @@ module.exports = function(Marker) {
     });
   };
 
-  Marker.remoteMethod('reindex',
-    {
-      description: 'Re-indexes all markers',
-      accepts: [],
-      returns: {},
-      accessType: 'READ',
-      http: {verb: 'post', path: '/reindex'}
-    }
-  );
+  Marker.remoteMethod('reindex', {
+    description: 'Re-indexes all markers',
+    accepts: [],
+    returns: {},
+    accessType: 'READ',
+    http: {verb: 'post', path: '/reindex'}
+  });
 };
 
