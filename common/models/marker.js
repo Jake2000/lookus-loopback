@@ -169,12 +169,32 @@ module.exports = function(Marker) {
     });
   };
 
-  Marker.remoteMethod('reindex', {
-    description: 'Re-indexes all markers',
-    accepts: [],
-    returns: {},
-    accessType: 'READ',
-    http: {verb: 'post', path: '/reindex'}
-  });
+  Marker.remoteMethod('reindex',
+    {
+      description: 'Re-indexes all markers',
+      accepts: [],
+      returns: {},
+      accessType: 'READ',
+      http: {verb: 'post', path: '/reindex'}
+    }
+  );
+
+  Marker.prototype.up = function(cb) {
+    this.is_up = true;
+
+    this.save(function(err, marker) {
+      cb(null);
+    });
+  };
+
+  Marker.remoteMethod('up',
+     {
+      isStatic:false,
+      description: 'Makes this marker up',
+      accepts: [],
+      accessType: 'WRITE',
+      http: {verb: 'post', path: '/up'}
+    }
+  );
 };
 
