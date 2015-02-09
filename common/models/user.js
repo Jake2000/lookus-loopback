@@ -595,19 +595,32 @@ module.exports = function(User) {
       http: {verb: 'delete', path: '/friends/rel/:friend_id'}
   });
 
-  User.prototype.upload_avatar = function( cb) {
+  User.beforeRemote('prototype.uploadAvatar', function(ctx, modelInstance, next) {
+    ctx.req.params.container = 'user-avatars';
+    app.models.container.upload(ctx.req, ctx.res, function(err, result) {
+      var ctx = loopback.getCurrentContext();
+      ctx.set("filename", result.files.image[0].name);
+      next();
+    });
+  });
 
+  User.prototype.uploadAvatar = function( cb) {
+    var ctx = loopback.getCurrentContext();
+    var modelInstance = this;
+    this.image_url = '/uploads/user-avatars/' + ctx.get('filename');
+    this.save(function(err) {
+      cb(err, modelInstance);
+    });
   };
 
-  User.remoteMethod('upload_avatar', {
+  User.remoteMethod('uploadAvatar', {
       isStatic: false,
       description: 'Upload avatar',
       accepts: [
+        {arg: 'image', type: "File", required: true, http: {source: 'body'}}
       ],
       returns: {
-        arg: 'success', type: 'successModel', root: true,
-        description:
-          'Success json.\n'
+        arg: 'user', type: 'user', root: true
       },
       accessType: 'WRITE',
       http: {verb: 'post', path: '/uploadAvatar'}

@@ -83,8 +83,29 @@ describe('Marker resource tests', function() {
 
   api.loginAsAdminUser();
 
-  describe('GET /api/markers', function () {
-    it('should work for admin user', function (done) {
+  describe('POST /api/markers', function () {
+    it('should create marker (as admin user)', function (done) {
+      marker.text = 'Marker for admin';
+      request
+        .post('/api/markers')
+        .set('Authorization', api.session.authToken)
+        .type('json')
+        .send(marker)
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .end(function (err, res) {
+          if (err) return done(err);
+          res.body.should.have.property('id');
+          res.body.should.have.property('is_up').and.equal(false);
+          done();
+        });
+    });
+  });
+
+  describe('POST /api/markers', function () {
+    it('should create second marker (as admin user)', function (done) {
+      marker.text = 'Second marker for admin';
       request
         .post('/api/markers')
         .set('Authorization', api.session.authToken)

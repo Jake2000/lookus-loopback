@@ -12,8 +12,13 @@ var ds = loopback.createDataSource({
   root: path.join(__dirname, '../client/uploads')
 });
 
+//var StorageService = require('loopback-component-storage').StorageService;
+//var uploadHandler = new StorageService({provider: 'filesystem', root: '/tmp/storage'});
+
 var container = ds.createModel('container');
 app.model(container, { public:false });
+//ds.connector.StorageService
+
 
 // Enable CORS
 app.use(cors());

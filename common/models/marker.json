@@ -89,6 +89,20 @@
       "principalId": "$everyone",
       "permission": "ALLOW",
       "property": "nearby"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "reindex"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "uploadImage"
     }
   ],
   "methods": []

@@ -186,14 +186,43 @@ module.exports = function(Marker) {
     });
   };
 
-  Marker.remoteMethod('up',
-     {
-      isStatic:false,
-      description: 'Makes this marker up',
-      accepts: [],
-      accessType: 'WRITE',
-      http: {verb: 'post', path: '/up'}
-    }
-  );
+  Marker.remoteMethod('up', {
+    isStatic:false,
+    description: 'Makes this marker up',
+    accepts: [],
+    accessType: 'WRITE',
+    http: {verb: 'post', path: '/up'}
+  });
+
+  Marker.beforeRemote('prototype.uploadImage', function(ctx, modelInstance, next) {
+    ctx.req.params.container = 'marker-images';
+    app.models.container.upload(ctx.req, ctx.res, function(err, result) {
+      var ctx = loopback.getCurrentContext();
+      ctx.set("filename", result.files.image[0].name);
+      next();
+    });
+  });
+
+  Marker.prototype.uploadImage = function(file, cb) {
+    var ctx = loopback.getCurrentContext();
+    var modelInstance = this;
+    this.image_url = '/uploads/marker-images/' + ctx.get('filename');
+    this.save(function(err) {
+      cb(err, modelInstance);
+    });
+  };
+
+  Marker.remoteMethod('uploadImage', {
+    isStatic:false,
+    description: 'Changes image of a marker',
+    accepts: [
+      {arg: 'image', type: "File", required: true, http: {source: 'body'}},
+    ],
+    returns: {
+      arg: 'markers', type: 'marker', root: true
+    },
+    accessType: 'WRITE',
+    http: {verb: 'post', path: '/uploadImage'}
+  });
 };
 
