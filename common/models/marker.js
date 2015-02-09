@@ -13,54 +13,52 @@ module.exports = function(Marker) {
   Marker.disableRemoteMethod('find', true);
   Marker.disableRemoteMethod('count', true);
 
+  Marker.canCreate = function(user, cb) {
+    if(!(user instanceof app.models.user)) {
+      var err = new Error("User model needed");
+      err.status = 500;
+      err.errorCode = 50001;
+      return cb(err);
+    }
+
+    //TODO replace with findByUserId
+    app.models.marker.find({ where: {user_id: user.id} }, function(err, markers) {
+      if(err) {
+        return cb(err);
+      }
+
+      if(markers.length == 0) {
+        return cb(null, true);
+      }
+
+      if(markers.length>0) {
+        user.isAdmin(function(err, isAdmin) {
+          if(isAdmin) {
+            return cb(null, true);
+          }
+
+          var err1 = new Error("You can't create a new marker without deleting the existed");
+          err1.status = 403;
+          err1.errorCode = 40303;
+          return cb(err1);
+        })
+      }
+    });
+  };
+
   Marker.beforeCreate = function(next, modelInstance) {
     var ctx = loopback.getCurrentContext();
     var currentUser = ctx && ctx.get('currentUser');
-    if(!currentUser) {
-      var err = new Error('Forbidden Exception');
-      err.status = 403;
-      err.errorCode = 40301;
-      return next(err);
-    }
 
-    console.log(modelInstance);
+    // Attaching user
+    modelInstance.user_id = currentUser.id;
 
-    //TODO replace with findByUserId
-    app.models.marker.findOne({user_id: currentUser.id}, function(err, marker) {
-        if(err) {
-          return next(err);
-        }
+    Marker.canCreate(currentUser, function(err, canCreate) {
+      if(err) { return next(err); }
 
-        console.log(currentUser.id);
-        console.log(marker);
-        if(!marker) {
-
-          // Attaching user
-          //modelInstance.user_id = currentUser.id;
-
-          return next();
-        }
-
-        if(marker) {
-
-          //if our user is admin - we allow to create multiple markers
-          app.models.Role.isInRole('admin', {principalType: app.models.RoleMapping.USER, principalId: currentUser.id}, function(err, exists) {
-
-            if (exists){
-
-              // Attaching user
-              //modelInstance.user_id = currentUser.id;
-
-              return next();
-            } else {
-              var err = new Error("You can't create a new marker without deleting the existed");
-              err.status = 403;
-              err.errorCode = 40303;
-              return next(err);
-            }
-          });
-        }
+      next();
     });
+
   };
 
   Marker.afterCreate = function(next) {
@@ -76,7 +74,8 @@ module.exports = function(Marker) {
     app.models.dialog.create({
       marker_id: modelInstance.id,
       title: modelInstance.text,
-      is_private: false
+      is_private: false,
+      is_group: true
     }, function(err, dialog) {
       dialog.users.add(currentUser, function(err, ok) {
         next();

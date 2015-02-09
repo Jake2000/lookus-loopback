@@ -78,6 +78,16 @@ module.exports = function(User) {
   User.disableRemoteMethod('__unlink__identities', false);
   User.disableRemoteMethod('__updateById__identities', false);
 
+  User.prototype.isAdmin = function(cb) {
+    app.models.Role.isInRole('admin', {principalType: app.models.RoleMapping.USER, principalId: this.id}, function(err, exists) {
+      if (exists){
+        return cb(null, true);
+      }
+
+      return cb(null, false);
+    });
+  };
+
   User.findByCredentials = function(credentials, fn) {
     var self = this;
 

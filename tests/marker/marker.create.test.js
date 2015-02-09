@@ -10,7 +10,7 @@ describe('Marker resource tests', function() {
   var marker = {
     life_time: 100,
     "type": 2,
-    text: "new marker",
+    text: "new marker for user ",
     is_up: false,
     location: {
       lat: 36.99,
@@ -39,7 +39,9 @@ describe('Marker resource tests', function() {
     });
   });
 
-  api.createUser(userA.email);
+  api.createUser(userA.email, function(user) {
+    marker.text += '' + user.email;
+  });
 
   api.loginAsUser(userA);
 
