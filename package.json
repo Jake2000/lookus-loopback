@@ -31,11 +31,12 @@
     "loopback-explorer": "^1.1.0"
   },
   "devDependencies": {
-    "mocha": "^2.1.0",
-    "supertest": "^0.15.0",
     "chai": "^1.10.0",
+    "chai-things": "^0.2.0",
     "gulp": "^3.8.10",
     "gulp-mocha": "^2.0.0",
-    "jshint": "^2.5.6"
+    "jshint": "^2.5.6",
+    "mocha": "^2.1.0",
+    "supertest": "^0.15.0"
   }
 }

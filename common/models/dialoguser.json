@@ -5,7 +5,19 @@
   "properties": {
     "dnd_start":{
       "type": "date",
+      "required": false,
       "description": "Время начала режима 'не беспокоить'"
+    },
+    "dnd_life_time":{
+      "type": "number",
+      "required": false,
+      "description": "Кол-во минут в режиме 'не беспокоить'"
+    },
+    "unread_count": {
+      "type": "number",
+      "required": false,
+      "default": 0,
+      "description": "Кол-во непрочитанных сообщений в диалоге для пользователя"
     }
   },
   "validations": [],

@@ -25,6 +25,12 @@ module.exports = function(Message) {
       err.errorCode = 40301;
       return next(err);
     }
+
+    // Setting is_read flag to false
+    modelInstance.is_read = false;
+    modelInstance.created = Date.now();
+    modelInstance.updated = Date.now();
+
     // Setting message sender
     modelInstance.sender(currentUser);
 
@@ -129,6 +135,10 @@ module.exports = function(Message) {
 
   };
 
+  Message.beforeUpdate = function(next, modelInstance) {
+    modelInstance.updated = Date.now();
+    next();
+  };
 
   Message.disableRemoteMethod('prototype.updateAttributes', true);
 
@@ -143,5 +153,20 @@ module.exports = function(Message) {
   Message.disableRemoteMethod('deleteById', true);
   Message.disableRemoteMethod('findById', true);
 
+  Message.prototype.setRead = function(cb) {
+    this.is_read = true;
+    this.save(cb);
+  };
 
+  Message.remoteMethod('setRead', {
+    isStatic:false,
+    description: 'Changes read status of message to \'true\'',
+    accepts: [
+    ],
+    returns: {
+      arg: 'message', type: 'message', root: true
+    },
+    accessType: 'WRITE',
+    http: {verb: 'put', path: '/set_read'}
+  });
 };

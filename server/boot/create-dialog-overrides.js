@@ -19,6 +19,6 @@ module.exports = function(app) {
   ];
 
   app.remotes().findMethod('dialog.findById').returns = [
-    {arg: 'dialog', type: ['dialogModelExtended'], root: true}
+    {arg: 'dialog', type: 'dialogModelExtended', root: true}
   ];
 };

@@ -625,4 +625,13 @@ module.exports = function(User) {
       accessType: 'WRITE',
       http: {verb: 'post', path: '/uploadAvatar'}
   });
+
+  User.afterRemote('prototype.__get__dialogs', function(ctx, dialogs, next) {
+    async.eachSeries(dialogs, function(dialog, cb) {
+      dialog.populate(cb);
+    }, function(err) {
+      ctx.result = {'dialogs': dialogs};
+      next();
+    });
+  });
 };

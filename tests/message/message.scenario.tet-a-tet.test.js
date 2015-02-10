@@ -1,5 +1,7 @@
 var chai = require('chai');
 chai.should();
+chai.use(require('chai-things'));
+
 var request = require('supertest');
 var async = require('async');
 var api = require('../helpers/api.js');
@@ -14,13 +16,6 @@ describe('Message resource tests', function() {
     recipient_id: 'objectid'
   };
 
-  var msgAtoB_WhereIsReadTrue = {
-    body: 'test message.',
-    subject: 'hello',
-    recipient_id: 'objectid',
-    is_read: true
-  };
-
   var userA = {
     email: 'user'+api.randomStr()+'@infloop.ru',
     password: '123456789'
@@ -31,24 +26,6 @@ describe('Message resource tests', function() {
     password: '123456789'
   };
 
-
-  describe('POST /api/messages', function () {
-    it('should throw access exception for unauthorized user', function (done) {
-      request
-        .post('/api/messages')
-        .type('json')
-        .send(msgAtoB)
-        .set('Authorization', '')
-        .set('Accept', 'application/json')
-        .expect('Content-Type', /json/)
-        .expect(401)
-        .end(function (err, res) {
-          if (err) return done(err);
-          done();
-        });
-    });
-  });
-
   api.createUser(userA.email, function(user){
     userA = user;
   });
@@ -56,7 +33,6 @@ describe('Message resource tests', function() {
   api.createUser(userB.email, function(user){
     userB = user;
     msgAtoB.recipient_id = userB.id;
-    msgAtoB_WhereIsReadTrue.recipient_id = userB.id;
   });
 
   api.loginAsUser(userA);
@@ -76,38 +52,55 @@ describe('Message resource tests', function() {
           res.body.should.have.property('id');
           msgAtoB.id = res.body.id;
           res.body.should.have.property('dialog_id');
+          msgAtoB.dialog_id = res.body.dialog_id;
           res.body.should.have.property('sender_id').and.equal(userA.id);
           res.body.should.have.property('recipient_id').and.equal(userB.id);
           res.body.should.have.property('is_read').and.equal(false);
-          res.body.should.have.property('created').and.have.length.above(6);
-          res.body.should.have.property('updated').and.have.length.above(6);
           done();
         });
     });
   });
 
-  describe('POST /api/messages', function () {
-    it('should send bad message (from userA to userB) and be unread', function (done) {
+  api.loginAsUser(userB);
+
+  describe('GET /api/users/{userB}/dialogs', function () {
+    it('should list dialogs, with dialog created from message, sent by userA', function (done) {
       request
-        .post('/api/messages')
+        .get('/api/users/'+userB.id+'/dialogs')
         .set('Authorization', api.session.authToken)
-        .type('json')
-        .send(msgAtoB_WhereIsReadTrue)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
         .end(function (err, res) {
           if (err) return done(err);
-          res.body.should.have.property('id');
-          res.body.should.have.property('dialog_id');
-          res.body.should.have.property('sender_id').and.equal(userA.id);
-          res.body.should.have.property('recipient_id').and.equal(userB.id);
-          res.body.should.have.property('is_read').and.equal(false);
-          res.body.should.have.property('created').and.have.length.above(6);
-          res.body.should.have.property('updated').and.have.length.above(6);
+          res.body.should.be.instanceOf(Array);
+          res.body.should.contain.an.item.with.property('id', msgAtoB.dialog_id);
+          res.body.should.contain.an.item.with.property('last_message');
           done();
         });
     });
   });
+
+  describe('GET /dialogs/{dialog}', function () {
+    it('should show dialog for userB', function (done) {
+      request
+        .get('/api/dialogs/'+msgAtoB.dialog_id)
+        .set('Authorization', api.session.authToken)
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .end(function (err, res) {
+          if (err) return done(err);
+          res.body.should.have.property('id').and.be.equal(msgAtoB.dialog_id);
+          res.body.should.have.property('is_private').and.be.equal(true);
+          res.body.should.have.property('is_grouped').and.be.equal(false);
+          //res.body.should.have.property('unread_count').and.be.equal(1);
+          res.body.should.have.property('last_message').and.be.not.equal(null);
+          res.body.last_message.should.have.property('id').and.be.equal(msgAtoB.id);
+          done();
+        });
+    });
+  });
+
 
 });

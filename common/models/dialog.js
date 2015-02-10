@@ -44,49 +44,46 @@ module.exports = function(Dialog) {
   //Dialog.disableRemoteMethod('__unlink__users', false);
   Dialog.disableRemoteMethod('__updateById__users', false);
 
-  Dialog.afterInitializeEvents = {
-    addTimestamps:function(next) {
-      if (!this.created) {
-        this.created = Date.now();
-      }
-      if (!this.updated) {
-        this.updated = Date.now();
-      }
-      if (next) next();
-    },
-    includeLastMessage:function(next) {
-      if (this.last_message === undefined) {
-        this.last_message = {
-          body: 'text',
-          subject: 'subject'
-        };
-      }
-      if (next) next();
-    },
-    includeRecipient:function(next) {
-      if (this.is_grouped === false) {
-        this.recipient = {
-          id: 'rcp',
-          last_name: 'rcp',
-          first_name: "text"
-        };
-      }
-      if (next) next();
+  Dialog.beforeCreate = function(next, modelInstance) {
+    modelInstance.created = Date.now();
+    modelInstance.updated = Date.now();
+    next();
+  };
+
+  Dialog.beforeUpdate = function(next, modelInstance) {
+    modelInstance.updated = Date.now();
+    next();
+  };
+
+  Dialog.prototype.populate = function(cb) {
+    var modelInstance = this;
+    app.models.message.findOne({ where: {dialog_id: modelInstance.id}, order:'created ASC'}, function(err, message) {
+      modelInstance.last_message = message;
+      return cb();
+    });
+  };
+
+  Dialog.afterRemote('findById', function(ctx, dialog, next) {
+    if(!dialog || !dialog.id) {
+      dialog.last_message = null;
+      return next();
     }
-  };
 
-  Dialog.afterInitialize = function(next) {
-    Dialog.afterInitializeEvents = Dialog.afterInitializeEvents || {};
-    var events = [];
-    var self = this;
-    _.forEach(_.keys(Dialog.afterInitializeEvents), function(key) {
-      events.push(Dialog.afterInitializeEvents[key]);
-    });
+    return dialog.populate(next);
+  });
 
-    async.eachSeries(events, function(fn, cb) {
-      fn.call(self, cb);
-    }, function(err){
-      if (next) next();
-    });
-  };
+  Dialog.afterRemote('*.__get__dialogs', function(ctx, dialogs, next) {
+    console.log('AAAA');
+    next();
+  });
+
+  Dialog.afterRemote('findById', function(ctx, dialog, next) {
+    if(!dialog || !dialog.id) {
+      dialog.last_message = null;
+      return next();
+    }
+
+    return dialog.populate(next);
+  });
+
 };

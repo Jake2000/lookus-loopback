@@ -13,9 +13,17 @@
       "type": "string",
       "description": "Тема сообщения (при автосоздании диалога - заголовок диалога)"
     },
+    "is_read": {
+      "type": "boolean",
+      "description": "Прочитано сообщение или нет"
+    },
     "created": {
       "type": "date",
       "description": "Дата и время создания"
+    },
+    "updated": {
+      "type": "date",
+      "description": "Дата и время обновления"
     }
   },
   "validations": [],
