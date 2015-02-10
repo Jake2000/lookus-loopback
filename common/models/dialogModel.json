@@ -14,15 +14,25 @@
     },
     "is_grouped": {
       "type": "boolean",
-      "description": "Является ли диалог беседой только между двумя пользователями"
+      "description": "Является ли диалог беседой только между двумя пользователями [<b>read-only<b>]"
     },
     "is_private": {
       "type": "boolean",
-      "description": "Запрещает писать и добавляться в диалог другим пользователям, не состоящим в диалоге"
+      "description": "Запрещает писать и добавляться в диалог другим пользователям, не состоящим в диалоге [<b>read-only<b>]"
     },
     "last_message": {
       "type": "message",
-      "description": "Последнее сообщение в диалоге  [<b>read-only<b>]"
+      "description": "Последнее сообщение в диалоге [<b>read-only<b>]"
+    },
+    "dnd_start":{
+      "type": "date",
+      "required": false,
+      "description": "Время начала режима 'не беспокоить' [<b>read-only<b>]"
+    },
+    "dnd_life_time":{
+      "type": "number",
+      "required": false,
+      "description": "Кол-во минут в режиме 'не беспокоить' [<b>read-only<b>]"
     },
     "created": {
       "type": "Date",

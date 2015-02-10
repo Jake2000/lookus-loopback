@@ -1,0 +1,23 @@
+{
+  "name": "dndModeModel",
+  "plural": "dndModeModels",
+  "base": "Model",
+  "idInjection": true,
+  "properties": {
+    "dnd_start":{
+      "type": "date",
+      "required": false,
+      "description": "Время начала режима 'не беспокоить'"
+    },
+    "dnd_life_time":{
+      "type": "number",
+      "required": false,
+      "description": "Кол-во минут в режиме 'не беспокоить'"
+    }
+  },
+  "hidden": ["id"],
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": []
+}

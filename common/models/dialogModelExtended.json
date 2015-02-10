@@ -10,19 +10,29 @@
     },
     "users_count": {
       "type": "number",
-      "description": "Кол-во пользователей в диалоге"
+      "description": "Кол-во пользователей в диалоге [<b>read-only<b>]"
     },
     "is_grouped": {
       "type": "boolean",
-      "description": "Является ли диалог беседой только между двумя пользователями"
+      "description": "Является ли диалог беседой только между двумя пользователями [<b>read-only<b>]"
     },
     "is_private": {
       "type": "boolean",
-      "description": "Запрещает писать и добавляться в диалог другим пользователям, не состоящим в диалоге"
+      "description": "Запрещает писать и добавляться в диалог другим пользователям, не состоящим в диалоге [<b>read-only<b>]"
     },
     "last_message": {
       "type": "message",
-      "description": "Последнее сообщение в диалоге"
+      "description": "Последнее сообщение в диалоге [<b>read-only<b>]"
+    },
+    "dnd_start":{
+      "type": "date",
+      "required": false,
+      "description": "Время начала режима 'не беспокоить' [<b>read-only<b>]"
+    },
+    "dnd_life_time":{
+      "type": "number",
+      "required": false,
+      "description": "Кол-во минут в режиме 'не беспокоить' [<b>read-only<b>]"
     },
     "recipient": {
       "type": "user",
@@ -30,11 +40,11 @@
     },
     "created": {
       "type": "Date",
-      "description": "Дата и время создания диалога"
+      "description": "Дата и время создания диалога [<b>read-only<b>]"
     },
     "updated": {
       "type": "Date",
-      "description": "Дата и время изменения диалога"
+      "description": "Дата и время изменения диалога [<b>read-only<b>]"
     }
   },
   "hidden": [],

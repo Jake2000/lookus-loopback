@@ -99,6 +99,10 @@
     "dataSource": null,
     "public": false
   },
+  "dndModeModel": {
+    "dataSource": null,
+    "public": false
+  },
   "locationModel": {
     "dataSource": null,
     "public": false

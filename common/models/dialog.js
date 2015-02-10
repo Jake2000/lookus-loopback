@@ -56,10 +56,38 @@ module.exports = function(Dialog) {
   };
 
   Dialog.prototype.populate = function(cb) {
+    // this can be user-specific
+    var ctx = loopback.getCurrentContext();
+    var currentUser = ctx && ctx.get('currentUser');
     var modelInstance = this;
-    app.models.message.findOne({ where: {dialog_id: modelInstance.id}, order:'created ASC'}, function(err, message) {
-      modelInstance.last_message = message;
-      return cb();
+
+    async.series([
+      function(cb) {
+        if(!(currentUser instanceof app.models.user)) {
+          return cb();
+        }
+        app.models.dialoguser.findOne({ where: { dialog_id: modelInstance.id, user_id: currentUser.id }}, function(err, dialoguser) {
+
+          if(!dialoguser) {
+            modelInstance.dnd_start = null;
+            modelInstance.dnd_life_time = 0;
+            return cb();
+          }
+
+          //TODO job
+          modelInstance.dnd_start = dialoguser.dnd_start;
+          modelInstance.dnd_life_time = dialoguser.dnd_life_time;
+          return cb();
+        });
+      },
+      function(cb) {
+        app.models.message.findOne({ where: {dialog_id: modelInstance.id}, order:'created ASC'}, function(err, message) {
+          modelInstance.last_message = message;
+          return cb();
+        });
+      }
+    ], function(err) {
+      cb();
     });
   };
 
@@ -79,6 +107,37 @@ module.exports = function(Dialog) {
     }
 
     return dialog.populate(next);
+  });
+
+  Dialog.prototype.setDND = function(dnd, cb) {
+    var ctx = loopback.getCurrentContext();
+    var currentUser = ctx && ctx.get('currentUser');
+
+    var modelInstance = this;
+    app.models.dialoguser.findOne({ where: { dialog_id: modelInstance.id, user_id: currentUser.id }}, function(err, dialoguser) {
+
+      if(!dialoguser) {
+        return cb();
+      }
+
+      //TODO job
+      dialoguser.dnd_start = dnd.dnd_start;
+      dialoguser.dnd_life_time = dnd.dnd_life_time;
+      dialoguser.save(cb);
+    });
+  };
+
+  Dialog.remoteMethod('setDND', {
+    isStatic:false,
+    description: 'Changes dialog \'Do not disturb\' settings for registered user',
+    accepts: [
+      {arg: 'data', type: "dndModeModel", required: true, http: {source: 'body'}}
+    ],
+    returns: {
+      arg: 'dialog', type: 'dialog', root: true
+    },
+    accessType: 'WRITE',
+    http: {verb: 'put', path: '/set_dnd_mode'}
   });
 
 };
