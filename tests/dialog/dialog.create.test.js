@@ -14,6 +14,7 @@ describe('Dialog resource tests', function() {
   var userA = api.generateRandomUser();
 
   api.createUser(userA.email, function(user) {
+    userA.id = user.id;
     privateDialog.title += '' + user.email;
   });
 
