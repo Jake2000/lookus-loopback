@@ -73,9 +73,9 @@ describe('Message resource tests', function() {
         .expect(200)
         .end(function (err, res) {
           if (err) return done(err);
-          res.body.should.be.instanceOf(Array);
-          res.body.should.contain.an.item.with.property('id', msgAtoB.dialog_id);
-          res.body.should.contain.an.item.with.property('last_message');
+          res.body.should.have.property('dialogs').and.be.instanceOf(Array);
+          res.body.dialogs.should.contain.an.item.with.property('id', msgAtoB.dialog_id);
+          res.body.dialogs.should.contain.an.item.with.property('last_message');
           done();
         });
     });

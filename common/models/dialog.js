@@ -72,11 +72,6 @@ module.exports = function(Dialog) {
     return dialog.populate(next);
   });
 
-  Dialog.afterRemote('*.__get__dialogs', function(ctx, dialogs, next) {
-    console.log('AAAA');
-    next();
-  });
-
   Dialog.afterRemote('findById', function(ctx, dialog, next) {
     if(!dialog || !dialog.id) {
       dialog.last_message = null;
