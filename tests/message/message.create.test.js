@@ -21,16 +21,8 @@ describe('Message resource tests', function() {
     is_read: true
   };
 
-  var userA = {
-    email: 'user'+api.randomStr()+'@infloop.ru',
-    password: '123456789'
-  };
-
-  var userB = {
-    email: 'user'+api.randomStr()+'@infloop.ru',
-    password: '123456789'
-  };
-
+  var userA = api.generateRandomUser();
+  var userB = api.generateRandomUser();
 
   describe('POST /api/messages', function () {
     it('should throw access exception for unauthorized user', function (done) {

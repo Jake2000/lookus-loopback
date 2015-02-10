@@ -18,10 +18,7 @@ describe('Marker resource tests', function() {
     }
   };
 
-  var userA = {
-    email: 'user'+api.randomStr()+'@infloop.ru',
-    password: '123456789'
-  };
+  var userA = api.generateRandomUser();
 
   describe('POST /api/markers', function () {
     it('should throw access exception for unauthorized user', function (done) {

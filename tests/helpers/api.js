@@ -36,22 +36,25 @@ function loginAsUser(user) {
   });
 }
 
-function createUser(email, cb) {
+function createUser(emailOrUser, cb) {
   cb = cb || function(){};
 
-  var newUser = {
-    email: email,
-    password: '123456789',
-    first_name: 'Arthur',
-    last_name: 'King',
-    birthday: '1987-01-01',
-    sex: 1,
-    country: 'Russia',
-    city: 'Saint-Petersburg'
-  };
+  var newUser = emailOrUser;
+  if(_.isString(emailOrUser)) {
+    newUser = {
+      email: emailOrUser,
+      password: '123456789',
+      first_name: 'Arthur',
+      last_name: 'King',
+      birthday: '1987-01-01',
+      sex: 1,
+      country: 'Russia',
+      city: 'Saint-Petersburg'
+    };
+  }
 
   describe('POST /api/users', function() {
-    it('should create a new user '+email, function(done) {
+    it('should create a new user '+newUser.email, function(done) {
       request
         .post('/api/users')
         .type('json')
@@ -84,6 +87,13 @@ function loginAsAdminUser() {
 
 function randomStr() {
   return Math.random().toString(36).substring(4);
+}
+
+function generateRandomUser() {
+  return {
+    email: 'user'+randomStr()+'@infloop.ru',
+    password: '123456789'
+  };
 }
 
 function createAndLoginAsNewNormalUser() {
@@ -146,6 +156,7 @@ module.exports.session = session;
 module.exports.randomStr = randomStr;
 module.exports.createUser = createUser;
 module.exports.loginAsUser = loginAsUser;
+module.exports.generateRandomUser = generateRandomUser;
 module.exports.createAndLoginAsNewNormalUser = createAndLoginAsNewNormalUser;
 module.exports.loginAsAdminUser = loginAsAdminUser;
 module.exports.loginAsNormalUser = loginAsNormalUser;
