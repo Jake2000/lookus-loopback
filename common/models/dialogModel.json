@@ -10,7 +10,7 @@
     },
     "users_count": {
       "type": "number",
-      "description": "Кол-во пользователей в диалоге"
+      "description": "Кол-во пользователей в диалоге  [<b>read-only<b>]"
     },
     "is_grouped": {
       "type": "boolean",
@@ -22,15 +22,15 @@
     },
     "last_message": {
       "type": "message",
-      "description": "Последнее сообщение в диалоге"
+      "description": "Последнее сообщение в диалоге  [<b>read-only<b>]"
     },
     "created": {
       "type": "Date",
-      "description": "Дата и время создания диалога"
+      "description": "Дата и время создания диалога  [<b>read-only<b>]"
     },
     "updated": {
       "type": "Date",
-      "description": "Дата и время изменения диалога"
+      "description": "Дата и время изменения диалога  [<b>read-only<b>]"
     }
   },
   "hidden": [],

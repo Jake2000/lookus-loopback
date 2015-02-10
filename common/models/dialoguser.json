@@ -2,7 +2,12 @@
   "name": "dialoguser",
   "base": "PersistedModel",
   "idInjection": true,
-  "properties": {},
+  "properties": {
+    "dnd_start":{
+      "type": "date",
+      "description": "Время начала режима 'не беспокоить'"
+    }
+  },
   "validations": [],
   "relations": {
     "user": {

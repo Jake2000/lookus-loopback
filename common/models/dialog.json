@@ -24,11 +24,11 @@
     },
     "created": {
       "type": "Date",
-      "description": "Дата и время создания диалога"
+      "description": "Дата и время создания диалога  [<b>read-only<b>]"
     },
     "updated": {
       "type": "Date",
-      "description": "Дата и время изменения диалога"
+      "description": "Дата и время изменения диалога  [<b>read-only<b>]"
     }
   },
   "hidden": ["private_participant_1_id", "private_participant_2_id"],

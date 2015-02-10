@@ -22,24 +22,28 @@
     "image_url": {
       "type": "string",
       "required": false,
-      "description": "Изображение маркера"
+      "description": "Изображение маркера [<b>read-only<b>]"
     },
     "image_preview_url": {
       "type": "string",
       "required": false,
-      "description": "Изображение маркера (уменьш.)"
+      "description": "Изображение маркера (уменьш.) [<b>read-only<b>]"
+    },
+    "is_active": {
+      "type": "boolean",
+      "description": "Является ли маркер активным (автоматически переводится в false после истечения lifetime)"
     },
     "created": {
       "type": "date",
-      "description": "Дата и время создания"
+      "description": "Дата и время создания [<b>read-only<b>]"
     },
     "updated": {
       "type": "date",
-      "description": "Дата и время изменения"
+      "description": "Дата и время изменения [<b>read-only<b>]"
     },
     "deleted": {
       "type": "date",
-      "description": "Дата и время удаления"
+      "description": "Дата и время удаления [<b>read-only<b>]"
     },
     "is_up": {
       "type": "boolean",
