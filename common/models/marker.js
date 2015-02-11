@@ -72,7 +72,7 @@ module.exports = function(Marker) {
     }
 
     var modelInstance = this;
-    app.io.emitEventForUser(currentUser, 'marker:created', modelInstance);
+    app.io.emitEventForUser('*', 'marker:created', modelInstance);
     app.models.dialog.create({
       marker_id: modelInstance.id,
       title: modelInstance.text,

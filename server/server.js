@@ -155,6 +155,11 @@ var emitEventForUser = function(user, eventName, eventArgs) {
     userId = user.id.toString()
   }
 
+  if(user === '*') {
+    app.io.emit(eventName, eventArgs);
+    return;
+  }
+
   if(socketsByUser[userId]) {
     var socket = socketsByUser[userId];
     socket.emit(eventName, eventArgs);
