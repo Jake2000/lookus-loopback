@@ -153,7 +153,7 @@ if (require.main === module) {
   var ioapp = require('express')();
   var server = require('http').Server(ioapp);
   app.io = require('socket.io')(server);
-  ioapp.listen(3302);
+  server.listen(3302);
 
   app.io.on('connection', function(socket){
     console.log('a user connected');
