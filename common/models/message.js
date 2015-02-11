@@ -109,18 +109,25 @@ module.exports = function(Message) {
             if(!dialog) {
               return next(new Error("Dialog not created"));
             }
-            console.log("dialog created");
-            console.log(dialog);
+            //console.log("dialog created");
+            //console.log(dialog);
 
             //setting dialog users
+            var recipientUser = null;
+
             modelInstance.recipient(function(err, recipient) {
+
               dialog.users.add(currentUser, function(err, ac) {
                 dialog.users.add(recipient, noop);
               });
+
+              app.io.emitEventForUser(recipient, 'message:created', modelInstance);
             });
 
             modelInstance.dialog_id = dialog.id;
             modelInstance.save();
+
+
             return next();
           });
         } else {

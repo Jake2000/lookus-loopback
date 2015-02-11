@@ -148,6 +148,20 @@ app.io = {};
 var socketsByToken = {};
 var socketsByUser = {};
 
+var emitEventForUser = function(user, eventName, eventArgs) {
+  var userId = user;
+  if(user instanceof app.models.user) {
+    userId = user.id.toString()
+  }
+
+  if(socketsByUser[userId]) {
+    var socket = socketsByUser[userId];
+    socket.emit(eventName, eventArgs);
+  }
+
+};
+
+
 // start the server if `$ node server.js`
 if (require.main === module) {
   app.start();
@@ -157,6 +171,8 @@ if (require.main === module) {
   var server = require('http').Server(ioapp);
   app.io = require('socket.io')(server);
   server.listen(3302);
+
+  app.io.emitEventForUser = emitEventForUser;
 
   app.io.on('connection', function(socket){
     socket.auth = false;
