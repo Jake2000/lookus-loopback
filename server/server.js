@@ -151,13 +151,14 @@ var socketsByUser = {};
 
 var emitEventForUser = function(user, eventName, eventArgs) {
   var userId = user;
-  if(user instanceof app.models.user) {
-    userId = user.id.toString()
-  }
 
   if(user === '*') {
     app.io.emit(eventName, eventArgs);
     return;
+  }
+
+  if(user instanceof app.models.user) {
+    userId = user.id.toString()
   }
 
   if(socketsByUser[userId]) {
