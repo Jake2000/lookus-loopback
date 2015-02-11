@@ -121,13 +121,13 @@ module.exports = function(Message) {
                 dialog.users.add(recipient, noop);
               });
 
-              app.io.emitEventForUser(recipient, 'message:created', modelInstance);
+
             });
 
             modelInstance.dialog_id = dialog.id;
             modelInstance.save();
 
-
+            app.io.emitEventForUser(modelInstance.recipient_id, 'message:created', modelInstance);
             return next();
           });
         } else {
@@ -135,6 +135,10 @@ module.exports = function(Message) {
           console.log("dialog found");
           modelInstance.dialog_id = dialog.id;
           modelInstance.save();
+
+
+
+          app.io.emitEventForUser(modelInstance.recipient_id, 'message:created', modelInstance);
           return next();
         }
       });

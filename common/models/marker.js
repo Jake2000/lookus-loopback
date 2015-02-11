@@ -70,7 +70,9 @@ module.exports = function(Marker) {
       err.errorCode = 40301;
       return next(err);
     }
+
     var modelInstance = this;
+    app.io.emitEventForUser(currentUser, 'marker:created', modelInstance);
     app.models.dialog.create({
       marker_id: modelInstance.id,
       title: modelInstance.text,
