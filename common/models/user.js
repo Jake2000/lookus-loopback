@@ -455,7 +455,7 @@ module.exports = function(User) {
       }
 
       app.models.friendscontaineruser.find({
-        friendscontainer_id:  friendsContainer.id
+        where: { friendscontainer_id:  friendsContainer.id }
       }, function(err, usercontainers) {
         if(err) {
           return cb(err);
@@ -651,7 +651,7 @@ module.exports = function(User) {
       }
 
       app.models.blacklistuser.find({
-        blacklist_id:  blacklist.id
+        where: { blacklist_id:  blacklist.id }
       }, function(err, usercontainers) {
         if(err) {
           return cb(err);
