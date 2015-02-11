@@ -634,4 +634,160 @@ module.exports = function(User) {
       next();
     });
   });
+
+
+  User.prototype.__get__blacklist = function(cb) {
+    app.models.blacklist.findOne({where: { user_id: this.id}}, function(err, blacklist) {
+
+      if(err) {
+        return cb(err);
+      }
+
+      if(!blacklist) {
+        var err1 = new Error("Blacklist not found");
+        err1.status = 404;
+        err1.errorCode = 40401;
+        return cb(err1);
+      }
+
+      app.models.blacklistuser.find({
+        blacklist_id:  blacklist.id
+      }, function(err, usercontainers) {
+        if(err) {
+          return cb(err);
+        }
+
+        var ids = [];
+        _.forEach(usercontainers, function(usercontainer) {
+          ids.push(usercontainer.user_id);
+        });
+
+        app.models.user.findByIds(ids, function(err,users) {
+          return cb(null, users);
+        });
+      });
+    });
+  };
+
+  User.remoteMethod('__get__blacklist', {
+    isStatic: false,
+    description: 'Query blacklisted friends',
+    returns: {
+      arg: 'users', type: ["user"], root: true,
+      description:
+        'The response body contains list of users in blacklist.\n'
+    },
+    accessType: 'READ',
+    http: {verb: 'get', path: '/blacklist'}
+  });
+
+  User.prototype.__link__blacklistuser = function(blacklistedUserId, cb) {
+    app.models.blacklist.findOne({where: { user_id: this.id}}, function(err, blacklist) {
+
+      if(err) {
+        return cb(err);
+      }
+
+      if(!blacklist) {
+        var err1 = new Error("Blacklist not found");
+        err1.status = 404;
+        err1.errorCode = 40401;
+        return cb(err1);
+      }
+
+      app.models.user.findById(blacklistedUserId, function(err, blacklistedUser) {
+
+        if(err) {
+          return cb(err);
+        }
+
+        if(!blacklistedUser) {
+          var err2 = new Error("User with this id not found");
+          err2.status = 404;
+          err2.errorCode = 40401;
+          return cb(err2);
+        }
+
+        app.models.blacklistruser.findOrCreate(
+          {
+            blacklist_id: blacklist.id,
+            user_id: blacklistedUser.id
+          }, {
+            blacklist_id: blacklist.id,
+            user_id: blacklistedUser.id
+          }, function (err, ok) {
+            cb(null, {success: true});
+          });
+      });
+
+    });
+  };
+
+  User.prototype.__unlink__blacklistuser = function(blacklistedUserId, cb) {
+    app.models.blacklist.findOne({where: { user_id: this.id}}, function(err, blacklist) {
+
+      if(err) {
+        return cb(err);
+      }
+
+      if(!blacklist) {
+        var err1 = new Error("Blacklist not found");
+        err1.status = 404;
+        err1.errorCode = 40401;
+        return cb(err1);
+      }
+
+      app.models.user.findById(blacklistedUserId, function(err, blacklistedUser) {
+
+        if(err) {
+          return cb(err);
+        }
+
+        if(!blacklistedUser) {
+          var err2 = new Error("User with this id not found");
+          err2.status = 404;
+          err2.errorCode = 40401;
+          return cb(err2);
+        }
+
+        app.models.blacklistruser.remove({
+          blacklist_id: blacklist.id,
+          user_id: blacklistedUser.id
+        }, function (err, ok) {
+          cb(null, {success: true});
+        });
+      });
+
+    });
+  };
+
+  User.remoteMethod('__link__blacklistuser', {
+    isStatic: false,
+    description: 'Add user to blacklist',
+    accepts: [
+      {arg: 'blacklisted_user_id', type: 'any', description:'User id', required: true, http: {source: 'path'}}
+    ],
+    returns: {
+      arg: 'success', type: 'successModel', root: true,
+      description:
+        'Success json.\n'
+    },
+    accessType: 'WRITE',
+    http: {verb: 'put', path: '/blacklist/rel/:blacklisted_user_id'}
+  });
+
+  User.remoteMethod('__unlink__blacklistuser', {
+    isStatic: false,
+    description: 'Remove user from blacklist',
+    accepts: [
+      {arg: 'blacklisted_user_id', type: 'any', description:'User id', required: true, http: {source: 'path'}}
+    ],
+    returns: {
+      arg: 'success', type: 'successModel', root: true,
+      description:
+        'Success json.\n'
+    },
+    accessType: 'WRITE',
+    http: {verb: 'delete', path: '/blacklist/rel/:blacklisted_user_id'}
+  });
 };

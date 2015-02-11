@@ -1,11 +1,22 @@
 {
-  "name": "blacklistItem",
-  "plural": "blacklistItems",
+  "name": "blacklist",
+  "plural": "blacklists",
   "base": "PersistedModel",
   "idInjection": true,
   "properties": {},
   "validations": [],
-  "relations": {},
+  "relations": {
+    "owner": {
+      "type": "belongsTo",
+      "model": "user",
+      "foreignKey": "user_id"
+    },
+    "users": {
+      "type": "hasMany",
+      "model": "blacklistuser",
+      "foreignKey": "blacklist_id"
+    }
+  },
   "acls": [
     {
       "accessType": "*",
