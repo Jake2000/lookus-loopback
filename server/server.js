@@ -204,10 +204,10 @@ if (require.main === module) {
           if(token) {
             socket.auth = true;
             socketsByToken[token.id.toString()] = socket;
-            socketsByToken[token.userId] = socket;
-            app.io.emit('auth', { code: 200 });
+            socketsByUser[token.userId] = socket;
+            socket.emit('auth', { code: 200 });
           } else {
-            app.io.emit('auth', { code: 404, error: 'Token not found'});
+            socket.emit('auth', { code: 404, error: 'Token not found'});
           }
         });
       }
