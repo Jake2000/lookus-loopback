@@ -27,6 +27,8 @@ socket.on('message:created', function(data) {
 
 socket.on('marker:created', function(data) {
   $('#ws-messages').append('<li class="list-group-item"><span class="glyphicon glyphicon-download" aria-hidden="true"></span>&nbsp; marker.created:&nbsp;'+JSON.stringify(data)+'</li>');
+
+  placeMarker(data);
 });
 
 socket.on('error', function() { console.error(arguments) });
@@ -34,17 +36,21 @@ socket.on('message', function() { console.log(arguments) });
 
 $(function(){
 
-  $('#send-ws-message').on('click', function() {
-    socket.emit('msg', {text: $('#ws-message').val()});
-    $('#ws-messages').append('<li class="list-group-item"><span class="glyphicon glyphicon-upload" aria-hidden="true"></span>&nbsp;' + $('#ws-message').val() + '</li>');
-    $('#ws-message').val('');
-  });
+  if($('#send-ws-message').length>0) {
+    $('#send-ws-message').on('click', function() {
+      socket.emit('msg', {text: $('#ws-message').val()});
+      $('#ws-messages').append('<li class="list-group-item"><span class="glyphicon glyphicon-upload" aria-hidden="true"></span>&nbsp;' + $('#ws-message').val() + '</li>');
+      $('#ws-message').val('');
+    });
+  }
 
-  $('#send-ws-auth').on('click', function() {
-    if(localStorage.getItem('access_token')) {
-      socket.emit('auth', {token: localStorage.getItem('access_token') });
-      $('#ws-messages').append('<li class="list-group-item"><span class="glyphicon glyphicon-upload" aria-hidden="true"></span>&nbsp; Send auth </li>');
-    }
-  });
+  if($('#send-ws-auth').length>0) {
+    $('#send-ws-auth').on('click', function () {
+      if (localStorage.getItem('access_token')) {
+        socket.emit('auth', {token: localStorage.getItem('access_token')});
+        $('#ws-messages').append('<li class="list-group-item"><span class="glyphicon glyphicon-upload" aria-hidden="true"></span>&nbsp; Send auth </li>');
+      }
+    });
+  }
 
 });

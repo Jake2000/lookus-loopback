@@ -77,6 +77,17 @@ function clearMarkers() {
   markers = [];
 }
 
+function placeMarker(marker) {
+  if($('#map-canvas').length>0) {
+    var gMarker = new google.maps.Marker({
+      position: new google.maps.LatLng(marker.location.lat, marker.location.lng),
+      map: map
+    });
+
+    markers.push(gMarker);
+  }
+}
+
 function saveCurrentMarker() {
   if(!currentMarker)
     return;
@@ -153,17 +164,19 @@ function loadMarkers() {
 }
 
 $(function(){
-  initialize();
+  if($('#map-canvas').length>0) {
+    initialize();
 
-  $('#load-markers').on('click', function() {
-    loadMarkers();
-  });
+    $('#load-markers').on('click', function() {
+      loadMarkers();
+    });
 
-  $('#save-marker').on('click', function() {
-    saveCurrentMarker();
-  });
+    $('#save-marker').on('click', function() {
+      saveCurrentMarker();
+    });
 
-  google.maps.event.addListener(map, 'bounds_changed', _.debounce(function() {
-    loadMarkers();
-  }, 1000));
+    google.maps.event.addListener(map, 'bounds_changed', _.debounce(function() {
+      loadMarkers();
+    }, 1000));
+  }
 });
