@@ -145,6 +145,9 @@ app.start = function() {
 
 app.io = {};
 
+var socketsByToken = {};
+var socketsByUser = {};
+
 // start the server if `$ node server.js`
 if (require.main === module) {
   app.start();
@@ -156,15 +159,52 @@ if (require.main === module) {
   server.listen(3302);
 
   app.io.on('connection', function(socket){
+    socket.auth = false;
     console.log('a user connected');
+
+    // Msg echo
     socket.on('msg', function(msg){
       console.log('msg: ' + msg.text);
       msg.text = "server." + msg.text;
       app.io.emit('msg', msg);
     });
+
+    // Disconnect
     socket.on('disconnect', function(){
       console.log('user disconnected');
+
     });
+
+    // Auth
+    socket.on('auth', function(auth){
+      console.log('io:auth: ' + auth.token);
+      if(auth.token && _.isString(auth.token)) {
+
+        app.models.AccessToken.findById(auth.token, function(err, token) {
+
+          if(token) {
+            socket.auth = true;
+            socketsByToken[token.id.toString()] = socket;
+            socketsByToken[token.userId] = socket;
+            app.io.emit('auth', { code: 200 });
+          } else {
+            app.io.emit('auth', { code: 404, error: 'Token not found'});
+          }
+
+        });
+
+
+      }
+
+
+    });
+
+    // Status
+    socket.on('status', function(){
+      console.log('io: status');
+      app.io.emit('status', {auth: socket.auth, code: 200});
+    });
+
   });
 
 }
