@@ -143,11 +143,17 @@ app.start = function() {
   });
 };
 
-
+app.io = {};
 
 // start the server if `$ node server.js`
 if (require.main === module) {
-  app.io = require('socket.io')(app.start());
+  app.start();
+
+  //starting io.js
+  var ioapp = require('express')();
+  var server = require('http').Server(ioapp);
+  app.io = require('socket.io')(server);
+  ioapp.listen(3302);
 
   app.io.on('connection', function(socket){
     console.log('a user connected');
@@ -162,6 +168,8 @@ if (require.main === module) {
   });
 
 }
+
+
 
 
 

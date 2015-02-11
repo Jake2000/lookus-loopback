@@ -1,5 +1,13 @@
+var host = window.location.host;
 
-var socket = io.connect(window.location.host);
+console.log(host);
+
+if(host.indexOf('localhost') >=0) {
+  host = 'localhost:3302';
+} else {
+  host = 'ws.'+window.location.host;
+}
+var socket = io.connect(host);
 
 socket.on('welcome', function(data) {
   socket.emit('i am client', {data: 'foo!'});
