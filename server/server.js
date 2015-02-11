@@ -190,13 +190,8 @@ if (require.main === module) {
           } else {
             app.io.emit('auth', { code: 404, error: 'Token not found'});
           }
-
         });
-
-
       }
-
-
     });
 
     // Status
