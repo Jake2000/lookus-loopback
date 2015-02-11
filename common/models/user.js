@@ -611,12 +611,11 @@ module.exports = function(User) {
     });
   });
 
-  User.prototype.uploadAvatar = function( cb) {
+  User.prototype.uploadAvatar = function(image, cb) {
     var ctx = loopback.getCurrentContext();
-    var modelInstance = this;
     this.image_url = '/uploads/user-avatars/' + ctx.get('filename');
-    this.save(function(err) {
-      cb(err, modelInstance);
+    this.save(function(err, user) {
+      cb(err, user);
     });
   };
 
