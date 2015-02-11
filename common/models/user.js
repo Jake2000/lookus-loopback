@@ -256,6 +256,13 @@ module.exports = function(User) {
         });
       },
       function(cb) {
+        app.models.blacklist.create({
+          user_id: modelInstance.id.toString()
+        },function(err, blacklist) {
+          cb();
+        });
+      },
+      function(cb) {
         app.models.usersetting.create({
           notifications_global_disable: false,
           notifications_only_from_friends: false,
