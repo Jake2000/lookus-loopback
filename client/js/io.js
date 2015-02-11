@@ -21,11 +21,11 @@ socket.on('auth', function(data) {
   $('#ws-messages').append('<li class="list-group-item"><span class="glyphicon glyphicon-download" aria-hidden="true"></span>&nbsp; auth:&nbsp;'+JSON.stringify(data)+'</li>');
 });
 
-socket.on('message.created', function(data) {
+socket.on('message:created', function(data) {
   $('#ws-messages').append('<li class="list-group-item"><span class="glyphicon glyphicon-download" aria-hidden="true"></span>&nbsp; message.created:&nbsp;'+JSON.stringify(data)+'</li>');
 });
 
-socket.on('marker.created', function(data) {
+socket.on('marker:created', function(data) {
   $('#ws-messages').append('<li class="list-group-item"><span class="glyphicon glyphicon-download" aria-hidden="true"></span>&nbsp; marker.created:&nbsp;'+JSON.stringify(data)+'</li>');
 });
 
