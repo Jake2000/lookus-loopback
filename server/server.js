@@ -161,18 +161,20 @@ if (require.main === module) {
   app.io.on('connection', function(socket){
     socket.auth = false;
     console.log('a user connected');
+    app.io.emit('log', { code: 200, type: 'user:connected', socket_id: socket.id});
 
     // Msg echo
     socket.on('msg', function(msg){
       console.log('msg: ' + msg.text);
       msg.text = "server." + msg.text;
       app.io.emit('msg', msg);
+      app.io.emit('log', { code: 200, type: 'msg:incoming', socket_id: socket.id});
     });
 
     // Disconnect
     socket.on('disconnect', function(){
       console.log('user disconnected');
-
+      app.io.emit('log', { code: 200, type: 'user:disconnected', socket_id: socket.id});
     });
 
     // Auth

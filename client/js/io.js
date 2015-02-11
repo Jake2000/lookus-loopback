@@ -15,6 +15,10 @@ socket.on('welcome', function(data) {
 socket.on('msg', function(data) {
   $('#ws-messages').append('<li class="list-group-item"><span class="glyphicon glyphicon-download" aria-hidden="true"></span>&nbsp;' + data.text + '</li>');
 });
+
+socket.on('log', function(data) {
+  $('#ws-messages').append('<li class="list-group-item"><span class="glyphicon glyphicon-download" aria-hidden="true"></span>&nbsp;&nbsp;'+JSON.stringify(data)+'</li>');
+});
 socket.on('error', function() { console.error(arguments) });
 socket.on('message', function() { console.log(arguments) });
 
