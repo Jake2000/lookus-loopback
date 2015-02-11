@@ -1,6 +1,7 @@
 var loopback = require('loopback');
 var boot = require('loopback-boot');
 var path = require('path');
+var _ = require('lodash');
 
 var app = module.exports = loopback();
 var cors = require('cors');
