@@ -13,6 +13,10 @@ module.exports = function(Marker) {
   Marker.disableRemoteMethod('find', true);
   Marker.disableRemoteMethod('count', true);
 
+  Marker.disableRemoteMethod('__destroy__dialog', false);
+  Marker.disableRemoteMethod('__create__dialog', false);
+  Marker.disableRemoteMethod('__update__dialog', false);
+
   Marker.canCreate = function(user, cb) {
     if(!(user instanceof app.models.user)) {
       var err = new Error("User model needed");
@@ -52,13 +56,18 @@ module.exports = function(Marker) {
 
     // Attaching user
     modelInstance.user_id = currentUser.id;
+    modelInstance.created = (new Date());
+    modelInstance.updated = (new Date());
 
     Marker.canCreate(currentUser, function(err, canCreate) {
       if(err) { return next(err); }
 
       next();
     });
+  };
 
+  Marker.beforeUpdate = function(next, modelInstance) {
+    modelInstance.updated = (new Date());
   };
 
   Marker.afterCreate = function(next) {

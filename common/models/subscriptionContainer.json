@@ -1,11 +1,22 @@
 {
-  "name": "subscription",
-  "plural": "subscriptions",
+  "name": "subscriptionContainer",
+  "plural": "subscriptionContainers",
   "base": "PersistedModel",
   "idInjection": true,
   "properties": {},
   "validations": [],
-  "relations": {},
+  "relations": {
+    "owner": {
+      "type": "belongsTo",
+      "model": "user",
+      "foreignKey": "user_id"
+    },
+    "users": {
+      "type": "hasMany",
+      "model": "subscriptionContainerUser",
+      "foreignKey": "subscriptionContainer_id"
+    }
+  },
   "acls": [
     {
       "accessType": "*",

@@ -79,14 +79,9 @@
       "foreignKey": "user_id",
       "through": "dialoguser"
     },
-    "friendscontainer": {
-      "type": "hasOne",
-      "model": "friendscontainer",
-      "foreignKey": "user_id"
-    },
     "settings": {
       "type": "hasOne",
-      "model": "usersetting",
+      "model": "settings",
       "foreignKey": "user_id"
     },
     "marker": {
@@ -95,7 +90,7 @@
       "foreignKey": "user_id"
     }
   },
-  "hidden": ["friendscontainer_id"],
+  "hidden": [],
   "acls": [
     {
       "accessType": "*",

@@ -84,15 +84,32 @@ module.exports = function(Message) {
 
     if(modelInstance.dialog_id) {
       // Do not need to do something
+
+      modelInstance.users.find({}, function(err, users) {
+
+        if(!users) {
+          return next();
+        }
+
+          async.eachSeries(users, function(user, cb) {
+            if(user.id.toString() != currentUser.id.toString())
+              app.io.emitEventForUser(user, 'message:created', modelInstance);
+          }, function(err) {
+            return next();
+          });
+      });
+
+
+
     } else if (modelInstance.recipient_id) {
 
       //searching for private dialogs with this recipient
       findDialogByParticipants(currentUser.id, modelInstance.recipient_id, function(err, dialog) {
-        console.log("dialog search");
-        console.log(dialog);
+        //console.log("dialog search");
+        //console.log(dialog);
 
         if(!dialog) {
-          console.log("dialog not found");
+          //console.log("dialog not found");
           // Creating dialog
           app.models.dialog.create({
             title: modelInstance.subject || "",
@@ -102,7 +119,7 @@ module.exports = function(Message) {
             private_participant_2_id: currentUser.id
           }, function(err, dialog) {
             if(err) {
-              console.log(err);
+              //console.log(err);
               return next(err);
             }
 
