@@ -800,4 +800,44 @@ module.exports = function(User) {
     accessType: 'WRITE',
     http: {verb: 'delete', path: '/blacklist/rel/:blacklisted_user_id'}
   });
+
+  User.prototype.__get__markers = function(filter, cb) {
+    app.models.marker.findActiveForUser(this, filter, cb);
+  };
+
+  User.prototype.__get__marker__history = function(filter, cb) {
+    app.models.marker.findInactiveForUser(this, filter, cb);
+  };
+
+  User.remoteMethod('__get__marker__history', {
+    isStatic: false,
+    description: 'Get markers history for user (all inactive markers)',
+    accepts: [
+      {arg: 'filter', type: 'string', description:'Filter defining fields, where, orderBy, offset, and limit',
+        required: false, http: {source: 'query'}}
+    ],
+    returns: {
+      arg: 'markers', type: ['marker'], root: true,
+      description:
+        'Array of markers'
+    },
+    accessType: 'READ',
+    http: {verb: 'get', path: '/markers/history'}
+  });
+
+  User.remoteMethod('__get__markers_active', {
+    isStatic: false,
+    description: 'Get markers for user (all active markers)',
+    accepts: [
+      {arg: 'filter', type: 'string', description:'Filter defining fields, where, orderBy, offset, and limit',
+        required: false, http: {source: 'query'}}
+    ],
+    returns: {
+      arg: 'markers', type: ['marker'], root: true,
+      description:
+        'Array of markers'
+    },
+    accessType: 'READ',
+    http: {verb: 'get', path: '/markers'}
+  });
 };

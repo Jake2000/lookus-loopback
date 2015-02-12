@@ -53,8 +53,8 @@ function createUser(emailOrUser, cb) {
     };
   }
 
-  describe('POST /api/users', function() {
-    it('should create a new user '+newUser.email, function(done) {
+  describe('API: createUser', function() {
+    it('should create a new user ' + newUser.email, function(done) {
       request
         .post('/api/users')
         .type('json')
@@ -169,10 +169,32 @@ function createFriendship(friendship) {
   });
 }
 
+function createMarker(marker) {
+  describe('API: createMarker', function () {
+    it('should create marker for user ' + session.userId, function (done) {
+      request
+        .post('/api/markers')
+        .set('Authorization', session.authToken)
+        .type('json')
+        .send(marker)
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .end(function (err, res) {
+          if (err) return done(err);
+          res.body.should.have.property('id');
+          marker.id = res.body.id;
+          done();
+        });
+    });
+  });
+}
+
 module.exports.session = session;
 module.exports.randomStr = randomStr;
 module.exports.createUser = createUser;
 module.exports.loginAsUser = loginAsUser;
+module.exports.createMarker = createMarker;
 module.exports.createFriendship = createFriendship;
 module.exports.generateRandomUser = generateRandomUser;
 module.exports.createAndLoginAsNewNormalUser = createAndLoginAsNewNormalUser;

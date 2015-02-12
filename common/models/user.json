@@ -83,11 +83,6 @@
       "type": "hasOne",
       "model": "settings",
       "foreignKey": "user_id"
-    },
-    "marker": {
-      "type": "hasOne",
-      "model": "marker",
-      "foreignKey": "user_id"
     }
   },
   "hidden": [],

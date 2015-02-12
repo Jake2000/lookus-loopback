@@ -227,7 +227,7 @@ module.exports = function(Marker) {
     isStatic:false,
     description: 'Changes image of a marker',
     accepts: [
-      {arg: 'image', type: "File", required: true, http: {source: 'body'}},
+      {arg: 'image', type: "File", required: true, http: {source: 'body'}}
     ],
     returns: {
       arg: 'markers', type: 'marker', root: true
@@ -235,5 +235,36 @@ module.exports = function(Marker) {
     accessType: 'WRITE',
     http: {verb: 'post', path: '/uploadImage'}
   });
+
+  Marker.findInactiveForUser = function(user, filter, cb) {
+    filter = filter || {};
+    filter.where = filter.where || {};
+    filter.where.user_id = user.id;
+    filter.where.is_active = false;
+
+    Marker.find(filter, function(err, markers) {
+      if(err) {
+        return cb(err);
+      }
+
+      cb(null,markers);
+    })
+  };
+
+  Marker.findActiveForUser = function(user, filter, cb) {
+    filter = filter || {};
+    filter.where = filter.where || {};
+    filter.where.user_id = user.id;
+    filter.where.is_active = true;
+
+    Marker.find(filter, function(err, markers) {
+      if(err) {
+        return cb(err);
+      }
+
+      cb(null,markers);
+    })
+  };
+
 };
 
