@@ -83,5 +83,22 @@ describe('Marker resource tests', function() {
     });
   });
 
+  describe('GET /api/users/{userA}/markers/history', function () {
+    it('should list empty array (for userA)', function (done) {
+      request
+        .get('/api/users/'+userA.id+'/markers/history')
+        .set('Authorization', api.session.authToken)
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .end(function (err, res) {
+          if (err) return done(err);
+          res.body.should.be.instanceOf(Array);
+          res.body.should.have.length(0);
+          done();
+        });
+    });
+  });
+
 
 });

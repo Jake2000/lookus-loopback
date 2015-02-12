@@ -14,6 +14,7 @@ module.exports = function(Marker) {
   Marker.disableRemoteMethod('count', true);
 
   Marker.disableRemoteMethod('__destroy__dialog', false);
+  Marker.disableRemoteMethod('__destroy__dialog', false);
   Marker.disableRemoteMethod('__create__dialog', false);
   Marker.disableRemoteMethod('__update__dialog', false);
 

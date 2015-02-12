@@ -22,8 +22,7 @@ module.exports = function(Dialog) {
   Dialog.disableRemoteMethod('upsert', true);
 
   Dialog.disableRemoteMethod('__create__messages', false);
-  Dialog.disableRemoteMethod('__destroyById__messages', false);
-  Dialog.disableRemoteMethod('__deleteById__messages', false);
+  Dialog.disableRemoteMethod('__delete__messages', false);
   Dialog.disableRemoteMethod('__link__messages', false);
   Dialog.disableRemoteMethod('__unlink__messages', false);
   Dialog.disableRemoteMethod('__updateById__messages', false);

@@ -78,6 +78,10 @@ module.exports = function(User) {
   User.disableRemoteMethod('__unlink__identities', false);
   User.disableRemoteMethod('__updateById__identities', false);
 
+  User.disableRemoteMethod('__create__settings', false);
+  User.disableRemoteMethod('__destroy__settings', false);
+  User.disableRemoteMethod('__update__settings', false);
+
   User.prototype.isAdmin = function(cb) {
     app.models.Role.isInRole('admin', {principalType: app.models.RoleMapping.USER, principalId: this.id}, function(err, exists) {
       if (exists){
