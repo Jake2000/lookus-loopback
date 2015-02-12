@@ -190,10 +190,39 @@ function createMarker(marker) {
   });
 }
 
+
+function sendMessage(message) {
+  describe('API: sendMessage', function () {
+    var text = (message.recipient_id) ? (' to user ' + message.recipient_id) : (' to dialog ' + message.dialog_id) ;
+    it('should send message from user '+session.userId+' to user' +message.recipient_id + text, function (done) {
+      request
+        .post('/api/messages')
+        .set('Authorization', session.authToken)
+        .type('json')
+        .send(message)
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .end(function (err, res) {
+          if (err) return done(err);
+          res.body.should.have.property('id');
+          msgAtoB.id = res.body.id;
+          res.body.should.have.property('dialog_id');
+          res.body.should.have.property('sender_id').and.equal(session.userId);
+          res.body.should.have.property('is_read').and.equal(false);
+          res.body.should.have.property('created').and.have.length.above(6);
+          res.body.should.have.property('updated').and.have.length.above(6);
+          done();
+        });
+    });
+  });
+}
+
 module.exports.session = session;
 module.exports.randomStr = randomStr;
 module.exports.createUser = createUser;
 module.exports.loginAsUser = loginAsUser;
+module.exports.sendMessage = sendMessage;
 module.exports.createMarker = createMarker;
 module.exports.createFriendship = createFriendship;
 module.exports.generateRandomUser = generateRandomUser;
