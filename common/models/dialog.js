@@ -66,17 +66,17 @@ module.exports = function(Dialog) {
         if(!(currentUser instanceof app.models.user)) {
           return cb();
         }
-        app.models.dialoguser.findOne({ where: { dialog_id: modelInstance.id, user_id: currentUser.id }}, function(err, dialoguser) {
+        app.models.dialogUser.findOne({ where: { dialog_id: modelInstance.id, user_id: currentUser.id }}, function(err, dialogUser) {
 
-          if(!dialoguser) {
+          if(!dialogUser) {
             modelInstance.dnd_start = null;
             modelInstance.dnd_life_time = 0;
             return cb();
           }
 
           //TODO job
-          modelInstance.dnd_start = dialoguser.dnd_start;
-          modelInstance.dnd_life_time = dialoguser.dnd_life_time;
+          modelInstance.dnd_start = dialogUser.dnd_start;
+          modelInstance.dnd_life_time = dialogUser.dnd_life_time;
           return cb();
         });
       },
@@ -114,16 +114,16 @@ module.exports = function(Dialog) {
     var currentUser = ctx && ctx.get('currentUser');
 
     var modelInstance = this;
-    app.models.dialoguser.findOne({ where: { dialog_id: modelInstance.id, user_id: currentUser.id }}, function(err, dialoguser) {
+    app.models.dialogUser.findOne({ where: { dialog_id: modelInstance.id, user_id: currentUser.id }}, function(err, dialogUser) {
 
-      if(!dialoguser) {
+      if(!dialogUser) {
         return cb();
       }
 
       //TODO job
-      dialoguser.dnd_start = dnd.dnd_start;
-      dialoguser.dnd_life_time = dnd.dnd_life_time;
-      dialoguser.save(cb);
+      dialogUser.dnd_start = dnd.dnd_start;
+      dialogUser.dnd_life_time = dnd.dnd_life_time;
+      dialogUser.save(cb);
     });
   };
 

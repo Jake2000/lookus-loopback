@@ -1,6 +1,6 @@
 {
-  "name": "usersetting",
-  "plural": "usersettings",
+  "name": "settings",
+  "plural": "settingss",
   "base": "PersistedModel",
   "idInjection": true,
   "properties": {

@@ -1,5 +1,5 @@
 {
-  "name": "dialoguser",
+  "name": "dialogUser",
   "base": "PersistedModel",
   "idInjection": true,
   "properties": {

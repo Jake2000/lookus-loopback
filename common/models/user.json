@@ -77,7 +77,7 @@
       "type": "hasMany",
       "model": "dialog",
       "foreignKey": "user_id",
-      "through": "dialoguser"
+      "through": "dialogUser"
     },
     "settings": {
       "type": "hasOne",

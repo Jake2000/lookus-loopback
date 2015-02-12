@@ -63,11 +63,11 @@
     "dataSource": "mongodb",
     "public": true
   },
-  "dialoguser": {
+  "dialogUser": {
     "dataSource": "mongodb",
     "public": false
   },
-  "usersetting": {
+  "settings": {
     "dataSource": "mongodb",
     "public": false
   },
@@ -75,19 +75,23 @@
     "dataSource": "mongodb",
     "public": false
   },
-  "blacklistuser": {
+  "blacklistUser": {
     "dataSource": "mongodb",
     "public": false
   },
-  "subscription": {
-    "dataSource": "mongodb",
-    "public": true
-  },
-  "friendscontainer": {
+  "subscriptionContainer": {
     "dataSource": "mongodb",
     "public": false
   },
- "friendscontaineruser": {
+  "subscriptionContainerUser": {
+    "dataSource": "mongodb",
+    "public": false
+  },
+  "friendsContainer": {
+    "dataSource": "mongodb",
+    "public": false
+  },
+ "friendsContainerUser": {
    "dataSource": "mongodb",
    "public": false
  },

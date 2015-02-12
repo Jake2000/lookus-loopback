@@ -12,7 +12,7 @@ module.exports = function(app) {
   var AccessToken = app.models.AccessToken;
   var Marker = app.models.marker;
   var Message = app.models.message;
-  var Settings = app.models.usersetting;
+  var Settings = app.models.settings;
 
   User.remember = Settings.remember =
     AccessToken.remember = Marker.remember =

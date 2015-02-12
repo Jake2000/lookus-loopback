@@ -20,6 +20,10 @@ describe('Marker resource tests', function() {
 
   var userA = api.generateRandomUser();
 
+  api.createUser(userA.email, function(user) {
+    marker.text += '' + user.email;
+  });
+
   describe('POST /api/markers', function () {
     it('should throw access exception for unauthorized user', function (done) {
       request
@@ -34,10 +38,6 @@ describe('Marker resource tests', function() {
           done();
         });
     });
-  });
-
-  api.createUser(userA.email, function(user) {
-    marker.text += '' + user.email;
   });
 
   api.loginAsUser(userA);

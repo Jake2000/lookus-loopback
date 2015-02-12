@@ -13,7 +13,7 @@
     },
     "users": {
       "type": "hasMany",
-      "model": "blacklistuser",
+      "model": "blacklistUser",
       "foreignKey": "blacklist_id"
     }
   },

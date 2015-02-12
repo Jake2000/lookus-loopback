@@ -1,6 +1,6 @@
 {
-  "name": "friendscontainer",
-  "plural": "friendscontainers",
+  "name": "friendsContainer",
+  "plural": "friendsContainers",
   "base": "PersistedModel",
   "idInjection": true,
   "properties": {
@@ -15,8 +15,8 @@
     },
     "friends": {
       "type": "hasMany",
-      "model": "friendscontaineruser",
-      "foreignKey": "friendscontainer_id"
+      "model": "friendsContainerUser",
+      "foreignKey": "friendsContainer_id"
     }
   },
   "acls": [

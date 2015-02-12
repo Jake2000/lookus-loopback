@@ -1,5 +1,5 @@
 {
-  "name": "friendscontaineruser",
+  "name": "friendsContainerUser",
   "base": "PersistedModel",
   "idInjection": true,
   "properties": {},
@@ -10,10 +10,10 @@
       "model": "user",
       "foreignKey": "user_id"
     },
-    "friendscontainer": {
+    "friendsContainer": {
       "type": "belongsTo",
-      "model": "friendscontainer",
-      "foreignKey": "friendscontainer_id"
+      "model": "friendsContainer",
+      "foreignKey": "friendsContainer_id"
     }
   },
   "acls": [

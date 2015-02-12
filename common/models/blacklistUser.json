@@ -1,5 +1,5 @@
 {
-  "name": "blacklistuser",
+  "name": "blacklistUser",
   "base": "PersistedModel",
   "idInjection": true,
   "properties": {},

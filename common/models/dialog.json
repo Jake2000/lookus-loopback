@@ -38,7 +38,7 @@
       "type": "hasMany",
       "model": "user",
       "foreignKey": "dialog_id",
-      "through": "dialoguser"
+      "through": "dialogUser"
     },
     "messages": {
       "type": "hasMany",

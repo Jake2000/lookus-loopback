@@ -17,7 +17,7 @@ module.exports = function(User) {
   User.disableRemoteMethod('count', true);
   //User.disableRemoteMethod('find', true);
 
-  User.disableRemoteMethod('__get__friendscontainer', false);
+  User.disableRemoteMethod('__get__friendsContainer', false);
 
   //User.disableRemoteMethod('__get__dialogs', false);
   //User.disableRemoteMethod('__create__dialogs', false);
@@ -249,9 +249,9 @@ module.exports = function(User) {
 
     async.series([
       function(cb) {
-        app.models.friendscontainer.create({
+        app.models.friendsContainer.create({
           user_id: modelInstance.id.toString()
-        },function(err, friendscontainer) {
+        },function(err, friendsContainer) {
           cb();
         });
       },
@@ -263,12 +263,12 @@ module.exports = function(User) {
         });
       },
       function(cb) {
-        app.models.usersetting.create({
+        app.models.settings.create({
           notifications_global_disable: false,
           notifications_only_from_friends: false,
           notifications_no_sound: false,
           user_id: modelInstance.id.toString()
-        }, function (err, usersetting) {
+        }, function (err, settings) {
           cb();
         });
       }
@@ -278,7 +278,7 @@ module.exports = function(User) {
   };
 
   User.prototype.__set__settings = function(data, cb) {
-    app.models.usersetting.findOne({where: { user_id: this.id}}, function(err, settings) {
+    app.models.settings.findOne({where: { user_id: this.id}}, function(err, settings) {
 
       if(err) {
         return cb(err);
@@ -305,10 +305,10 @@ module.exports = function(User) {
       isStatic: false,
       description: 'Update user settings',
       accepts: [
-        {arg: 'data', type: "usersetting", required: true, http: {source: 'body'}}
+        {arg: 'data', type: "settings", required: true, http: {source: 'body'}}
       ],
       returns: {
-        arg: 'settings', type: 'usersetting', root: true,
+        arg: 'settings', type: 'settings', root: true,
         description:
           'The response body contains properties of user settings.\n'
       },
@@ -448,7 +448,7 @@ module.exports = function(User) {
   });
 
   User.prototype.__get__friends = function(cb) {
-    app.models.friendscontainer.findOne({where: { user_id: this.id}}, function(err, friendsContainer) {
+    app.models.friendsContainer.findOne({where: { user_id: this.id}}, function(err, friendsContainer) {
 
       if(err) {
         return cb(err);
@@ -461,16 +461,16 @@ module.exports = function(User) {
         return cb(err1);
       }
 
-      app.models.friendscontaineruser.find({
-        where: { friendscontainer_id:  friendsContainer.id }
-      }, function(err, usercontainers) {
+      app.models.friendsContainerUser.find({
+        where: { friendsContainer_id:  friendsContainer.id }
+      }, function(err, userContainers) {
         if(err) {
           return cb(err);
         }
 
         var ids = [];
-        _.forEach(usercontainers, function(usercontainer) {
-          ids.push(usercontainer.user_id);
+        _.forEach(userContainers, function(userContainer) {
+          ids.push(userContainer.user_id);
         });
 
         app.models.user.findByIds(ids, function(err,users) {
@@ -493,7 +493,7 @@ module.exports = function(User) {
   });
 
   User.prototype.__link__friends = function(friendId, cb) {
-    app.models.friendscontainer.findOne({where: { user_id: this.id}}, function(err, friendsContainer) {
+    app.models.friendsContainer.findOne({where: { user_id: this.id}}, function(err, friendsContainer) {
 
       if(err) {
         return cb(err);
@@ -519,15 +519,17 @@ module.exports = function(User) {
           return cb(err2);
         }
 
-        app.models.friendscontaineruser.findOrCreate(
+        app.models.friendsContainerUser.findOrCreate(
           {
-            friendscontainer_id: friendsContainer.id,
-            user_id: friend.id
+            where: {
+              friendsContainer_id: friendsContainer.id,
+              user_id: friend.id
+            }
           }, {
-            friendscontainer_id: friendsContainer.id,
+            friendsContainer_id: friendsContainer.id,
             user_id: friend.id
           }, function (err, ok) {
-            cb(null, {success: true});
+            cb(err, {success: true});
           });
       });
 
@@ -535,7 +537,7 @@ module.exports = function(User) {
   };
 
   User.prototype.__unlink__friends = function(friendId, cb) {
-    app.models.friendscontainer.findOne({where: { user_id: this.id}}, function(err, friendsContainer) {
+    app.models.friendsContainer.findOne({where: { user_id: this.id}}, function(err, friendsContainer) {
 
       if(err) {
         return cb(err);
@@ -561,11 +563,11 @@ module.exports = function(User) {
           return cb(err2);
         }
 
-        app.models.friendscontaineruser.remove({
-            friendscontainer_id: friendsContainer.id,
+        app.models.friendsContainerUser.remove({
+            friendsContainer_id: friendsContainer.id,
             user_id: friend.id
           }, function (err, ok) {
-            cb(null, {success: true});
+            cb(err, {success: true});
           });
       });
 
@@ -656,7 +658,7 @@ module.exports = function(User) {
         return cb(err1);
       }
 
-      app.models.blacklistuser.find({
+      app.models.blacklistUser.find({
         where: { blacklist_id:  blacklist.id }
       }, function(err, usercontainers) {
         if(err) {
@@ -687,7 +689,7 @@ module.exports = function(User) {
     http: {verb: 'get', path: '/blacklist'}
   });
 
-  User.prototype.__link__blacklistuser = function(blacklistedUserId, cb) {
+  User.prototype.__link__blacklistUser = function(blacklistedUserId, cb) {
     app.models.blacklist.findOne({where: { user_id: this.id}}, function(err, blacklist) {
 
       if(err) {
@@ -716,8 +718,10 @@ module.exports = function(User) {
 
         app.models.blacklistruser.findOrCreate(
           {
-            blacklist_id: blacklist.id,
-            user_id: blacklistedUser.id
+            where: {
+              blacklist_id: blacklist.id,
+              user_id: blacklistedUser.id
+            }
           }, {
             blacklist_id: blacklist.id,
             user_id: blacklistedUser.id
@@ -729,7 +733,7 @@ module.exports = function(User) {
     });
   };
 
-  User.prototype.__unlink__blacklistuser = function(blacklistedUserId, cb) {
+  User.prototype.__unlink__blacklistUser = function(blacklistedUserId, cb) {
     app.models.blacklist.findOne({where: { user_id: this.id}}, function(err, blacklist) {
 
       if(err) {
@@ -767,7 +771,7 @@ module.exports = function(User) {
     });
   };
 
-  User.remoteMethod('__link__blacklistuser', {
+  User.remoteMethod('__link__blacklistUser', {
     isStatic: false,
     description: 'Add user to blacklist',
     accepts: [
@@ -782,7 +786,7 @@ module.exports = function(User) {
     http: {verb: 'put', path: '/blacklist/rel/:blacklisted_user_id'}
   });
 
-  User.remoteMethod('__unlink__blacklistuser', {
+  User.remoteMethod('__unlink__blacklistUser', {
     isStatic: false,
     description: 'Remove user from blacklist',
     accepts: [

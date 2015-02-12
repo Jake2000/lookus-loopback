@@ -152,10 +152,28 @@ function createAndLoginAsNewNormalUser() {
   });
 }
 
+function createFriendship(friendship) {
+  describe('API: createFriendship', function () {
+    it('should create friendship between user '+friendship.user_id+' and user'+friendship.friend_id, function (done) {
+      request
+        .put('/api/users/'+friendship.user_id+'/friends/rel/'+friendship.friend_id)
+        .set('Authorization', session.authToken)
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .end(function (err, res) {
+          if (err) return done(err);
+          done();
+        });
+    });
+  });
+}
+
 module.exports.session = session;
 module.exports.randomStr = randomStr;
 module.exports.createUser = createUser;
 module.exports.loginAsUser = loginAsUser;
+module.exports.createFriendship = createFriendship;
 module.exports.generateRandomUser = generateRandomUser;
 module.exports.createAndLoginAsNewNormalUser = createAndLoginAsNewNormalUser;
 module.exports.loginAsAdminUser = loginAsAdminUser;
