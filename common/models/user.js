@@ -801,7 +801,7 @@ module.exports = function(User) {
     http: {verb: 'delete', path: '/blacklist/rel/:blacklisted_user_id'}
   });
 
-  User.prototype.__get__markers = function(filter, cb) {
+  User.prototype.__get__active__markers = function(filter, cb) {
     app.models.marker.findActiveForUser(this, filter, cb);
   };
 
@@ -825,7 +825,7 @@ module.exports = function(User) {
     http: {verb: 'get', path: '/markers/history'}
   });
 
-  User.remoteMethod('__get__markers_active', {
+  User.remoteMethod('__get__active__markers', {
     isStatic: false,
     description: 'Get markers for user (all active markers)',
     accepts: [

@@ -25,6 +25,7 @@ describe('Marker resource tests', function() {
   var userA = api.generateRandomUser();
 
   api.createUser(userA.email, function(user) {
+    userA.id = user.id;
     marker.text += '' + user.email;
   });
 
@@ -37,6 +38,7 @@ describe('Marker resource tests', function() {
         .expect(401)
         .end(function (err, res) {
           if (err) return done(err);
+
           done();
         });
     });
@@ -80,7 +82,6 @@ describe('Marker resource tests', function() {
         });
     });
   });
-
 
 
 });
