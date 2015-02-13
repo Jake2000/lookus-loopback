@@ -119,6 +119,10 @@
     "dataSource": null,
     "public": false
   },
+  "mapboxModel": {
+    "dataSource": null,
+    "public": false
+  },
   "credentials": {
     "dataSource": null,
     "public": false

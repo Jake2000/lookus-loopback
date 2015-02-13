@@ -180,15 +180,13 @@ module.exports = function(Marker) {
     });
   };
 
-  Marker.remoteMethod('reindex',
-    {
-      description: 'Re-indexes all markers',
-      accepts: [],
-      returns: {},
-      accessType: 'READ',
-      http: {verb: 'post', path: '/reindex'}
-    }
-  );
+  Marker.remoteMethod('reindex', {
+    description: 'Re-indexes all markers',
+    accepts: [],
+    returns: {},
+    accessType: 'READ',
+    http: {verb: 'post', path: '/reindex'}
+  });
 
   Marker.prototype.up = function(cb) {
     this.is_up = true;
@@ -266,6 +264,24 @@ module.exports = function(Marker) {
       cb(null,markers);
     })
   };
+
+  Marker.mapbox = function(mapbox, cb) {
+
+    cb();
+  };
+
+  Marker.remoteMethod('mapbox', {
+    description: 'Get markers in mapbox',
+    accepts: [
+      {arg: 'data', type: "mapboxModel", required: true, http: {source: 'body'}},
+      {arg: 'zoom', type: "integer", required: true, http: {source: 'query'}}
+    ],
+    returns: {
+      arg: 'markers', type: ['marker'], root: true
+    },
+    accessType: 'READ',
+    http: {verb: 'post', path: '/mapbox'}
+  });
 
 };
 

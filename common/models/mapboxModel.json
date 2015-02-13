@@ -1,0 +1,20 @@
+{
+  "name": "mapboxModel",
+  "base": "Model",
+  "idInjection": false,
+  "properties": {
+    "topLeft": {
+      "type": "locationModel",
+      "description": "Левый верхний угол карты"
+    },
+    "bottomRight": {
+      "type": "locationModel",
+      "description": "Правый нижний угол карты"
+    }
+  },
+  "hidden": [ "id" ],
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": []
+}
