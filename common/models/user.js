@@ -844,4 +844,14 @@ module.exports = function(User) {
     accessType: 'READ',
     http: {verb: 'get', path: '/markers'}
   });
+
+  User.afterInitialize = function() {
+    // your logic goes here
+    console.log('afterInitialize');
+  };
+
+  User.afterRemote('login', function(ctx, modelInstance, next) {
+    modelInstance.__data['user'].is_online = true;
+    next();
+  });
 };
