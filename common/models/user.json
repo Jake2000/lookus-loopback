@@ -46,11 +46,6 @@
       "required": false,
       "description": "Статус пользователя"
     },
-    "is_online": {
-      "type": "boolean",
-      "required": false,
-      "description": "Онлайн ли пользователь"
-    },
     "is_friend": {
       "type": "boolean",
       "required": false,

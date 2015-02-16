@@ -850,8 +850,20 @@ module.exports = function(User) {
     console.log('afterInitialize');
   };
 
-  User.afterRemote('login', function(ctx, modelInstance, next) {
-    modelInstance.__data['user'].is_online = true;
-    next();
+  Object.defineProperty(User.prototype, 'is_online', {
+    get: function() {
+      return true;
+    }
   });
+
+
+  Object.defineProperty(User.prototype, 'is_friend', {
+    get: function() {
+
+
+
+      return false;
+    }
+  });
+
 };
