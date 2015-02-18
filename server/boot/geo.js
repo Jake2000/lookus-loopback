@@ -334,6 +334,32 @@ module.exports = function(app) {
     return cells;
   };
 
+  /**
+   *
+   * @param {PointCell} cellTopLeft
+   * @param {PointCell} cellBottomRight
+   * @returns {Array<PointCell>}
+   */
+  var getCellsInSquare = function(cellTopLeft, cellBottomRight) {
+    var cells = [];
+
+    var minLatCell = Math.min(cellTopLeft.latCell, cellBottomRight.latCell);
+    var maxLatCell = Math.max(cellTopLeft.latCell, cellBottomRight.latCell);
+
+    var minLngCell = Math.min(cellTopLeft.lngCell, cellBottomRight.lngCell);
+    var maxLngCell = Math.max(cellTopLeft.lngCell, cellBottomRight.lngCell);
+
+    for(var latIndex = minLatCell; latIndex <= maxLatCell; latIndex++) {
+      for(var lngIndex = minLngCell; lngIndex <= maxLngCell; lngIndex++) {
+        cells.push({ latCell: latIndex, lngCell: lngIndex, zoom: cell.zoom});
+      }
+    }
+
+    return cells;
+  };
+
+
+
   app.geo = app.geo || {};
 
   app.geo.MAX_CACHED_ZOOM = MAX_CACHED_ZOOM;
@@ -342,6 +368,7 @@ module.exports = function(app) {
   app.geo.addCellPoint = addCellPoint;
   app.geo.removeCellPoint = removeCellPoint;
   app.geo.getAdjacentCells = getAdjacentCells;
+  app.geo.getCellsInSquare = getCellsInSquare;
   app.geo.addPoint = addPoint;
   app.geo.removePoint = removePoint;
 

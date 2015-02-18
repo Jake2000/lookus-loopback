@@ -267,8 +267,51 @@ module.exports = function(Marker) {
     })
   };
 
-  Marker.mapbox = function(mapbox, cb) {
+  Marker.mapbox = function(mapbox, zoom, cb) {
+    if(zoom >= app.geo.MAX_CACHED_ZOOM ) {
 
+      var minLat = Math.min(mapbox.topLeft.lat + 90, mapbox.bottomRight.lat + 90) - 90;
+      var maxLat = Math.max(mapbox.topLeft.lat + 90, mapbox.bottomRight.lat + 90) - 90;
+
+      var minLng = Math.min(mapbox.topLeft.lng + 180, mapbox.bottomRight.lng + 180) - 180;
+      var maxLng = Math.max(mapbox.topLeft.lng + 180, mapbox.bottomRight.lng + 180) - 180;
+
+      // we can do no-caching here
+      app.models.marker.find({ geo: { geoWithin: { box: [[minLng, minLat],[maxLng,maxLat]] }}}, function(err, markers) {
+        if(err) {
+          return cb(err);
+        }
+
+        if(markers) {
+          return cb(null, markers);
+        }
+      });
+    } else {
+
+      var cellTopLeft = app.geo.getCell(mapbox.topLeft, zoom);
+      var cellBottomRight = app.geo.getCell(mapbox.bottomRight, zoom);
+      var markers = [];
+
+      var adjacentCells = app.geo.getCellsInSquare(cellTopLeft, cellBottomRight);
+
+      async.each(adjacentCells, function(adjacentCell, cb) {
+        app.geo.getCellInfo(adjacentCell, function(err, pointInfo) {
+          if(pointInfo) {
+            markers.push({
+              is_clustered: true,
+              count: pointInfo.points,
+              location: {
+                lat:pointInfo.lat,
+                lng:pointInfo.lng
+              }
+            });
+          }
+          cb();
+        });
+      }, function(err, results) {
+        return cb(null, markers);
+      });
+    }
     cb();
   };
 
