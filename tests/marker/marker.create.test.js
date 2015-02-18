@@ -11,7 +11,7 @@ describe('Marker resource tests', function() {
     life_time: 100,
     "type": 2,
     text: "new marker for user ",
-    is_up: false,
+    is_up: true,  //Note - this should fallback to 'false'
     location: {
       lat: 36.99,
       lng: 25.45
@@ -21,6 +21,7 @@ describe('Marker resource tests', function() {
   var userA = api.generateRandomUser();
 
   api.createUser(userA.email, function(user) {
+    marker.badMarker += '' + user.email;
     marker.text += '' + user.email;
   });
 

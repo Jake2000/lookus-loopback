@@ -31,7 +31,8 @@
     },
     "is_active": {
       "type": "boolean",
-      "description": "Является ли маркер активным (автоматически переводится в false после истечения lifetime)"
+      "default": true,
+      "description": "Является ли маркер активным (при создании true, автоматически переводится в false после истечения lifetime)"
     },
     "created": {
       "type": "date",
@@ -47,7 +48,8 @@
     },
     "is_up": {
       "type": "boolean",
-      "description": "Поднят ли маркер"
+      "default": false,
+      "description": "Поднят ли маркер [<b>can only be set through 'up' method<b>]"
     },
     "location": {
       "type": "locationModel",

@@ -107,6 +107,10 @@
     "dataSource": null,
     "public": false
   },
+  "settingsModelEditable": {
+    "dataSource": null,
+    "public": false
+  },
   "dndModeModel": {
     "dataSource": null,
     "public": false

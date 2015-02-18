@@ -1,0 +1,28 @@
+{
+  "name": "settingsModelEditable",
+  "plural": "settingsModelsEditable",
+  "base": "Model",
+  "idInjection": true,
+  "properties": {
+    "notifications_global_disable": {
+      "type": "boolean",
+      "required": true,
+      "description": "Выключение уведомлений"
+    },
+    "notifications_only_from_friends": {
+      "type": "boolean",
+      "required": true,
+      "description": "Уведомления только от друзей"
+    },
+    "notifications_no_sound": {
+      "type": "boolean",
+      "required": true,
+      "description": "Уведомления без звука"
+    }
+  },
+  "hidden": ["id", "user_id"],
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": []
+}

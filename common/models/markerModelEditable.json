@@ -19,13 +19,9 @@
       "required": true,
       "description": "Текст маркера (становится заголовком диалога для маркера)"
     },
-    "is_up": {
-      "type": "boolean",
-      "description": "Поднят ли маркер"
-    },
     "is_active": {
       "type": "boolean",
-      "description": "Является ли маркер активным (автоматически переводится в false после истечения lifetime)"
+      "description": "Является ли маркер активным (при создании true, автоматически переводится в false после истечения lifetime)"
     },
     "location": {
       "type": "locationModel",

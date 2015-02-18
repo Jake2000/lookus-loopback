@@ -59,6 +59,8 @@ module.exports = function(Marker) {
     modelInstance.user_id = currentUser.id;
     modelInstance.created = (new Date());
     modelInstance.updated = (new Date());
+    modelInstance.is_up = false;
+    modelInstance.is_active = true;
 
     Marker.canCreate(currentUser, function(err, canCreate) {
       if(err) { return next(err); }

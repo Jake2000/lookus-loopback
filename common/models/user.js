@@ -294,9 +294,11 @@ module.exports = function(User) {
         err1.errorCode = 40401;
         return cb(err1);
       }
-      var dd = data.toObject();
-      delete dd.id;
-      settings.updateAttributes(dd, function(err, settings) {
+      console.log(data);
+
+      //var dd = data.toObject();
+      //delete dd.id;
+      settings.updateAttributes(data, function(err, settings) {
         if(err) {
           return cb(err);
         }
@@ -309,7 +311,7 @@ module.exports = function(User) {
       isStatic: false,
       description: 'Update user settings',
       accepts: [
-        {arg: 'data', type: "settings", required: true, http: {source: 'body'}}
+        {arg: 'data', type: "settingsModelEditable", required: true, http: {source: 'body'}}
       ],
       returns: {
         arg: 'settings', type: 'settings', root: true,
@@ -847,7 +849,6 @@ module.exports = function(User) {
 
   User.afterInitialize = function() {
     // your logic goes here
-    console.log('afterInitialize');
   };
 
   Object.defineProperty(User.prototype, 'is_online', {
