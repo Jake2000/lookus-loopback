@@ -294,8 +294,6 @@ module.exports = function(Marker) {
 
       var adjacentCells = app.geo.getCellsInSquare(cellTopLeft, cellBottomRight);
 
-      console.log(adjacentCells);
-
       async.each(adjacentCells, function(adjacentCell, cb) {
         app.geo.getCellInfo(adjacentCell, function(err, pointInfo) {
           if(pointInfo) {
