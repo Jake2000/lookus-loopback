@@ -253,6 +253,13 @@ module.exports = function(User) {
 
     async.series([
       function(cb) {
+        app.models.subscriptionContainer.create({
+          user_id: modelInstance.id.toString()
+        },function(err, subscriptionContainer) {
+          cb();
+        });
+      },
+      function(cb) {
         app.models.friendsContainer.create({
           user_id: modelInstance.id.toString()
         },function(err, friendsContainer) {
@@ -294,10 +301,7 @@ module.exports = function(User) {
         err1.errorCode = 40401;
         return cb(err1);
       }
-      console.log(data);
 
-      //var dd = data.toObject();
-      //delete dd.id;
       settings.updateAttributes(data, function(err, settings) {
         if(err) {
           return cb(err);
@@ -649,7 +653,6 @@ module.exports = function(User) {
     });
   });
 
-
   User.prototype.__get__blacklist = function(cb) {
     app.models.blacklist.findOne({where: { user_id: this.id}}, function(err, blacklist) {
 
@@ -857,7 +860,6 @@ module.exports = function(User) {
     }
   });
 
-
   Object.defineProperty(User.prototype, 'is_friend', {
     get: function() {
 
@@ -867,4 +869,162 @@ module.exports = function(User) {
     }
   });
 
+
+  //subscriptions
+  User.prototype.__get__subscription = function(cb) {
+    app.models.subscriptionContainer.findOne({where: { user_id: this.id}}, function(err, subscriptionContainer) {
+
+      if(err) {
+        return cb(err);
+      }
+
+      if(!subscriptionContainer) {
+        var err1 = new Error("FriendContainer not found");
+        err1.status = 404;
+        err1.errorCode = 40401;
+        return cb(err1);
+      }
+
+      app.models.subscriptionContainerUser.find({
+        where: { subscriptionContainer_id:  subscriptionContainer.id }
+      }, function(err, userContainers) {
+        if(err) {
+          return cb(err);
+        }
+
+        var ids = [];
+        _.forEach(userContainers, function(userContainer) {
+          ids.push(userContainer.user_id);
+        });
+
+        app.models.user.findByIds(ids, function(err,users) {
+          return cb(null, users);
+        });
+      });
+    });
+  };
+
+  User.remoteMethod('__get__subscription', {
+    isStatic: false,
+    description: 'Query user subscriptions',
+    returns: {
+      arg: 'users', type: ["user"], root: true,
+      description:
+        'The response body contains list of users\'s subscription.\n'
+    },
+    accessType: 'READ',
+    http: {verb: 'get', path: '/subscriptions'}
+  });
+
+  User.prototype.__link__subscription = function(friendId, cb) {
+    app.models.subscriptionContainer.findOne({where: { user_id: this.id}}, function(err, subscriptionContainer) {
+
+      if(err) {
+        return cb(err);
+      }
+
+      if(!subscriptionContainer) {
+        var err1 = new Error("FriendContainer not found");
+        err1.status = 404;
+        err1.errorCode = 40401;
+        return cb(err1);
+      }
+
+      app.models.user.findById(friendId, function(err, friend) {
+
+        if(err) {
+          return cb(err);
+        }
+
+        if(!friend) {
+          var err2 = new Error("User with this id not found");
+          err2.status = 404;
+          err2.errorCode = 40401;
+          return cb(err2);
+        }
+
+        app.models.subscriptionContainerUser.findOrCreate(
+          {
+            where: {
+              subscriptionContainer_id: subscriptionContainer.id,
+              user_id: friend.id
+            }
+          }, {
+            subscriptionContainer_id: subscriptionContainer.id,
+            user_id: friend.id
+          }, function (err, ok) {
+            cb(err, {success: true});
+          });
+      });
+
+    });
+  };
+
+  User.prototype.__unlink__subscription = function(friendId, cb) {
+    app.models.subscriptionContainer.findOne({where: { user_id: this.id}}, function(err, subscriptionContainer) {
+
+      if(err) {
+        return cb(err);
+      }
+
+      if(!subscriptionContainer) {
+        var err1 = new Error("FriendContainer not found");
+        err1.status = 404;
+        err1.errorCode = 40401;
+        return cb(err1);
+      }
+
+      app.models.user.findById(friendId, function(err, friend) {
+
+        if(err) {
+          return cb(err);
+        }
+
+        if(!friend) {
+          var err2 = new Error("User with this id not found");
+          err2.status = 404;
+          err2.errorCode = 40401;
+          return cb(err2);
+        }
+
+        app.models.subscriptionContainerUser.remove({
+          subscriptionContainer_id: subscriptionContainer.id,
+          user_id: friend.id
+        }, function (err, ok) {
+          cb(err, {success: true});
+        });
+      });
+
+    });
+  };
+
+  User.remoteMethod('__link__subscription', {
+    isStatic: false,
+    description: 'Add user subscription',
+    accepts: [
+      {arg: 'subscription_id', type: 'any', description:'User id', required: true, http: {source: 'path'}}
+    ],
+    returns: {
+      arg: 'success', type: 'successModel', root: true,
+      description:
+        'Success json.\n'
+    },
+    accessType: 'WRITE',
+    http: {verb: 'put', path: '/subscriptions/rel/:subscription_id'}
+  });
+
+  User.remoteMethod('__unlink__subscription', {
+    isStatic: false,
+    description: 'Remove user subscription',
+    accepts: [
+      {arg: 'subscription_id', type: 'any', description:'User id', required: true, http: {source: 'path'}}
+    ],
+    returns: {
+      arg: 'success', type: 'successModel', root: true,
+      description:
+        'Success json.\n'
+    },
+    accessType: 'WRITE',
+    http: {verb: 'delete', path: '/subscriptions/rel/:subscription_id'}
+  });
 };
