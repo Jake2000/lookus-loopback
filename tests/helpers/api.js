@@ -173,7 +173,7 @@ function createSubscription(subscription) {
   describe('API: createSubscription', function () {
     it('should create subscription from user '+subscription.user_id+' to '+subscription.subscription_user_id, function (done) {
       request
-        .put('/api/users/'+subscription.user_id+'/friends/rel/'+subscription.subscription_user_id)
+        .put('/api/users/'+subscription.user_id+'/subscriptions/rel/'+subscription.subscription_user_id)
         .set('Authorization', session.authToken)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
@@ -241,6 +241,7 @@ module.exports.createUser = createUser;
 module.exports.loginAsUser = loginAsUser;
 module.exports.sendMessage = sendMessage;
 module.exports.createMarker = createMarker;
+module.exports.createSubscription = createSubscription;
 module.exports.createFriendship = createFriendship;
 module.exports.generateRandomUser = generateRandomUser;
 module.exports.createAndLoginAsNewNormalUser = createAndLoginAsNewNormalUser;
