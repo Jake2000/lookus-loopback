@@ -351,7 +351,7 @@ module.exports = function(app) {
 
     for(var latIndex = minLatCell; latIndex <= maxLatCell; latIndex++) {
       for(var lngIndex = minLngCell; lngIndex <= maxLngCell; lngIndex++) {
-        cells.push({ latCell: latIndex, lngCell: lngIndex, zoom: cell.zoom});
+        cells.push({ latCell: latIndex, lngCell: lngIndex, zoom: cellTopLeft.zoom});
       }
     }
 

@@ -163,6 +163,53 @@ function loadMarkers() {
   });
 }
 
+function loadMarkersMapsbox() {
+
+  var bounds = map.getBounds();
+
+  var topLeft = {
+    lat: map.getBounds().getNorthEast().lat(),
+    lng: map.getBounds().getNorthEast().lng()
+  };
+
+  var bottomRight = {
+    lat: map.getBounds().getSouthWest().lat(),
+    lng: map.getBounds().getSouthWest().lng()
+  };
+
+  $.ajax({
+    type: 'POST',
+    contentType: 'application/json',
+    dataType: 'json',
+    processData: false,
+    url:'/api/markers/mapbox?zoom='+map.zoom,
+    data: JSON.stringify({ topLeft: topLeft, bottomRight: bottomRight}),
+    success: function(data) {
+      clearMarkers();
+      if(_.isArray(data)) {
+        _.forEach(data, function(marker) {
+          if(marker.is_clustered) {
+            var gClMarker = new google.maps.Marker({
+              position: new google.maps.LatLng(marker.location.lat, marker.location.lng),
+              map: map,
+              icon: '/images/marker_cluster.png',
+              title: marker.count
+            });
+            markers.push(gClMarker);
+          } else {
+            var gMarker = new google.maps.Marker({
+              position: new google.maps.LatLng(marker.location.lat, marker.location.lng),
+              map: map,
+              title: marker.text
+            });
+            markers.push(gMarker);
+          }
+        });
+      }
+    }
+  });
+}
+
 $(function(){
   if($('#map-canvas').length>0) {
     initialize();
@@ -176,7 +223,7 @@ $(function(){
     });
 
     google.maps.event.addListener(map, 'bounds_changed', _.debounce(function() {
-      loadMarkers();
+      loadMarkersMapsbox();
     }, 1000));
   }
 });
