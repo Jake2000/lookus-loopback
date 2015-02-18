@@ -8,16 +8,16 @@ var api = require('../helpers/api.js');
 
 request = request('http://localhost:3301');
 
-describe('Friend resource tests', function() {
+describe('Blacklist resource tests', function() {
 
-  var friendshipAB = {
+  var blacklistItemAB = {
     user_id: null,
-    friend_id: null
+    blacklisted_user_id: null
   };
 
-  var friendshipAC = {
+  var blacklistItemAC = {
     user_id: null,
-    friend_id: null
+    blacklisted_user_id: null
   };
 
   var userA = api.generateRandomUser();
@@ -26,44 +26,26 @@ describe('Friend resource tests', function() {
 
   api.createUser(userA.email, function(user) {
     userA.id = user.id;
-    friendshipAB.user_id = user.id;
-    friendshipAC.user_id = user.id;
+    blacklistItemAB.user_id = user.id;
+    blacklistItemAC.user_id = user.id;
   });
 
   api.createUser(userB.email, function(user) {
     userB.id = user.id;
-    friendshipAB.friend_id = user.id;
+    blacklistItemAB.blacklisted_user_id = user.id;
   });
 
   api.createUser(userC.email, function(user) {
     userC.id = user.id;
-    friendshipAC.friend_id = user.id;
+    blacklistItemAC.blacklisted_user_id = user.id;
   });
 
   api.loginAsUser(userA);
 
-  api.createFriendship(friendshipAB);
-
-  api.createFriendship(friendshipAC);
-
-  describe('DELETE /api/users/{unauthorized}/friends/rel/{friend_id}', function () {
-    it('should throw access exception for unauthorized user', function (done) {
+  describe('PUT /api/users/{userA}/blacklist/rel/{userB}', function () {
+    it('should create add blacklisted userB to userA blacklist', function (done) {
       request
-        .del('/api/users/'+friendshipAB.user_id+'/friends/rel/'+friendshipAB.friend_id)
-        .set('Accept', 'application/json')
-        .expect('Content-Type', /json/)
-        .expect(401)
-        .end(function (err, res) {
-          if (err) return done(err);
-          done();
-        });
-    });
-  });
-
-  describe('DELETE /api/users/{userA}/friends/rel/{friend_id}', function () {
-    it('should delete userB friend from userA friends', function (done) {
-      request
-        .del('/api/users/'+friendshipAB.user_id+'/friends/rel/'+friendshipAB.friend_id)
+        .put('/api/users/'+blacklistItemAB.user_id+'/blacklist/rel/'+blacklistItemAB.blacklisted_user_id)
         .set('Authorization', api.session.authToken)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
@@ -75,10 +57,10 @@ describe('Friend resource tests', function() {
     });
   });
 
-  describe('DELETE /api/users/{userA}/friends/rel/{friend_id}', function () {
-    it('should delete userC friend from userA friends', function (done) {
+  describe('PUT /api/users/{userA}/friends/rel/{userC}', function () {
+    it('should create add blacklisted userC to userA blacklist', function (done) {
       request
-        .del('/api/users/'+friendshipAC.user_id+'/friends/rel/'+friendshipAC.friend_id)
+        .put('/api/users/'+blacklistItemAC.user_id+'/blacklist/rel/'+blacklistItemAC.blacklisted_user_id)
         .set('Authorization', api.session.authToken)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
@@ -91,9 +73,9 @@ describe('Friend resource tests', function() {
   });
 
   describe('GET /api/users/{userA}/friends', function () {
-    it('should list none friends for userA', function (done) {
+    it('should list item blacklist for userA, including userB and userC', function (done) {
       request
-        .get('/api/users/'+friendshipAB.user_id+'/friends')
+        .get('/api/users/'+blacklistItemAB.user_id+'/blacklist')
         .set('Authorization', api.session.authToken)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
@@ -101,7 +83,9 @@ describe('Friend resource tests', function() {
         .end(function (err, res) {
           if (err) return done(err);
           res.body.should.be.instanceOf(Array);
-          res.body.should.have.length(0);
+          res.body.should.have.length(2);
+          res.body.should.contain.an.item.with.property('id', blacklistItemAB.blacklisted_user_id);
+          res.body.should.contain.an.item.with.property('id', blacklistItemAC.blacklisted_user_id);
           done();
         });
     });

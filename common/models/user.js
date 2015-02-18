@@ -725,7 +725,7 @@ module.exports = function(User) {
           return cb(err2);
         }
 
-        app.models.blacklistruser.findOrCreate(
+        app.models.blacklistUser.findOrCreate(
           {
             where: {
               blacklist_id: blacklist.id,
@@ -769,7 +769,7 @@ module.exports = function(User) {
           return cb(err2);
         }
 
-        app.models.blacklistruser.remove({
+        app.models.blacklistUser.remove({
           blacklist_id: blacklist.id,
           user_id: blacklistedUser.id
         }, function (err, ok) {

@@ -8,16 +8,16 @@ var api = require('../helpers/api.js');
 
 request = request('http://localhost:3301');
 
-describe('Friend resource tests', function() {
+describe('Blacklist resource tests', function() {
 
-  var friendshipAB = {
+  var blacklistItemAB = {
     user_id: null,
-    friend_id: null
+    blacklisted_user_id: null
   };
 
-  var friendshipAC = {
+  var blacklistItemAC = {
     user_id: null,
-    friend_id: null
+    blacklisted_user_id: null
   };
 
   var userA = api.generateRandomUser();
@@ -26,30 +26,30 @@ describe('Friend resource tests', function() {
 
   api.createUser(userA.email, function(user) {
     userA.id = user.id;
-    friendshipAB.user_id = user.id;
-    friendshipAC.user_id = user.id;
+    blacklistItemAB.user_id = user.id;
+    blacklistItemAC.user_id = user.id;
   });
 
   api.createUser(userB.email, function(user) {
     userB.id = user.id;
-    friendshipAB.friend_id = user.id;
+    blacklistItemAB.blacklisted_user_id = user.id;
   });
 
   api.createUser(userC.email, function(user) {
     userC.id = user.id;
-    friendshipAC.friend_id = user.id;
+    blacklistItemAC.blacklisted_user_id = user.id;
   });
 
   api.loginAsUser(userA);
 
-  api.createFriendship(friendshipAB);
+  api.createBlacklistItem(blacklistItemAB);
 
-  api.createFriendship(friendshipAC);
+  api.createBlacklistItem(blacklistItemAC);
 
-  describe('DELETE /api/users/{unauthorized}/friends/rel/{friend_id}', function () {
+  describe('DELETE /api/users/{unauthorized}/blacklist/rel/{blacklisted_user_id}', function () {
     it('should throw access exception for unauthorized user', function (done) {
       request
-        .del('/api/users/'+friendshipAB.user_id+'/friends/rel/'+friendshipAB.friend_id)
+        .del('/api/users/'+blacklistItemAB.user_id+'/blacklist/rel/'+blacklistItemAB.blacklisted_user_id)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(401)
@@ -60,10 +60,10 @@ describe('Friend resource tests', function() {
     });
   });
 
-  describe('DELETE /api/users/{userA}/friends/rel/{friend_id}', function () {
-    it('should delete userB friend from userA friends', function (done) {
+  describe('DELETE /api/users/{userA}/blacklist/rel/{blacklisted_user_id}', function () {
+    it('should delete blacklisted userB from userA blacklist', function (done) {
       request
-        .del('/api/users/'+friendshipAB.user_id+'/friends/rel/'+friendshipAB.friend_id)
+        .del('/api/users/'+blacklistItemAB.user_id+'/blacklist/rel/'+blacklistItemAB.blacklisted_user_id)
         .set('Authorization', api.session.authToken)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
@@ -75,10 +75,10 @@ describe('Friend resource tests', function() {
     });
   });
 
-  describe('DELETE /api/users/{userA}/friends/rel/{friend_id}', function () {
-    it('should delete userC friend from userA friends', function (done) {
+  describe('DELETE /api/users/{userA}/blacklist/rel/{blacklisted_user_id}', function () {
+    it('should delete blacklisted userC from userA blacklist', function (done) {
       request
-        .del('/api/users/'+friendshipAC.user_id+'/friends/rel/'+friendshipAC.friend_id)
+        .del('/api/users/'+blacklistItemAC.user_id+'/blacklist/rel/'+blacklistItemAC.blacklisted_user_id)
         .set('Authorization', api.session.authToken)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
@@ -90,10 +90,10 @@ describe('Friend resource tests', function() {
     });
   });
 
-  describe('GET /api/users/{userA}/friends', function () {
-    it('should list none friends for userA', function (done) {
+  describe('GET /api/users/{userA}/blacklist', function () {
+    it('should empty blacklist for userA', function (done) {
       request
-        .get('/api/users/'+friendshipAB.user_id+'/friends')
+        .get('/api/users/'+blacklistItemAB.user_id+'/blacklist')
         .set('Authorization', api.session.authToken)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)

@@ -186,6 +186,25 @@ function createSubscription(subscription) {
   });
 }
 
+
+
+function createBlacklistItem(blacklistItem) {
+  describe('API: createBlacklistItem', function () {
+    it('should create blacklistItem - user '+blacklistItem.user_id+' to '+blacklistItem.blacklisted_user_id, function (done) {
+      request
+        .put('/api/users/'+blacklistItem.user_id+'/blacklist/rel/'+blacklistItem.blacklisted_user_id)
+        .set('Authorization', session.authToken)
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .end(function (err, res) {
+          if (err) return done(err);
+          done();
+        });
+    });
+  });
+}
+
 function createMarker(marker) {
   describe('API: createMarker', function () {
     it('should create marker for user ' + session.userId, function (done) {
@@ -241,6 +260,7 @@ module.exports.createUser = createUser;
 module.exports.loginAsUser = loginAsUser;
 module.exports.sendMessage = sendMessage;
 module.exports.createMarker = createMarker;
+module.exports.createBlacklistItem = createBlacklistItem;
 module.exports.createSubscription = createSubscription;
 module.exports.createFriendship = createFriendship;
 module.exports.generateRandomUser = generateRandomUser;

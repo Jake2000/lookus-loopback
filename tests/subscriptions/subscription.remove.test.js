@@ -8,16 +8,16 @@ var api = require('../helpers/api.js');
 
 request = request('http://localhost:3301');
 
-describe('Friend resource tests', function() {
+describe('Subscription resource tests', function() {
 
-  var friendshipAB = {
+  var subscriptionAB = {
     user_id: null,
-    friend_id: null
+    subscription_user_id: null
   };
 
-  var friendshipAC = {
+  var subscriptionAC = {
     user_id: null,
-    friend_id: null
+    subscription_user_id: null
   };
 
   var userA = api.generateRandomUser();
@@ -26,30 +26,30 @@ describe('Friend resource tests', function() {
 
   api.createUser(userA.email, function(user) {
     userA.id = user.id;
-    friendshipAB.user_id = user.id;
-    friendshipAC.user_id = user.id;
+    subscriptionAB.user_id = user.id;
+    subscriptionAC.user_id = user.id;
   });
 
   api.createUser(userB.email, function(user) {
     userB.id = user.id;
-    friendshipAB.friend_id = user.id;
+    subscriptionAB.subscription_user_id = user.id;
   });
 
   api.createUser(userC.email, function(user) {
     userC.id = user.id;
-    friendshipAC.friend_id = user.id;
+    subscriptionAC.subscription_user_id = user.id;
   });
 
   api.loginAsUser(userA);
 
-  api.createFriendship(friendshipAB);
+  api.createSubscription(subscriptionAB);
 
-  api.createFriendship(friendshipAC);
+  api.createSubscription(subscriptionAC);
 
-  describe('DELETE /api/users/{unauthorized}/friends/rel/{friend_id}', function () {
+  describe('DELETE /api/users/{unauthorized}/subscriptions/rel/{subscription_user_id}', function () {
     it('should throw access exception for unauthorized user', function (done) {
       request
-        .del('/api/users/'+friendshipAB.user_id+'/friends/rel/'+friendshipAB.friend_id)
+        .del('/api/users/'+subscriptionAB.user_id+'/subscriptions/rel/'+subscriptionAB.subscription_user_id)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(401)
@@ -60,10 +60,10 @@ describe('Friend resource tests', function() {
     });
   });
 
-  describe('DELETE /api/users/{userA}/friends/rel/{friend_id}', function () {
-    it('should delete userB friend from userA friends', function (done) {
+  describe('DELETE /api/users/{userA}/subscriptions/rel/{subscription_user_id}', function () {
+    it('should delete subscription to userB from userA subscriptions', function (done) {
       request
-        .del('/api/users/'+friendshipAB.user_id+'/friends/rel/'+friendshipAB.friend_id)
+        .del('/api/users/'+subscriptionAB.user_id+'/subscriptions/rel/'+subscriptionAB.subscription_user_id)
         .set('Authorization', api.session.authToken)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
@@ -75,10 +75,10 @@ describe('Friend resource tests', function() {
     });
   });
 
-  describe('DELETE /api/users/{userA}/friends/rel/{friend_id}', function () {
-    it('should delete userC friend from userA friends', function (done) {
+  describe('DELETE /api/users/{userA}/subscriptions/rel/{subscription_user_id}', function () {
+    it('should delete subscription to userC from userA subscriptions', function (done) {
       request
-        .del('/api/users/'+friendshipAC.user_id+'/friends/rel/'+friendshipAC.friend_id)
+        .del('/api/users/'+subscriptionAC.user_id+'/subscriptions/rel/'+subscriptionAC.subscription_user_id)
         .set('Authorization', api.session.authToken)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
@@ -90,10 +90,10 @@ describe('Friend resource tests', function() {
     });
   });
 
-  describe('GET /api/users/{userA}/friends', function () {
-    it('should list none friends for userA', function (done) {
+  describe('GET /api/users/{userA}/subscriptions', function () {
+    it('should list none subscriptions for userA', function (done) {
       request
-        .get('/api/users/'+friendshipAB.user_id+'/friends')
+        .get('/api/users/'+subscriptionAB.user_id+'/subscriptions')
         .set('Authorization', api.session.authToken)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
