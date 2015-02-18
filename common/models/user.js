@@ -588,7 +588,7 @@ module.exports = function(User) {
       isStatic: false,
       description: 'Add user friend',
       accepts: [
-        {arg: 'friend_id', type: 'any', description:'User id', required: true, http: {source: 'path'}}
+        {arg: 'subscription_user_id', type: 'any', description:'User id', required: true, http: {source: 'path'}}
       ],
       returns: {
         arg: 'success', type: 'successModel', root: true,
@@ -596,14 +596,14 @@ module.exports = function(User) {
           'Success json.\n'
       },
       accessType: 'WRITE',
-      http: {verb: 'put', path: '/friends/rel/:friend_id'}
+      http: {verb: 'put', path: '/friends/rel/:subscription_user_id'}
   });
 
   User.remoteMethod('__unlink__friends', {
       isStatic: false,
       description: 'Remove user friend',
       accepts: [
-        {arg: 'friend_id', type: 'any', description:'User id', required: true, http: {source: 'path'}}
+        {arg: 'subscription_user_id', type: 'any', description:'User id', required: true, http: {source: 'path'}}
       ],
       returns: {
         arg: 'success', type: 'successModel', root: true,
@@ -611,7 +611,7 @@ module.exports = function(User) {
           'Success json.\n'
       },
       accessType: 'WRITE',
-      http: {verb: 'delete', path: '/friends/rel/:friend_id'}
+      http: {verb: 'delete', path: '/friends/rel/:subscription_user_id'}
   });
 
   User.beforeRemote('prototype.uploadAvatar', function(ctx, modelInstance, next) {

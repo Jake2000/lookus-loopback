@@ -154,9 +154,26 @@ function createAndLoginAsNewNormalUser() {
 
 function createFriendship(friendship) {
   describe('API: createFriendship', function () {
-    it('should create friendship between user '+friendship.user_id+' and user'+friendship.friend_id, function (done) {
+    it('should create friendship between user '+friendship.user_id+' and user '+friendship.friend_id, function (done) {
       request
         .put('/api/users/'+friendship.user_id+'/friends/rel/'+friendship.friend_id)
+        .set('Authorization', session.authToken)
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .end(function (err, res) {
+          if (err) return done(err);
+          done();
+        });
+    });
+  });
+}
+
+function createSubscription(subscription) {
+  describe('API: createSubscription', function () {
+    it('should create subscription from user '+subscription.user_id+' to '+subscription.subscription_user_id, function (done) {
+      request
+        .put('/api/users/'+subscription.user_id+'/friends/rel/'+subscription.subscription_user_id)
         .set('Authorization', session.authToken)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
