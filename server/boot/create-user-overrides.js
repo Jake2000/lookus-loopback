@@ -1,5 +1,6 @@
 var debug = require('debug')('boot:create-user-overrides');
 var _ = require('lodash');
+var async = require('async');
 
 module.exports = function(app) {
   var loopback = app.loopback;
@@ -55,8 +56,55 @@ module.exports = function(app) {
 
     filter = filter || {};
     filter.where = filter.where || {};
-    filter.where.deletedBy = {neq: currentUser.id};
+    filter.where.deleted_by = {neq: currentUser.id.toString()};
 
     tmpFunction.call(this, filter, cb);
+  };
+
+  User.prototype.__destroyById__dialogs = function(dialogId, cb) {
+    var modelInstance = this;
+
+    app.models.dialogUser.findOne({where: {dialog_id: dialogId, user_id: modelInstance.id }}, function(err, dialogUser) {
+
+      if(err) { return cb(err); }
+
+      if(!dialogUser) {
+        var err1 = new Error('Dialog not found in user\'s dialogs');
+        err1.statusCode = 404;
+        return cb(err1);
+      }
+
+      app.models.dialog.findById(dialogId, function (err, dialog) {
+
+        if(err) { return cb(err); }
+
+        if(!(dialog instanceof app.models.dialog)) {
+          var err2 = new Error('Dialog not found in');
+          err2.statusCode = 404;
+          return cb(err2);
+        }
+
+        if(dialog.is_grouped == true) {
+          // If dialog is group dialog - only leave it
+          dialogUser.destroy(function(err, res) {
+            if(err) { return cb(err); }
+
+            return cb(null, 204);
+          });
+        } else {
+          // If dialog is not a group dialog - update all messages as deleted by this user
+          app.models.message.find({ where: {dialog_id: dialogId}}, function(err, messages) {
+
+            async.eachSeries(messages, function(message, cb) {
+              message.markAsDeleted(modelInstance.id, cb);
+            }, function(err) {
+              dialog.markAsDeleted(modelInstance.id, function(err, dialog) {
+                return cb(null, 204);
+              });
+            });
+          });
+        }
+      });
+    });
   };
 };

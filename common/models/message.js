@@ -159,8 +159,13 @@ module.exports = function(Message) {
           });
         } else {
 
+          dialog.deleted_by = null;
+          dialog.save();
+
+
           console.log("dialog found");
           modelInstance.dialog_id = dialog.id;
+
           modelInstance.save();
 
 

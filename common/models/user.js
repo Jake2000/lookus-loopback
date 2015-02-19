@@ -87,54 +87,6 @@ module.exports = function(User) {
     next();
   });
 
-  User.prototype.__destroyById__dialogs = function(dialogId, cb) {
-    var modelInstance = this;
-
-    app.models.dialogUser.exists({where: {dialog_id: dialogId, user_id: modelInstance.id }}, function(err, exists) {
-
-      if(err) { return cb(err); }
-
-      if(!exists) {
-        var err1 = new Error('Dialog not found in user\'s dialogs');
-        err1.statusCode = 404;
-        return cb(err1);
-      }
-
-      app.models.dialog.findById(dialogId, function (err, dialog) {
-
-        if(err) { return cb(err); }
-
-        if(!(dialog instanceof app.models.dialog)) {
-          var err2 = new Error('Dialog not found in');
-          err2.statusCode = 404;
-          return cb(err2);
-        }
-
-        if(dialog.is_grouped == true) {
-          // If dialog is group dialog - only leave it
-          app.models.dialogUser.delete({where: {dialog_id: dialogId, user_id: modelInstance.id }, limit:1}, function(err, res) {
-
-            if(err) { return cb(err); }
-
-            return cb(null, 204);
-          });
-        } else  {
-          // If dialog is not a group dialog - update all messages as deleted by this user
-          app.models.message.find({ where: {dialog_id: dialogId}}, function(err, messages) {
-
-            async.eachSeries(messages, function(message, cb) {
-              message.markAsDeleted(modelInstance.id, cb);
-            }, function(err) {
-              dialog.markAsDeleted(modelInstance.id, function(err, deleted) {
-                return cb(null, 204);
-              });
-            });
-          });
-        }
-
-      });
-    });
-  };
 
   User.prototype.isAdmin = function(cb) {
     app.models.Role.isInRole('admin', {principalType: app.models.RoleMapping.USER, principalId: this.id}, function(err, exists) {

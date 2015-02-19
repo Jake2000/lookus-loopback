@@ -99,14 +99,6 @@ module.exports = function(Dialog) {
     return dialog.populate(next);
   });
 
-  Dialog.afterRemote('findById', function(ctx, dialog, next) {
-    if(!dialog || !dialog.id) {
-      dialog.last_message = null;
-      return next();
-    }
-
-    return dialog.populate(next);
-  });
 
   Dialog.prototype.setDND = function(dnd, cb) {
     var ctx = loopback.getCurrentContext();

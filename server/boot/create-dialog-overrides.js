@@ -43,7 +43,7 @@ module.exports = function(app) {
 
     filter = filter || {};
     filter.where = filter.where || {};
-    filter.where.deleted_by = {neq: currentUser.id};
+    filter.where.deleted_by = {neq: currentUser.id.toString()};
 
     tmpFunction.call(this, filter, cb);
   };
