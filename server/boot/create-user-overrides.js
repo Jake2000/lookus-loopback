@@ -52,7 +52,8 @@ module.exports = function(app) {
 
   var tmpFunction = User.prototype.__get__dialogs;
   User.prototype.__get__dialogs = function(filter, cb) {
-    var currentUser = this;
+    var ctx = loopback.getCurrentContext();
+    var currentUser = ctx && ctx.get('currentUser');
 
     filter = filter || {};
     filter.where = filter.where || {};
