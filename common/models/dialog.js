@@ -139,4 +139,12 @@ module.exports = function(Dialog) {
     http: {verb: 'put', path: '/set_dnd_mode'}
   });
 
+  Dialog.prototype.markAsDeleted = function(userId, cb) {
+    userId = (userId.toString) ?  userId.toString() : userId;
+
+    var modelInstance = this;
+    modelInstance.deleted_by = modelInstance.deleted_by || [];
+    modelInstance.deleted_by.push(userId);
+    modelInstance.save(cb);
+  };
 };

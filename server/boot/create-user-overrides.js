@@ -2,6 +2,7 @@ var debug = require('debug')('boot:create-user-overrides');
 var _ = require('lodash');
 
 module.exports = function(app) {
+  var loopback = app.loopback;
   var User = app.models.user;
 
   User.disableRemoteMethod('__create__dialogs');
@@ -48,4 +49,14 @@ module.exports = function(app) {
 
   app.remotes().findMethod('user.prototype.updateAttributes').accepts = [{arg: 'data', type: 'userModelEditable', required: true, http: {source: 'body'}}];
 
+  var tmpFunction = User.prototype.__get__dialogs;
+  User.prototype.__get__dialogs = function(filter, cb) {
+    var currentUser = this;
+
+    filter = filter || {};
+    filter.where = filter.where || {};
+    filter.where.deletedBy = {neq: currentUser.id};
+
+    tmpFunction.call(this, filter, cb);
+  };
 };

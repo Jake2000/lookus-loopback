@@ -29,6 +29,10 @@
     "updated": {
       "type": "Date",
       "description": "Дата и время изменения диалога  [<b>read-only<b>]"
+    },
+    "deleted_by": {
+      "type": ["string"],
+      "description": "Флаг удаленного сообщения в диалоге (список пользователей, которые удалили сообщение)"
     }
   },
   "hidden": ["private_participant_1_id", "private_participant_2_id"],

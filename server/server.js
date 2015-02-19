@@ -29,7 +29,7 @@ app.options('*', cors());
 app.use(loopback.context());
 app.use(loopback.token());
 app.use(function setCurrentUser(req, res, next) {
-  console.log('Trying to retrieve accessToken');
+  //console.log('Trying to retrieve accessToken');
   if (!req.accessToken) {
     return next();
   }

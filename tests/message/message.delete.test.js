@@ -9,13 +9,7 @@ request = request('http://localhost:3301');
 describe('Message resource tests', function() {
 
   var msgAB = {
-    body: 'test message AB',
-    subject: 'hello',
-    recipient_id: 'objectid'
-  };
-
-  var msgBA = {
-    body: 'test message BA',
+    body: 'test message.',
     subject: 'hello',
     recipient_id: 'objectid'
   };
@@ -25,7 +19,6 @@ describe('Message resource tests', function() {
 
   api.createUser(userA.email, function(user){
     userA = user;
-    msgBA.recipient_id = userA.id;
   });
 
   api.createUser(userB.email, function(user){
@@ -40,17 +33,23 @@ describe('Message resource tests', function() {
     msgAB.dialog_id = message.dialog_id;
   });
 
-  api.loginAsUser(userB);
-
-  api.sendMessage(msgBA, function(message) {
-    msgBA.id = message.id;
-    msgBA.dialog_id = message.dialog_id;
+  describe('DELETE /api/dialogs/{dialogId}/messages/{id}', function () {
+    it('should delete message by userA', function (done) {
+      request
+        .del('/api/dialogs/'+msgAB.dialog_id+'/messages/'+msgAB.id)
+        .set('Authorization', api.session.authToken)
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(204)
+        .end(function (err, res) {
+          if (err) return done(err);
+          done();
+        });
+    });
   });
 
-  api.loginAsUser(userA);
-
   describe('GET /api/dialogs/{dialogId}/messages', function () {
-    it('should include 2 msgs from userA and userB', function (done) {
+    it('should not include deleted msg from userA', function (done) {
       request
         .get('/api/dialogs/'+msgAB.dialog_id+'/messages')
         .set('Authorization', api.session.authToken)
@@ -60,9 +59,8 @@ describe('Message resource tests', function() {
         .end(function (err, res) {
           if (err) return done(err);
           res.body.should.be.instanceOf(Array);
-          res.body.should.have.length(2);
-          res.body.should.contain.an.item.with.property('id', msgAB.id);
-          res.body.should.contain.an.item.with.property('id', msgBA.id);
+          res.body.should.have.length(0);
+          res.body.should.not.contain.an.item.with.property('id', msgAB.id);
           done();
         });
     });
@@ -71,7 +69,7 @@ describe('Message resource tests', function() {
   api.loginAsUser(userB);
 
   describe('GET /api/dialogs/{dialogId}/messages', function () {
-    it('should include 2 msgs from userA and userB', function (done) {
+    it('should include msg from userA for userB', function (done) {
       request
         .get('/api/dialogs/'+msgAB.dialog_id+'/messages')
         .set('Authorization', api.session.authToken)
@@ -81,9 +79,8 @@ describe('Message resource tests', function() {
         .end(function (err, res) {
           if (err) return done(err);
           res.body.should.be.instanceOf(Array);
-          res.body.should.have.length(2);
+          res.body.should.have.length(1);
           res.body.should.contain.an.item.with.property('id', msgAB.id);
-          res.body.should.contain.an.item.with.property('id', msgBA.id);
           done();
         });
     });

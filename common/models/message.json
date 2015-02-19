@@ -24,6 +24,14 @@
     "updated": {
       "type": "date",
       "description": "Дата и время обновления"
+    },
+    "deleted_by": {
+      "type": ["string"],
+      "description": "Флаг удаленного сообщения в диалоге (список пользователей, которые удалили сообщение)"
+    },
+    "read_by": {
+      "type": ["string"],
+      "description": "Флаг прочитанного сообщения в диалоге (список пользователей, которые прочитали сообщение)"
     }
   },
   "validations": [],
@@ -44,6 +52,7 @@
       "foreignKey": "recipient_id"
     }
   },
+  "hidden": ["deleted_by", ""],
   "acls": [
     {
       "accessType": "*",

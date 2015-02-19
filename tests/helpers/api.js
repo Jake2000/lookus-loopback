@@ -227,7 +227,8 @@ function createMarker(marker) {
 }
 
 
-function sendMessage(message) {
+function sendMessage(message ,cb) {
+  cb = cb || function() {};
   describe('API: sendMessage', function () {
     var text = (message.recipient_id) ? (' to user ' + message.recipient_id) : (' to dialog ' + message.dialog_id) ;
     it('should send message from user '+session.userId+' to user' +message.recipient_id + text, function (done) {
@@ -242,12 +243,14 @@ function sendMessage(message) {
         .end(function (err, res) {
           if (err) return done(err);
           res.body.should.have.property('id');
-          msgAtoB.id = res.body.id;
+          message.id = res.body.id;
+          message.dialog_id = res.body.dialog_id;
           res.body.should.have.property('dialog_id');
           res.body.should.have.property('sender_id').and.equal(session.userId);
           res.body.should.have.property('is_read').and.equal(false);
           res.body.should.have.property('created').and.have.length.above(6);
           res.body.should.have.property('updated').and.have.length.above(6);
+          cb(res.body);
           done();
         });
     });

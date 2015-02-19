@@ -77,6 +77,16 @@ module.exports = function(Message) {
     }
   };
 
+  Message.prototype.markAsDeleted = function(userId, cb) {
+    userId = (userId.toString) ?  userId.toString() : userId;
+
+    var modelInstance = this;
+    modelInstance.deleted_by = modelInstance.deleted_by || [];
+    modelInstance.deleted_by.push(userId);
+    console.log(modelInstance.deleted_by);
+    modelInstance.save(cb);
+  };
+
   Message.afterCreate = function(next) {
     var ctx = loopback.getCurrentContext();
     var currentUser = ctx && ctx.get('currentUser');
@@ -164,7 +174,7 @@ module.exports = function(Message) {
   };
 
   Message.beforeUpdate = function(next, modelInstance) {
-    modelInstance.updated = Date.now();
+    modelInstance.updated = (Date.now());
     next();
   };
 

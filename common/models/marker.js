@@ -71,6 +71,7 @@ module.exports = function(Marker) {
 
   Marker.beforeUpdate = function(next, modelInstance) {
     modelInstance.updated = (new Date());
+    next();
   };
 
   Marker.afterCreate = function(next) {
@@ -209,6 +210,8 @@ module.exports = function(Marker) {
   Marker.beforeRemote('prototype.uploadImage', function(ctx, modelInstance, next) {
     ctx.req.params.container = 'marker-images';
     app.models.container.upload(ctx.req, ctx.res, function(err, result) {
+      if(err) { return next(err); }
+
       var ctx = loopback.getCurrentContext();
       ctx.set("filename", result.files.image[0].name);
       next();
@@ -218,10 +221,13 @@ module.exports = function(Marker) {
   Marker.prototype.uploadImage = function(file, cb) {
     var ctx = loopback.getCurrentContext();
     var modelInstance = this;
-    this.image_url = '/uploads/marker-images/' + ctx.get('filename');
-    this.save(function(err) {
-      cb(err, modelInstance);
+    modelInstance.image_url = '/uploads/marker-images/' + ctx.get('filename');
+    modelInstance.save(function(err, marker) {
+      if(err) { return cb(err); }
+
+      cb(null, marker);
     });
+
   };
 
   Marker.remoteMethod('uploadImage', {
