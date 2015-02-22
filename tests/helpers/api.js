@@ -36,6 +36,10 @@ function loginAsUser(user) {
   });
 }
 
+function timezoneRegExp() {
+  return (new RegExp("\\d{4}-[01]\\d-[0-3]\\dT[0-2]\\d:[0-5]\\d:[0-5]\\d\\.\\d+([+-][0-2]\\d:[0-5]\\d|Z)"));
+}
+
 function createUser(emailOrUser, cb) {
   cb = cb || function(){};
 
@@ -257,6 +261,7 @@ function sendMessage(message ,cb) {
   });
 }
 
+module.exports.timezoneRegExp = timezoneRegExp;
 module.exports.session = session;
 module.exports.randomStr = randomStr;
 module.exports.createUser = createUser;

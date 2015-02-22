@@ -28,8 +28,8 @@ module.exports = function(Message) {
 
     // Setting is_read flag to false
     modelInstance.is_read = false;
-    modelInstance.created = Date.now();
-    modelInstance.updated = Date.now();
+    modelInstance.created = new Date();
+    modelInstance.updated = new Date();
 
     // Setting message sender
     modelInstance.sender(currentUser);
@@ -179,7 +179,7 @@ module.exports = function(Message) {
   };
 
   Message.beforeUpdate = function(next, modelInstance) {
-    modelInstance.updated = (Date.now());
+    modelInstance.updated = new Date();
     next();
   };
 

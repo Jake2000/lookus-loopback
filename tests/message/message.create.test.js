@@ -71,8 +71,8 @@ describe('Message resource tests', function() {
           res.body.should.have.property('sender_id').and.equal(userA.id);
           res.body.should.have.property('recipient_id').and.equal(userB.id);
           res.body.should.have.property('is_read').and.equal(false);
-          res.body.should.have.property('created').and.have.length.above(6);
-          res.body.should.have.property('updated').and.have.length.above(6);
+          res.body.should.have.property('created').and.match(api.timezoneRegExp());
+          res.body.should.have.property('updated').and.match(api.timezoneRegExp());
           done();
         });
     });
@@ -95,11 +95,13 @@ describe('Message resource tests', function() {
           res.body.should.have.property('sender_id').and.equal(userA.id);
           res.body.should.have.property('recipient_id').and.equal(userB.id);
           res.body.should.have.property('is_read').and.equal(false);
-          res.body.should.have.property('created').and.have.length.above(6);
-          res.body.should.have.property('updated').and.have.length.above(6);
+          res.body.should.have.property('created').and.match(api.timezoneRegExp());
+          res.body.should.have.property('updated').and.match(api.timezoneRegExp());
           done();
         });
     });
   });
+
+
 
 });

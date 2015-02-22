@@ -57,8 +57,8 @@ module.exports = function(Marker) {
 
     // Attaching user
     modelInstance.user_id = currentUser.id;
-    modelInstance.created = (new Date());
-    modelInstance.updated = (new Date());
+    modelInstance.created = new Date();
+    modelInstance.updated = new Date();
     modelInstance.is_up = false;
     modelInstance.is_active = true;
 
@@ -70,7 +70,7 @@ module.exports = function(Marker) {
   };
 
   Marker.beforeUpdate = function(next, modelInstance) {
-    modelInstance.updated = (new Date());
+    modelInstance.updated = new Date();
     next();
   };
 

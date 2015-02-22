@@ -47,6 +47,8 @@ describe('Message resource tests', function() {
           res.body.should.have.property('sender_id').and.equal(userA.id);
           res.body.should.have.property('recipient_id').and.equal(userB.id);
           res.body.should.have.property('is_read').and.equal(false);
+          res.body.should.have.property('created').and.match(api.timezoneRegExp());
+          res.body.should.have.property('updated').and.match(api.timezoneRegExp());
 
           msgAtoB.dialog_id = res.body.dialog_id;
           msgAtoB.id = res.body.id;
@@ -75,7 +77,7 @@ describe('Message resource tests', function() {
     });
   });
 
-  describe('GET /api/dialogs/{dialog}', function () {
+  describe('GET /api/dialogs/{dialogId}', function () {
     it('should show dialog with message 1 for userB', function (done) {
       request
         .get('/api/dialogs/'+msgAtoB.dialog_id)

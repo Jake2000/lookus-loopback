@@ -44,13 +44,13 @@ module.exports = function(Dialog) {
   Dialog.disableRemoteMethod('__updateById__users', false);
 
   Dialog.beforeCreate = function(next, modelInstance) {
-    modelInstance.created = Date.now();
-    modelInstance.updated = Date.now();
+    modelInstance.created = new Date();
+    modelInstance.updated = new Date();
     next();
   };
 
   Dialog.beforeUpdate = function(next, modelInstance) {
-    modelInstance.updated = Date.now();
+    modelInstance.updated = new Date();
     next();
   };
 
