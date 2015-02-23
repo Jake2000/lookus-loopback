@@ -39,10 +39,9 @@ describe('User settings resource tests', function() {
         .expect(200)
         .end(function (err, res) {
           if (err) return done(err);
-          res.body.should.have.property('notifications_global_disable');
-          res.body.should.have.property('notifications_only_from_friends');
-          res.body.should.have.property('notifications_no_sound');
-          res.body.should.have.property('user_id').and.equals(userA.id);
+          res.body.should.have.property('push_notifications_enable');
+          res.body.should.have.property('push_notifications_only_from_friends');
+          res.body.should.have.property('app_sound_enabled');
           done();
         });
     });

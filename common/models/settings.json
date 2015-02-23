@@ -4,23 +4,26 @@
   "base": "PersistedModel",
   "idInjection": true,
   "properties": {
-    "notifications_global_disable": {
+    "push_notifications_enable": {
       "type": "boolean",
       "required": true,
-      "description": "Выключение уведомлений"
+      "default": true,
+      "description": "Включение уведомлений"
     },
-    "notifications_only_from_friends": {
+    "push_notifications_only_from_friends": {
       "type": "boolean",
       "required": true,
+      "default": false,
       "description": "Уведомления только от друзей"
     },
-    "notifications_no_sound": {
+    "app_sound_enabled": {
       "type": "boolean",
       "required": true,
-      "description": "Уведомления без звука"
+      "default": true,
+      "description": "Звук в приложении"
     }
   },
-  "hidden": [],
+  "hidden": ["id","user_id"],
   "validations": [],
   "relations": {
     "owner": {

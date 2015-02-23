@@ -8,9 +8,9 @@ request = request('http://localhost:3301');
 describe('User settings resource tests', function() {
 
   var settings = {
-    notifications_global_disable: true,
-    notifications_only_from_friends: true,
-    notifications_no_sound: true
+    push_notifications_enable: true,
+    push_notifications_only_from_friends: true,
+    app_sound_enabled: true
   };
 
   var userA = api.generateRandomUser();
@@ -49,9 +49,9 @@ describe('User settings resource tests', function() {
         .expect(200)
         .end(function (err, res) {
           if (err) return done(err);
-          res.body.should.have.property('notifications_global_disable').and.equals(true);
-          res.body.should.have.property('notifications_only_from_friends').and.equals(true);
-          res.body.should.have.property('notifications_no_sound').and.equals(true);
+          res.body.should.have.property('push_notifications_enable').and.equals(true);
+          res.body.should.have.property('push_notifications_only_from_friends').and.equals(true);
+          res.body.should.have.property('app_sound_enabled').and.equals(true);
           done();
         });
     });
@@ -67,10 +67,9 @@ describe('User settings resource tests', function() {
         .expect(200)
         .end(function (err, res) {
           if (err) return done(err);
-          res.body.should.have.property('notifications_global_disable').and.equals(true);
-          res.body.should.have.property('notifications_only_from_friends').and.equals(true);
-          res.body.should.have.property('notifications_no_sound').and.equals(true);
-          res.body.should.have.property('user_id').and.equals(userA.id);
+          res.body.should.have.property('push_notifications_enable').and.equals(true);
+          res.body.should.have.property('push_notifications_only_from_friends').and.equals(true);
+          res.body.should.have.property('app_sound_enabled').and.equals(true);
           done();
         });
     });

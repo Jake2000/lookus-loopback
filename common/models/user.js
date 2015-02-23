@@ -281,9 +281,9 @@ module.exports = function(User) {
       },
       function(cb) {
         app.models.settings.create({
-          notifications_global_disable: false,
-          notifications_only_from_friends: false,
-          notifications_no_sound: false,
+          push_notifications_enable: true,
+          push_notifications_only_from_friends: false,
+          app_sound_enabled: true,
           user_id: modelInstance.id.toString()
         }, function (err, settings) {
           cb();
