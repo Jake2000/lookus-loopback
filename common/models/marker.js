@@ -324,10 +324,10 @@ module.exports = function(Marker) {
   Marker.remoteMethod('mapbox', {
     description: 'Get markers in mapbox',
     accepts: [
-      {arg: 'topLeftLatitude', type: "number", required: true, http: {source: 'query'}},
-      {arg: 'topLeftLongitude', type: "number", required: true, http: {source: 'query'}},
-      {arg: 'bottomRightLatitude', type: "number", required: true, http: {source: 'query'}},
-      {arg: 'bottomRightLongitude', type: "number", required: true, http: {source: 'query'}},
+      {arg: 'topLeftLat', type: "number", required: true, http: {source: 'query'}},
+      {arg: 'topLeftLng', type: "number", required: true, http: {source: 'query'}},
+      {arg: 'bottomRightLat', type: "number", required: true, http: {source: 'query'}},
+      {arg: 'bottomRightLng', type: "number", required: true, http: {source: 'query'}},
       {arg: 'zoom', type: "integer", required: true, http: {source: 'query'}}
     ],
     returns: {

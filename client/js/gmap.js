@@ -170,10 +170,10 @@ function loadMarkers() {
 function loadMarkersMapsbox() {
 
   var query = 'zoom=' + map.zoom;
-  query += '&topLeftLatitude=' + map.getBounds().getNorthEast().lat();
-  query += '&topLeftLongitude=' + map.getBounds().getNorthEast().lng();
-  query += '&bottomRightLatitude=' + map.getBounds().getSouthWest().lat();
-  query += '&bottomRightLongitude=' + map.getBounds().getSouthWest().lng();
+  query += '&topLeftLat=' + map.getBounds().getNorthEast().lat();
+  query += '&topLeftLng=' + map.getBounds().getNorthEast().lng();
+  query += '&bottomRightLat=' + map.getBounds().getSouthWest().lat();
+  query += '&bottomRightLng=' + map.getBounds().getSouthWest().lng();
 
   $.ajax({
     type: 'GET',
