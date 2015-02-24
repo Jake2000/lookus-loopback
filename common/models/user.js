@@ -15,7 +15,7 @@ module.exports = function(User) {
   User.disableRemoteMethod('exists', true);
   User.disableRemoteMethod('findOne', true);
   User.disableRemoteMethod('count', true);
-  //User.disableRemoteMethod('find', true);
+  User.disableRemoteMethod('find', true);
 
   User.disableRemoteMethod('__get__friendsContainer', false);
 
@@ -1036,5 +1036,41 @@ module.exports = function(User) {
     },
     accessType: 'WRITE',
     http: {verb: 'delete', path: '/subscriptions/rel/:subscription_id'}
+  });
+
+  User.findEx = function(firstName, lastName, offset, limit, cb) {
+    offset = offset | 0;
+    limit = (limit | 0 || 50);
+
+    var query = {offset: offset, limit: limit};
+
+    if(firstName) {
+      query.where = query.where || {};
+      query.where.first_name = { like: firstName+'.+' }
+    }
+
+    if(lastName) {
+      query.where = query.where || {};
+      query.where.last_name = { like: lastName+'.+' }
+    }
+
+    User.find(query, cb);
+  };
+
+  User.remoteMethod('findEx', {
+    description: 'Query users',
+    accepts: [
+      {arg: 'first_name', type: 'string', description:'Search by first name', required: false, http: {source: 'query'}},
+      {arg: 'last_name', type: 'string', description:'Search by last name', required: false, http: {source: 'query'}},
+      {arg: 'offset', type: 'integer', description:'Offset (for pagination), default = 0', required: false, http: {source: 'query'}},
+      {arg: 'limit', type: 'integer', description:'Limit (for pagination), default = 50', required: false, http: {source: 'query'}}
+    ],
+    returns: {
+      arg: 'users', type: ['user'], root: true,
+      description:
+        'Success json.\n'
+    },
+    accessType: 'READ',
+    http: {verb: 'get', path: '/'}
   });
 };
