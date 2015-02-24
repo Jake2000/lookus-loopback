@@ -254,8 +254,15 @@ module.exports = function(User) {
     });
   };
 
-  User.beforeCreate = function() {
+  User.beforeCreate = function(next, modelInstance) {
+    modelInstance.created = new Date();
+    modelInstance.updated = new Date();
+    next();
+  };
 
+  Message.beforeUpdate = function(next, modelInstance) {
+    modelInstance.updated = new Date();
+    next();
   };
 
   User.afterCreate = function(next) {
@@ -1038,20 +1045,18 @@ module.exports = function(User) {
     http: {verb: 'delete', path: '/subscriptions/rel/:subscription_id'}
   });
 
-  User.findEx = function(firstName, lastName, offset, limit, cb) {
+  User.findEx = function(searchText, offset, limit, cb) {
     offset = offset | 0;
     limit = (limit | 0 || 50);
 
     var query = {offset: offset, limit: limit};
 
-    if(firstName) {
-      query.where = query.where || {};
-      query.where.first_name = { like: firstName+'.+' }
-    }
-
-    if(lastName) {
-      query.where = query.where || {};
-      query.where.last_name = { like: lastName+'.+' }
+    if(searchText) {
+      query.where = {};
+      query.where.or = [
+        {first_name : { like: searchText+'.+' }},
+        {last_name : { like: searchText+'.+' }}
+      ];
     }
 
     User.find(query, cb);
@@ -1060,8 +1065,7 @@ module.exports = function(User) {
   User.remoteMethod('findEx', {
     description: 'Query users',
     accepts: [
-      {arg: 'first_name', type: 'string', description:'Search by first name', required: false, http: {source: 'query'}},
-      {arg: 'last_name', type: 'string', description:'Search by last name', required: false, http: {source: 'query'}},
+      {arg: 'search_text', type: 'string', description:'Search by text', required: false, http: {source: 'query'}},
       {arg: 'offset', type: 'integer', description:'Offset (for pagination), default = 0', required: false, http: {source: 'query'}},
       {arg: 'limit', type: 'integer', description:'Limit (for pagination), default = 50', required: false, http: {source: 'query'}}
     ],
