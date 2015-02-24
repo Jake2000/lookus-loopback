@@ -260,7 +260,7 @@ module.exports = function(User) {
     next();
   };
 
-  Message.beforeUpdate = function(next, modelInstance) {
+  User.beforeUpdate = function(next, modelInstance) {
     modelInstance.updated = new Date();
     next();
   };
