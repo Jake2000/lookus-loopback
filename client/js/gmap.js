@@ -130,13 +130,17 @@ function saveCurrentMarker() {
 }
 
 function loadMarkers() {
+
+  var query = 'zoom=' + map.zoom;
+  query += '&lat=' + map.getCenter().lat();
+  query += '&lng=' + map.getCenter().lng();
+
   $.ajax({
-    type: 'POST',
+    type: 'GET',
     contentType: 'application/json',
     dataType: 'json',
     processData: false,
-    url:'/api/markers/nearby?zoom='+map.zoom,
-    data: JSON.stringify({ lat: map.getCenter().lat(), lng:map.getCenter().lng()}),
+    url:'/api/markers/nearby?'+query,
     success: function(data) {
       clearMarkers();
       if(_.isArray(data)) {
@@ -165,25 +169,18 @@ function loadMarkers() {
 
 function loadMarkersMapsbox() {
 
-  var bounds = map.getBounds();
-
-  var topLeft = {
-    lat: map.getBounds().getNorthEast().lat(),
-    lng: map.getBounds().getNorthEast().lng()
-  };
-
-  var bottomRight = {
-    lat: map.getBounds().getSouthWest().lat(),
-    lng: map.getBounds().getSouthWest().lng()
-  };
+  var query = 'zoom=' + map.zoom;
+  query += '&topLeftLatitude=' + map.getBounds().getNorthEast().lat();
+  query += '&topLeftLongitude=' + map.getBounds().getNorthEast().lng();
+  query += '&bottomRightLatitude=' + map.getBounds().getSouthWest().lat();
+  query += '&bottomRightLongitude=' + map.getBounds().getSouthWest().lng();
 
   $.ajax({
-    type: 'POST',
+    type: 'GET',
     contentType: 'application/json',
     dataType: 'json',
     processData: false,
-    url:'/api/markers/mapbox?zoom='+map.zoom,
-    data: JSON.stringify({ topLeft: topLeft, bottomRight: bottomRight}),
+    url:'/api/markers/mapbox?'+query,
     success: function(data) {
       clearMarkers();
       if(_.isArray(data)) {
