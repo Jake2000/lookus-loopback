@@ -114,11 +114,11 @@ module.exports = function(Marker) {
     next();
   };
 
-  Marker.nearby = function(location, zoom, cb) {
+  Marker.nearby = function(lat, lng, zoom, cb) {
     if(zoom >= app.geo.MAX_CACHED_ZOOM ) {
 
       // we can do no-caching here
-      app.models.marker.find({ geo: {near: location, maxDistance: 2}}, function(err, markers) {
+      app.models.marker.find({ geo: {near: { lat: lat, lng: lng }, maxDistance: 2}}, function(err, markers) {
         if(err) {
           return cb(err);
         }
@@ -129,7 +129,7 @@ module.exports = function(Marker) {
       });
     } else {
 
-      var cell = app.geo.getCell(location, zoom);
+      var cell = app.geo.getCell({ lat: lat, lng: lng }, zoom);
       var markers = [];
       var distance = ((zoom+1)*4.5 |0);
       //console.log(distance);
@@ -159,7 +159,8 @@ module.exports = function(Marker) {
   Marker.remoteMethod('nearby', {
       description: 'Get nearby markers',
       accepts: [
-        {arg: 'data', type: "locationModel", required: true, http: {source: 'body'}},
+        {arg: 'lat', type: "number", required: true, http: {source: 'query'}},
+        {arg: 'lng', type: "number", required: true, http: {source: 'query'}},
         {arg: 'zoom', type: "integer", required: true, http: {source: 'query'}}
       ],
       returns: {
@@ -168,7 +169,7 @@ module.exports = function(Marker) {
           'The response body contains array of markers.\n'
       },
       accessType: 'READ',
-      http: {verb: 'post', path: '/nearby'}
+      http: {verb: 'get', path: '/nearby'}
   });
 
   Marker.reindex = function(cb) {
@@ -273,14 +274,14 @@ module.exports = function(Marker) {
     })
   };
 
-  Marker.mapbox = function(mapbox, zoom, cb) {
+  Marker.mapbox = function(topLeftLatitude, topLeftLongitude, bottomRightLatitude, bottomRightLongitude, zoom, cb) {
     if(zoom >= app.geo.MAX_CACHED_ZOOM ) {
 
-      var minLat = Math.min(mapbox.topLeft.lat + 90, mapbox.bottomRight.lat + 90) - 90;
-      var maxLat = Math.max(mapbox.topLeft.lat + 90, mapbox.bottomRight.lat + 90) - 90;
+      var minLat = Math.min(topLeftLatitude + 90, bottomRightLatitude + 90) - 90;
+      var maxLat = Math.max(topLeftLatitude + 90, bottomRightLatitude + 90) - 90;
 
-      var minLng = Math.min(mapbox.topLeft.lng + 180, mapbox.bottomRight.lng + 180) - 180;
-      var maxLng = Math.max(mapbox.topLeft.lng + 180, mapbox.bottomRight.lng + 180) - 180;
+      var minLng = Math.min(topLeftLongitude + 180, bottomRightLongitude + 180) - 180;
+      var maxLng = Math.max(topLeftLongitude + 180, bottomRightLongitude + 180) - 180;
 
       // we can do no-caching here
       app.models.marker.find({ geo: { geoWithin: { box: [[minLng, minLat],[maxLng,maxLat]] }}}, function(err, markers) {
@@ -294,8 +295,8 @@ module.exports = function(Marker) {
       });
     } else {
 
-      var cellTopLeft = app.geo.getCell(mapbox.topLeft, zoom);
-      var cellBottomRight = app.geo.getCell(mapbox.bottomRight, zoom);
+      var cellTopLeft = app.geo.getCell({lat: topLeftLatitude, lng: topLeftLongitude}, zoom);
+      var cellBottomRight = app.geo.getCell({ lat: bottomRightLatitude, lng: bottomRightLongitude}, zoom);
       var markers = [];
 
       var adjacentCells = app.geo.getCellsInSquare(cellTopLeft, cellBottomRight);
@@ -323,14 +324,17 @@ module.exports = function(Marker) {
   Marker.remoteMethod('mapbox', {
     description: 'Get markers in mapbox',
     accepts: [
-      {arg: 'data', type: "mapboxModel", required: true, http: {source: 'body'}},
+      {arg: 'topLeftLatitude', type: "number", required: true, http: {source: 'query'}},
+      {arg: 'topLeftLongitude', type: "number", required: true, http: {source: 'query'}},
+      {arg: 'bottomRightLatitude', type: "number", required: true, http: {source: 'query'}},
+      {arg: 'bottomRightLongitude', type: "number", required: true, http: {source: 'query'}},
       {arg: 'zoom', type: "integer", required: true, http: {source: 'query'}}
     ],
     returns: {
       arg: 'markers', type: ['marker'], root: true
     },
     accessType: 'READ',
-    http: {verb: 'post', path: '/mapbox'}
+    http: {verb: 'get', path: '/mapbox'}
   });
 
 };

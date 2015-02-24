@@ -254,6 +254,10 @@ module.exports = function(User) {
     });
   };
 
+  User.beforeCreate = function() {
+
+  };
+
   User.afterCreate = function(next) {
     var modelInstance = this;
 
