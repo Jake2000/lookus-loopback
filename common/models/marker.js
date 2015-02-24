@@ -295,6 +295,30 @@ module.exports = function(Marker) {
       });
     } else {
 
+      var minLat = Math.min(topLeftLatitude + 90, bottomRightLatitude + 90) - 90;
+      var maxLat = Math.max(topLeftLatitude + 90, bottomRightLatitude + 90) - 90;
+
+      var minLng = Math.min(topLeftLongitude + 180, bottomRightLongitude + 180) - 180;
+      var maxLng = Math.max(topLeftLongitude + 180, bottomRightLongitude + 180) - 180;
+
+      // we can do no-caching here
+      app.models.marker.find({ geo: { geoWithin: { box: [[minLng, minLat],[maxLng,maxLat]] }}}, function(err, markers) {
+        if(err) {
+          return cb(err);
+        }
+
+        if(markers) {
+
+          var clusteredMarkers = app.geo.clusterify(markers, zoom);
+
+          return cb(null, clusteredMarkers);
+        }
+      });
+
+      return;
+
+
+
       var cellTopLeft = app.geo.getCell({lat: topLeftLatitude, lng: topLeftLongitude}, zoom);
       var cellBottomRight = app.geo.getCell({ lat: bottomRightLatitude, lng: bottomRightLongitude}, zoom);
       var markers = [];

@@ -1,4 +1,5 @@
 var _ = require('lodash');
+var cluster = require('./geo-cluster.js');
 
 var MAX_CACHED_ZOOM = 16;
 var CACHE_KEY = 'geo:';
@@ -358,7 +359,82 @@ module.exports = function(app) {
     return cells;
   };
 
+  function makeCluster(markers, distance) {
+    var clustered = [];
+    // Loop until all markers have been compared.
+    while (markers.length) {
+      var marker  = markers.pop();
 
+      var cluster = [];
+      // Compare against all markers which are left.
+
+      for(var key=0;key<markers.length;key++){
+        var target = markers[key];
+
+
+        var meters = getDistance(marker,markers[key]);
+        if ((meters/1000) <= distance) {
+
+          markers.splice(key,1);
+          target.is_clustered = true;
+          target.count = (target.count | 0)+1;
+          cluster.push(target);
+          key--;
+        }
+      }
+
+      // If a marker has been added to cluster, add also the one
+      // we were comparing to and remove the original from array.
+      if (cluster.length > 0) {
+        cluster.push(marker);
+        clustered = clustered.concat(cluster);
+      } else {
+        clustered.push(marker);
+      }
+    }
+    return clustered;
+  }
+
+  var rad = function(x) {
+    return x * Math.PI / 180;
+  };
+
+  /**
+   *  get distance between two latLng points in meters
+   */
+  var geoDistance = function(p1, p2) {
+    var R = 6378137; // Earth’s mean radius in meter
+    var dLat = rad(p2.location.lat - p1.location.lat);
+    var dLong = rad(p2.location.lng - p1.location.lng);
+    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(rad(p1.location.lat)) * Math.cos(rad(p2.location.lat)) *
+      Math.sin(dLong / 2) * Math.sin(dLong / 2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c; // returns the distance in meter
+  };
+
+  var geoLinkage = function(distances) {
+    var R = 6378137; // Earth’s mean radius in meter
+    var dLat = rad(p2.location.lat - p1.location.lat);
+    var dLong = rad(p2.location.lng - p1.location.lng);
+    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(rad(p1.location.lat)) * Math.cos(rad(p2.location.lat)) *
+      Math.sin(dLong / 2) * Math.sin(dLong / 2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c; // returns the distance in meter
+  };
+
+  var clusterify = function(markers, zoom) {
+    zoom = zoom | 0;
+
+    var p = (MAX_CACHED_ZOOM - zoom + 1);
+
+    var distance = 20 * (Math.pow(2, p));
+
+    var clustered = cluster.createCluster(markers, distance, zoom, 0);
+
+    return clustered;
+  };
 
   app.geo = app.geo || {};
 
@@ -371,5 +447,6 @@ module.exports = function(app) {
   app.geo.getCellsInSquare = getCellsInSquare;
   app.geo.addPoint = addPoint;
   app.geo.removePoint = removePoint;
+  app.geo.clusterify = clusterify;
 
 };
