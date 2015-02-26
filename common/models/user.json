@@ -46,6 +46,11 @@
       "required": false,
       "description": "Статус пользователя"
     },
+    "push_token": {
+      "type": "string",
+      "required": false,
+      "description": "Push-token пользователя"
+    },
     "is_friend": {
       "type": "boolean",
       "required": false,
@@ -54,6 +59,10 @@
     "created": {
       "type": "date",
       "description": "Дата и время создания"
+    },
+    "updated": {
+      "type": "date",
+      "description": "Дата и время изменения"
     }
   },
   "validations": [],
@@ -80,7 +89,7 @@
       "foreignKey": "user_id"
     }
   },
-  "hidden": [],
+  "hidden": ["push_token"],
   "acls": [
     {
       "accessType": "*",
