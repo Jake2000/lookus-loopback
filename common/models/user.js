@@ -474,7 +474,7 @@ module.exports = function(User) {
       http: {verb: 'get', path: '/current'}
   });
 
-  User.prototype.__get__friends = function(cb) {
+  User.prototype.__get__friends = function(fields, queryText, offset, limit, cb) {
     app.models.friendsContainer.findOne({where: { user_id: this.id}}, function(err, friendsContainer) {
 
       if(err) {
@@ -500,7 +500,10 @@ module.exports = function(User) {
           ids.push(userContainer.user_id);
         });
 
-        app.models.user.findByIds(ids, function(err,users) {
+        var query = app.query.formatSearchQuery(fields, queryText, offset, limit, ['first_name','last_name']);
+        query.where = query.where || {};
+        query.where.id = {inq: ids };
+        app.models.user.find(query, function(err,users) {
           return cb(null, users);
         });
       });
@@ -510,6 +513,12 @@ module.exports = function(User) {
   User.remoteMethod('__get__friends', {
       isStatic: false,
       description: 'Query user friends',
+      accepts: [
+        {arg: 'fields', type: 'string', description:'Field names (field1,field2)', required: false, http: {source: 'query'}},
+        {arg: 'query', type: 'string', description:'Search by text', required: false, http: {source: 'query'}},
+        {arg: 'offset', type: 'integer', description:'Offset (for pagination), default = 0', required: false, http: {source: 'query'}},
+        {arg: 'limit', type: 'integer', description:'Limit (for pagination), default = 50', required: false, http: {source: 'query'}}
+      ],
       returns: {
         arg: 'users', type: ["user"], root: true,
         description:
@@ -670,7 +679,7 @@ module.exports = function(User) {
     });
   });
 
-  User.prototype.__get__blacklist = function(cb) {
+  User.prototype.__get__blacklist = function(fields, queryText, offset, limit, cb) {
     app.models.blacklist.findOne({where: { user_id: this.id}}, function(err, blacklist) {
 
       if(err) {
@@ -696,7 +705,10 @@ module.exports = function(User) {
           ids.push(usercontainer.user_id);
         });
 
-        app.models.user.findByIds(ids, function(err,users) {
+        var query = app.query.formatSearchQuery(fields, queryText, offset, limit, ['first_name','last_name']);
+        query.where = query.where || {};
+        query.where.id = {inq: ids };
+        app.models.user.find(query, function(err,users) {
           return cb(null, users);
         });
       });
@@ -706,6 +718,12 @@ module.exports = function(User) {
   User.remoteMethod('__get__blacklist', {
     isStatic: false,
     description: 'Query blacklisted friends',
+    accepts: [
+      {arg: 'fields', type: 'string', description:'Field names (field1,field2)', required: false, http: {source: 'query'}},
+      {arg: 'query', type: 'string', description:'Search by text', required: false, http: {source: 'query'}},
+      {arg: 'offset', type: 'integer', description:'Offset (for pagination), default = 0', required: false, http: {source: 'query'}},
+      {arg: 'limit', type: 'integer', description:'Limit (for pagination), default = 50', required: false, http: {source: 'query'}}
+    ],
     returns: {
       arg: 'users', type: ["user"], root: true,
       description:
@@ -914,7 +932,10 @@ module.exports = function(User) {
           ids.push(userContainer.user_id);
         });
 
-        app.models.user.findByIds(ids, function(err,users) {
+        var query = app.query.formatSearchQuery(fields, queryText, offset, limit, ['first_name','last_name']);
+        query.where = query.where || {};
+        query.where.id = {inq: ids };
+        app.models.user.find(query, function(err,users) {
           return cb(null, users);
         });
       });
@@ -924,6 +945,12 @@ module.exports = function(User) {
   User.remoteMethod('__get__subscription', {
     isStatic: false,
     description: 'Query user subscriptions',
+    accepts: [
+      {arg: 'fields', type: 'string', description:'Field names (field1,field2)', required: false, http: {source: 'query'}},
+      {arg: 'query', type: 'string', description:'Search by text', required: false, http: {source: 'query'}},
+      {arg: 'offset', type: 'integer', description:'Offset (for pagination), default = 0', required: false, http: {source: 'query'}},
+      {arg: 'limit', type: 'integer', description:'Limit (for pagination), default = 50', required: false, http: {source: 'query'}}
+    ],
     returns: {
       arg: 'users', type: ["user"], root: true,
       description:
@@ -1045,34 +1072,23 @@ module.exports = function(User) {
     http: {verb: 'delete', path: '/subscriptions/rel/:subscription_id'}
   });
 
-  User.findEx = function(searchText, offset, limit, cb) {
-    offset = offset | 0;
-    limit = (limit | 0 || 50);
-
-    var query = {offset: offset, limit: limit};
-
-    if(searchText) {
-      query.where = {};
-      query.where.or = [
-        {first_name : { like: searchText+'.+' }},
-        {last_name : { like: searchText+'.+' }}
-      ];
-    }
-
+  User.findEx = function(fields, queryText, offset, limit, cb) {
+    var query = app.query.formatSearchQuery(fields, queryText, offset, limit, ['first_name','last_name']);
     User.find(query, cb);
   };
 
   User.remoteMethod('findEx', {
     description: 'Query users',
     accepts: [
-      {arg: 'search_text', type: 'string', description:'Search by text', required: false, http: {source: 'query'}},
+      {arg: 'fields', type: 'string', description:'Field names (field1,field2)', required: false, http: {source: 'query'}},
+      {arg: 'query', type: 'string', description:'Search by text', required: false, http: {source: 'query'}},
       {arg: 'offset', type: 'integer', description:'Offset (for pagination), default = 0', required: false, http: {source: 'query'}},
       {arg: 'limit', type: 'integer', description:'Limit (for pagination), default = 50', required: false, http: {source: 'query'}}
     ],
     returns: {
       arg: 'users', type: ['user'], root: true,
       description:
-        'Success json.\n'
+        'Users array.\n'
     },
     accessType: 'READ',
     http: {verb: 'get', path: '/'}
