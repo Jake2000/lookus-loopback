@@ -26,9 +26,7 @@ module.exports = function(app) {
   app.remotes().findMethod('user.create').notes = '' +
   'Регистрация пользователя';
 
-
   app.remotes().findMethod('user.create').accepts = [{arg: 'data', type: 'userModelCreatable', http: {source: 'body'}}];
-
 
   app.remotes().findMethod('user.login').accepts = [{arg: 'credentials', type: 'credentials', required: true, http: {source: 'body'}}];
   app.remotes().findMethod('user.login').notes = 'Можно логиниться под двумя тестовыми пользователями:<br> ' +
@@ -49,18 +47,7 @@ module.exports = function(app) {
   'Редактирование пользователя <br>';
 
   app.remotes().findMethod('user.prototype.updateAttributes').accepts = [{arg: 'data', type: 'userModelEditable', required: true, http: {source: 'body'}}];
-
-  var tmpFunction = User.prototype.__get__dialogs;
-  User.prototype.__get__dialogs = function(filter, cb) {
-    var ctx = loopback.getCurrentContext();
-    var currentUser = ctx && ctx.get('currentUser');
-
-    filter = filter || {};
-    filter.where = filter.where || {};
-    filter.where.deleted_by = {neq: currentUser.id.toString()};
-
-    tmpFunction.call(this, filter, cb);
-  };
+  ;
 
   User.prototype.__destroyById__dialogs = function(dialogId, cb) {
     var modelInstance = this;

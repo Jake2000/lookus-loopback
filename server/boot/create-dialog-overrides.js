@@ -24,10 +24,6 @@ module.exports = function(app) {
     {arg: 'data', type: 'dialogModelEditable', required: true, http: {source: 'body'}}
   ];
 
-  app.remotes().findMethod('user.prototype.__get__dialogs').returns = [
-    {arg: 'dialogs', type: ['dialogModelExtended'], root: true}
-  ];
-
   app.remotes().findMethod('user.prototype.__create__dialogs').accepts = [
     {arg: 'data', type: 'dialogModelEditable', required: true, http: {source: 'body'}}
   ];
