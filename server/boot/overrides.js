@@ -27,8 +27,6 @@ module.exports = function(app) {
         f[fieldName] = {like: queryText + '.*'};
         query.where.or.push(f);
       });
-      console.log(query);
-      console.log(query.where.or);
     }
 
     return query;
