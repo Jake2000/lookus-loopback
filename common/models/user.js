@@ -886,8 +886,26 @@ module.exports = function(User) {
     description: 'Get markers history for user (all inactive markers)',
     accepts: [
       {
-        arg: 'filter', type: 'string', description: 'Filter defining fields, where, orderBy, offset, and limit',
-        required: false, http: {source: 'query'}
+        arg: 'fields',
+        type: 'string',
+        description: 'Field names (field1,field2)',
+        required: false,
+        http: {source: 'query'}
+      },
+      {arg: 'query', type: 'string', description: 'Search by text', required: false, http: {source: 'query'}},
+      {
+        arg: 'offset',
+        type: 'integer',
+        description: 'Offset (for pagination), default = 0',
+        required: false,
+        http: {source: 'query'}
+      },
+      {
+        arg: 'limit',
+        type: 'integer',
+        description: 'Limit (for pagination), default = 50',
+        required: false,
+        http: {source: 'query'}
       }
     ],
     returns: {
