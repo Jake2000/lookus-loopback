@@ -1200,4 +1200,22 @@ module.exports = function(User) {
     http: { verb: 'get', path: '/dialogs' }
   });
 
+  User.prototype.__update__push__token = function(device, pushToken, cb) {
+    cb();
+  };
+
+  User.remoteMethod('__update__push__token', {
+    isStatic: false,
+    description: 'Sets push token for a user',
+    accepts: [
+      { arg: 'device', type: 'string', description: 'Device type (ios, android)', required: false, http: {source: 'query'}},
+      { arg: 'push_token', type: 'string', description: 'Push token', required: false, http: {source: 'query'}}
+    ],
+    returns: {
+      arg: 'success', type: 'successModel', root: true,
+      description: 'Success.\n'
+    },
+    accessType: 'WRITE',
+    http: { verb: 'put', path: '/push_token' }
+  });
 };
