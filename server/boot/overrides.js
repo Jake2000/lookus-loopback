@@ -6,8 +6,8 @@ module.exports = function(app) {
 
   app.query = {};
   app.query.formatSearchQuery = function(fields, queryText, offset, limit, queryFields) {
-    offset = offset | 0;
-    limit = (limit | 0 || 50);
+    offset = (offset | 0);
+    limit = ((limit | 0) || 50);
 
     var query = {offset: offset, limit: limit};
 
@@ -24,10 +24,11 @@ module.exports = function(app) {
       query.where.or = [];
       _.forEach(queryFields, function (fieldName) {
         var f = {};
-        f[fieldName] = {like: queryText + '.+'};
-        query.where.or.push();
+        f[fieldName] = {like: queryText + '.*'};
+        query.where.or.push(f);
       });
-
+      console.log(query);
+      console.log(query.where.or);
     }
 
     return query;
