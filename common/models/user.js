@@ -1201,7 +1201,19 @@ module.exports = function(User) {
   });
 
   User.prototype.__update__push__token = function(device, pushToken, cb) {
-    cb();
+    if(!(device == 'ios' || device == 'android')) {
+      var err = new Error('Wrong device type');
+      err.statucCode = 422;
+      return cb(err);
+    }
+
+    if(device == 'android') {
+      this.push_token_android = pushToken;
+    } else if (device == 'ios') {
+      this.push_token_ios = pushToken;
+    }
+
+    this.save(cb);
   };
 
   User.remoteMethod('__update__push__token', {

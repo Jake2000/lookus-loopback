@@ -46,10 +46,15 @@
       "required": false,
       "description": "Статус пользователя"
     },
-    "push_token": {
+    "push_token_ios": {
       "type": "string",
       "required": false,
-      "description": "Push-token пользователя"
+      "description": "Push-token пользователя (ios)"
+    },
+    "push_token_android": {
+      "type": "string",
+      "required": false,
+      "description": "Push-token пользователя (android)"
     },
     "is_friend": {
       "type": "boolean",
@@ -89,7 +94,7 @@
       "foreignKey": "user_id"
     }
   },
-  "hidden": ["push_token"],
+  "hidden": ["push_token_ios", "push_token_android"],
   "acls": [
     {
       "accessType": "*",
