@@ -875,8 +875,10 @@ module.exports = function(User) {
     app.models.marker.findActiveForUser(this, filter, cb);
   };
 
-  User.prototype.__get__marker__history = function (filter, cb) {
-    app.models.marker.findInactiveForUser(this, filter, cb);
+  User.prototype.__get__marker__history = function (fields, queryText, offset, limit, cb) {
+    var query = app.query.formatSearchQuery(fields, queryText, offset, limit, ['text']);
+    query.where = query.where || {};
+    app.models.marker.findInactiveForUser(this, query, cb);
   };
 
   User.remoteMethod('__get__marker__history', {

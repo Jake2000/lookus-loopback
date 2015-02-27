@@ -32,7 +32,7 @@
     "is_active": {
       "type": "boolean",
       "default": true,
-      "description": "Является ли маркер активным (при создании true, автоматически переводится в false после истечения lifetime)"
+      "description": "Является ли маркер активным (при создании true, автоматически переводится в false после истечения lifetime и при первом удалении)"
     },
     "created": {
       "type": "date",
