@@ -96,7 +96,13 @@ function randomStr() {
 function generateRandomUser() {
   return {
     email: 'user'+randomStr()+'@infloop.ru',
-    password: '123456789'
+    password: '123456789',
+    first_name: 'Tro-lo-lo',
+    last_name: 'Tro-lo-lo',
+    sex: 1,
+    country: 'Russia',
+    city: 'Saint-Petersburg',
+    birthday: '1987-01-01'
   };
 }
 
