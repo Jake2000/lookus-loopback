@@ -1230,4 +1230,33 @@ module.exports = function(User) {
     accessType: 'WRITE',
     http: { verb: 'put', path: '/push_token' }
   });
+
+  User.createAndLogin = function(data, fn) {
+    User.create(data, function(err, user) {
+      if(err) { return fn(err); }
+
+      if(!user) {
+
+      }
+
+
+      User.login({email: data.email, password: data.password}, null, function(err, token) {
+        fn(null ,token);
+      });
+    });
+  };
+
+  User.remoteMethod('createAndLogin', {
+    isStatic: true,
+    description: 'Create and login user',
+    accepts: [
+      { arg: 'data', type: 'userModelCreatable', description: 'User data', required: true, http: {source: 'body'}},
+    ],
+    returns: {
+      arg: 'token', type: 'AccessToken', root: true,
+      description: 'Token.\n'
+    },
+    accessType: 'WRITE',
+    http: { verb: 'POST', path: '/create-and-login' }
+  });
 };

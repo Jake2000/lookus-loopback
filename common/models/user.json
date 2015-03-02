@@ -148,6 +148,13 @@
       "principalId": "$everyone",
       "permission": "ALLOW",
       "property": "loginFBCallback"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "createAndLogin"
     }
   ],
   "methods": []
