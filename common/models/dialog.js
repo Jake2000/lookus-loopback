@@ -139,4 +139,56 @@ module.exports = function(Dialog) {
     modelInstance.deleted_by.push(userId);
     modelInstance.save(cb);
   };
+
+  Dialog.findTetATetByParticipant = function(participantId, cb) {
+    var ctx = loopback.getCurrentContext();
+    var currentUser = ctx && ctx.get('currentUser');
+
+    var q = {where: {is_grouped: false, is_private: true }};
+
+    currentUser.__get__dialogs({}, function(err, dialogs) {
+      if(err) { return cb(err); }
+
+      var ids = [];
+      _.forEach(dialogs, function (dialog) {
+        if(dialog.is_grouped === false)
+          ids.push(dialog.id.toString());
+      });
+
+      app.models.dialogUser.findOne({where: { dialog_id: {inq: ids}, user_id: participantId  } }, function(err, dialogUser) {
+
+        if(err) { return cb(err); }
+
+        if(!dialogUser) {
+          var err1 = new Error('Tet-a-tet dialog with this user does not exist');
+          err1.statucCode = 404;
+          return cb(err1);
+        }
+
+        var foundDialog =_.find(dialogs, function(dialog) { return dialog.id.toString() == dialogUser.dialog_id.toString()});
+
+        if(!foundDialog) {
+          var err2 = new Error('Tet-a-tet dialog with this user does not exist');
+          err2.statucCode = 404;
+          return cb(err2);
+        }
+
+        return cb(null, foundDialog);
+
+      });
+    });
+  };
+
+  Dialog.remoteMethod('findTetATetByParticipant', {
+    isStatic:true,
+    description: 'Gets tet-a-tet dialog with specified user',
+    accepts: [
+      {arg: 'user_id', type: "any", required: true, http: {source: 'path'}}
+    ],
+    returns: {
+      arg: 'dialog', type: 'dialog', root: true
+    },
+    accessType: 'READ',
+    http: {verb: 'get', path: '/search-by-participant/:user_id'}
+  });
 };
