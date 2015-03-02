@@ -987,7 +987,7 @@ module.exports = function(User) {
     return 0;
   };
 
-  User.definition.properties.in_subscribers.default = function() {
+  User.definition.properties.in_subscriptions.default = function() {
     return false;
   };
 

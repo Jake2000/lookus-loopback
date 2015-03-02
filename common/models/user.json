@@ -93,8 +93,17 @@
       "type": "number",
       "required": false,
       "description": "Кол-во посетителей у поставленных маркеров у пользователя"
+    },
+    "in_subscriptions":{
+      "type": "boolean",
+      "required": false,
+      "description": "Есть ли пользователь в подпиская"
+    },
+    "in_blacklist":{
+      "type": "boolean",
+      "required": false,
+      "description": "Есть ли пользователь в блэклисте"
     }
-
   },
   "validations": [],
   "relations": {
