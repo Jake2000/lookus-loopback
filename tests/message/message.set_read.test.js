@@ -42,7 +42,7 @@ describe('Message set_read scenario', function() {
         .set('Authorization', api.session.authToken)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
-        .expect(204)
+        .expect(200)
         .end(function (err, res) {
           if (err) return done(err);
           done();
