@@ -35,7 +35,7 @@
       "description": "Флаг удаленного сообщения в диалоге (список пользователей, которые удалили сообщение)"
     }
   },
-  "hidden": ["private_participant_1_id", "private_participant_2_id"],
+  "hidden": ["private_participant_1_id", "private_participant_2_id", "deleted_by"],
   "validations": [],
   "relations": {
     "users": {

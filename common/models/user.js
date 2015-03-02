@@ -260,6 +260,14 @@ module.exports = function(User) {
   User.beforeCreate = function (next, modelInstance) {
     modelInstance.created = new Date();
     modelInstance.updated = new Date();
+
+    modelInstance.status = "";
+
+    modelInstance.is_online = false;
+    modelInstance.dialogs_count = 0;
+    modelInstance.markers_count = 0;
+    modelInstance.visitors_count = 0;
+    modelInstance.friends_count = 0;
     next();
   };
 
@@ -950,6 +958,34 @@ module.exports = function(User) {
       return false;
     }
   });
+
+  User.definition.properties.is_friend.default = function() {
+    return false;
+  };
+
+  User.definition.properties.is_friend.default = function() {
+    return false;
+  };
+
+  User.definition.properties.status.default = function() {
+    return "";
+  };
+
+  User.definition.properties.dialogs_count.default = function() {
+    return 0;
+  };
+
+  User.definition.properties.markers_count.default = function() {
+    return 0;
+  };
+
+  User.definition.properties.visitors_count.default = function() {
+    return 0;
+  };
+
+  User.definition.properties.friends_count.default = function() {
+    return 0;
+  };
 
   //subscriptions
   User.prototype.__get__subscription = function (fields, queryText, offset, limit, cb) {

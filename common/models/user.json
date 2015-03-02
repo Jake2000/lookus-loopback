@@ -68,7 +68,33 @@
     "updated": {
       "type": "date",
       "description": "Дата и время изменения"
+    },
+    "is_online": {
+      "type": "boolean",
+      "required": false,
+      "description": "Онлайн ли пользователь"
+    },
+    "dialogs_count": {
+      "type": "number",
+      "required": false,
+      "description": "Кол-во диалогов у пользователя"
+    },
+    "markers_count": {
+      "type": "number",
+      "required": false,
+      "description": "Кол-во поставленных маркеров у пользователя"
+    },
+    "visitors_count": {
+      "type": "number",
+      "required": false,
+      "description": "Кол-во посетителей у поставленных маркеров у пользователя"
+    },
+    "friends_count": {
+      "type": "number",
+      "required": false,
+      "description": "Кол-во посетителей у поставленных маркеров у пользователя"
     }
+
   },
   "validations": [],
   "relations": {
@@ -94,7 +120,7 @@
       "foreignKey": "user_id"
     }
   },
-  "hidden": ["push_token_ios", "push_token_android"],
+  "hidden": ["push_token_ios", "push_token_android", "emailVerified", "verificationToken", "realm", "lastUpdated"],
   "acls": [
     {
       "accessType": "*",
