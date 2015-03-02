@@ -92,7 +92,7 @@
     "friends_count": {
       "type": "number",
       "required": false,
-      "description": "Кол-во посетителей у поставленных маркеров у пользователя"
+      "description": "Кол-во друзей у пользователя"
     },
     "in_subscriptions":{
       "type": "boolean",
