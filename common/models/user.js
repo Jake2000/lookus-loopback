@@ -987,6 +987,14 @@ module.exports = function(User) {
     return 0;
   };
 
+  User.definition.properties.in_subscribers.default = function() {
+    return false;
+  };
+
+  User.definition.properties.in_blacklist.default = function() {
+    return false;
+  };
+
   //subscriptions
   User.prototype.__get__subscription = function (fields, queryText, offset, limit, cb) {
     app.models.subscriptionContainer.findOne({where: {user_id: this.id}}, function (err, subscriptionContainer) {
