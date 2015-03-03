@@ -175,6 +175,12 @@ if (require.main === module) {
 
   //starting io.js
   var ioapp = require('express')();
+  ioapp.use(function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    return next();
+  });
   var server = require('http').Server(ioapp);
   app.io = require('socket.io')(server);
   server.listen(3302);
