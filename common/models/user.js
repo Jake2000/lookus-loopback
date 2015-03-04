@@ -87,7 +87,6 @@ module.exports = function(User) {
     next();
   });
 
-
   User.prototype.isAdmin = function (cb) {
     app.models.Role.isInRole('admin', {
       principalType: app.models.RoleMapping.USER,
@@ -1303,4 +1302,12 @@ module.exports = function(User) {
     accessType: 'WRITE',
     http: { verb: 'POST', path: '/create-and-login' }
   });
+
+  User.prototype.populate = function(cb) {
+    var ctx = loopback.getCurrentContext();
+    var currentUser = ctx && ctx.get('currentUser');
+
+    this.is_friend = false;
+    cb();
+  };
 };
