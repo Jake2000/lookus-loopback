@@ -17,7 +17,7 @@ var pixelDistance = function(lat1, lng1, lat2, lng2, zoom) {
   var x2 = lngToX(lng2);
   var y2 = latToY(lat2);
 
-  return Math.sqrt(Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2)) >> (21 - zoom);
+  return Math.sqrt(Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2));// >> (21 - zoom);
 };
 
 /**
@@ -31,6 +31,13 @@ var pixelDistance = function(lat1, lng1, lat2, lng2, zoom) {
  */
 var newClusterPoint =  function (x1, x2, y1, y2, movePercent) {
   var pixel = Math.sqrt(Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2));
+
+  if(pixel == 0) {
+    return {
+      lng: x1,
+      lat: y1
+    };
+  }
 
   var cosin = (x1 - x2) / pixel;
   var sinus = (y1 - y2) / pixel;
@@ -53,6 +60,8 @@ var newClusterPoint =  function (x1, x2, y1, y2, movePercent) {
  * @return array
  */
 var createCluster = function (markers, distance, zoom, moreThen) {
+  zoom = zoom | 0;
+
 
   if (moreThen > 0) moreThen -= 1;
   if (moreThen < 0) moreThen = 0;
@@ -70,9 +79,15 @@ var createCluster = function (markers, distance, zoom, moreThen) {
     var clusterFinderIndex = [];
     var movePercent = 0.5;
 
-    var clusterPoint = marker.location;
+    var clusterPoint = {
+      lat: marker.location.lat,
+      lng: marker.location.lng
+    };
 
     for (var j = 0; j < markers.length; j++) {
+      if(!markers[j]) {
+        continue;
+      }
 
       var pixel = pixelDistance(
         marker.location.lat,

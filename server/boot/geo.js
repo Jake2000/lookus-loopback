@@ -429,11 +429,9 @@ module.exports = function(app) {
 
     var p = (MAX_CACHED_ZOOM - zoom + 1);
 
-    var distance = 20 * (Math.pow(2, p));
+    var distance = 1000 * (Math.pow(2, p));
 
-    var clustered = cluster.createCluster(markers, distance, zoom, 0);
-
-    return clustered;
+    return cluster.createCluster(markers, distance, zoom, 0);
   };
 
   app.geo = app.geo || {};

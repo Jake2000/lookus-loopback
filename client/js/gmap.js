@@ -190,14 +190,14 @@ function loadMarkersMapsbox() {
               position: new google.maps.LatLng(marker.location.lat, marker.location.lng),
               map: map,
               icon: '/images/marker_cluster.png',
-              title: marker.count
+              title: "count:" + (marker.count || "0")
             });
             markers.push(gClMarker);
           } else {
             var gMarker = new google.maps.Marker({
               position: new google.maps.LatLng(marker.location.lat, marker.location.lng),
               map: map,
-              title: marker.text
+              title: (marker.text || "text")
             });
             markers.push(gMarker);
           }
