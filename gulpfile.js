@@ -7,6 +7,6 @@ gulp.task('default', function () {
 });
 
 gulp.task('seed', function () {
-  return gulp.src('./seeds/seeder.js', {read: false})
+  return gulp.src('./seeds/seeds.js', {read: false})
     .pipe(mocha({reporter: 'nyan'}));
 });

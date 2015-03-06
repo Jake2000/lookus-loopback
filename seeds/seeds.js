@@ -53,7 +53,7 @@ describe('Seeder', function() {
 
   describe('Creating users', function() {
     for(var i = 0; i < 300; i++) {
-      var user = api.generateRandomUser(random(firstNames), random(lastNames), Math.Round(Math.random()));
+      var user = api.generateRandomUser(random(firstNames), random(lastNames), Math.round(Math.random()));
       api.createUser(user, function(newUser){
         user.id = newUser.id;
         users.push(user);
