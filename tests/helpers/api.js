@@ -93,13 +93,13 @@ function randomStr() {
   return Math.random().toString(36).substring(4);
 }
 
-function generateRandomUser() {
+function generateRandomUser(firstName, lastName, sex) {
   return {
     email: 'user'+randomStr()+'@infloop.ru',
     password: '123456789',
-    first_name: 'Tro-lo-lo',
-    last_name: 'Tro-lo-lo',
-    sex: 1,
+    first_name: firstName || 'Tro-lo-lo',
+    last_name: lastName || 'Tro-lo-lo',
+    sex: sex || 1,
     country: 'Russia',
     city: 'Saint-Petersburg',
     birthday: '1987-01-01'
