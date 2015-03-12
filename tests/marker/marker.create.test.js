@@ -21,6 +21,7 @@ describe('Marker resource tests', function() {
   var userA = api.generateRandomUser();
 
   api.createUser(userA.email, function(user) {
+    userA.id = user.id;
     marker.badMarker += '' + user.email;
     marker.text += '' + user.email;
   });
@@ -57,6 +58,22 @@ describe('Marker resource tests', function() {
           if (err) return done(err);
           res.body.should.have.property('id');
           res.body.should.have.property('is_up').and.equal(false);
+          done();
+        });
+    });
+  });
+
+  describe('GET /api/users/{userA}', function () {
+    it('should have increased markers_count after creating a marker userA', function (done) {
+      request
+        .get('/api/users/'+userA.id)
+        .set('Authorization', api.session.authToken)
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .end(function (err, res) {
+          if (err) return done(err);
+          res.body.should.have.property('markers_count').and.be.equal(1);
           done();
         });
     });

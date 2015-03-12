@@ -56,4 +56,20 @@ describe('Dialog resource tests', function() {
         });
     });
   });
+
+  describe('GET /api/users/{userA}', function () {
+    it('should have increased dialogs_count after creating tet-a-tet dialog for userA', function (done) {
+      request
+        .get('/api/users/'+userA.id)
+        .set('Authorization', api.session.authToken)
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .end(function (err, res) {
+          if (err) return done(err);
+          res.body.should.have.property('dialogs_count').and.be.equal(1);
+          done();
+        });
+    });
+  });
 });

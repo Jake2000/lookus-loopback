@@ -15,5 +15,22 @@ module.exports = function(DialogUser) {
         });
       });
     });
+
+    app.models.user.findById(modelInstance.user_id, function(err,user) {
+      user.dialogs_count++;
+      user.save(function(err, user) {
+        return;
+      })
+    });
   };
+
+  DialogUser.beforeDestroy = function(next, modelInstance) {
+    app.models.user.findById(modelInstance.user_id, function(err,user) {
+      user.dialogs_count--;
+      user.save(function(err, user) {
+        return;
+      })
+    });
+    next();
+  }
 };

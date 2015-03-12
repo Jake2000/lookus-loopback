@@ -96,6 +96,11 @@ module.exports = function(Marker) {
         next();
       });
     });
+
+    currentUser.markers_count++;
+    currentUser.save(function(err, user) {
+      return;
+    });
   };
 
   Marker.afterSave = function(next) {
