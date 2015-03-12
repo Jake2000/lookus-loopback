@@ -75,6 +75,7 @@ describe('Friend resource tests', function() {
     });
   });
 
+
   describe('DELETE /api/users/{userA}/friends/rel/{friend_id}', function () {
     it('should delete userC friend from userA friends', function (done) {
       request
@@ -102,6 +103,22 @@ describe('Friend resource tests', function() {
           if (err) return done(err);
           res.body.should.be.instanceOf(Array);
           res.body.should.have.length(0);
+          done();
+        });
+    });
+  });
+
+  describe('GET /api/users/{userA}', function () {
+    it('should have decreased friends_count after removing a friend for userA', function (done) {
+      request
+        .get('/api/users/'+userA.id)
+        .set('Authorization', api.session.authToken)
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .end(function (err, res) {
+          if (err) return done(err);
+          res.body.should.have.property('friends_count').and.be.equal(0);
           done();
         });
     });
