@@ -262,7 +262,6 @@ module.exports = function(User) {
 
     modelInstance.status = "";
 
-    modelInstance.is_online = false;
     modelInstance.dialogs_count = 0;
     modelInstance.markers_count = 0;
     modelInstance.visitors_count = 0;
@@ -947,19 +946,17 @@ module.exports = function(User) {
   Object.defineProperty(User.prototype, 'is_online', {
     get: function () {
       var id = this.id;
-      if(_.isFunction(this.id)) {
-        id = id.toString();
-      }
+      if(!id) return false;
+      id = id.toString();
 
       app.usersOnline = app.usersOnline || [];
       var time = app.usersOnline[id];
 
-      if(Date.now() <= (time + 100*60*10) ) {
+      if((Date.now()) <= (time + 1000*60*40) ) {
         return true;
       } else {
         return false;
       }
-
     }
   });
 
