@@ -95,6 +95,4 @@ module.exports = function(app) {
     this.client.hdecrby(key, 'value', decrement);
   };
 
-  //TODO manage situation when app is connecting to redis and DataSource request occurred
-
 };

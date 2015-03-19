@@ -1,5 +1,6 @@
 var apn = require('apn');
 
+// Need certificates
 var options = { };
 
 var apnConnection = new apn.Connection(options);

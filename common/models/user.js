@@ -946,7 +946,20 @@ module.exports = function(User) {
 
   Object.defineProperty(User.prototype, 'is_online', {
     get: function () {
-      return true;
+      var id = this.id;
+      if(_.isFunction(this.id)) {
+        id = id.toString();
+      }
+
+      app.usersOnline = app.usersOnline || [];
+      var time = app.usersOnline[id];
+
+      if(Date.now() <= (time + 100*60*10) ) {
+        return true;
+      } else {
+        return false;
+      }
+
     }
   });
 

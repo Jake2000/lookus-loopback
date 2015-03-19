@@ -47,7 +47,6 @@ module.exports = function(app) {
   'Редактирование пользователя <br>';
 
   app.remotes().findMethod('user.prototype.updateAttributes').accepts = [{arg: 'data', type: 'userModelEditable', required: true, http: {source: 'body'}}];
-  ;
 
   User.prototype.__destroyById__dialogs = function(dialogId, cb) {
     var modelInstance = this;

@@ -1,5 +1,7 @@
 var debug = require('debug')('boot:dcreate-model-instances');
 
+// Autocreating user accounts
+
 module.exports = function(app) {
   console.log("dcreate-model-instances");
   var User = app.models.user;

@@ -34,6 +34,9 @@ app.use(function setCurrentUser(req, res, next) {
     return next();
   }
 
+  app.usersOnline = app.usersOnline || [];
+  app.usersOnline[req.accessToken.userId.toString()] = (Date.now());
+
   app.models.user.findById(req.accessToken.userId, function(err, user) {
     if (err) {
       return next(err);
@@ -77,7 +80,6 @@ try {
 }
 
 // Setup the view engine (jade)
-var path = require('path');
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
